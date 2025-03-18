@@ -8,7 +8,6 @@
 #include <vector>
 #include "OptionsDef.h"
 #include "OptionsMgr.h"
-#include "RegOptionsMgr.h"
 #include "OptionsCustomColors.h"
 #include "OptionsDiffOptions.h"
 #include "OptionsDiffColors.h"
@@ -38,11 +37,6 @@ namespace Options
  */
 void Init(COptionsMgr *pOptions)
 {
-	if (typeid(*pOptions) == typeid(CRegOptionsMgr))
-	{
-		static_cast<CRegOptionsMgr*>(pOptions)->SetRegRootKey(_T("Thingamahoochie\\WinMerge\\"));
-	}
-
 	LANGID LangId = GetUserDefaultLangID();
 	pOptions->InitOption(OPT_SELECTED_LANGUAGE, static_cast<int>(LangId));
 
@@ -61,9 +55,11 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_SHOW_MISSING_MIDDLE_ONLY, true);
 	pOptions->InitOption(OPT_SHOW_MISSING_RIGHT_ONLY, true);
 
+	pOptions->InitOption(OPT_SHOW_MENUBAR, true);
 	pOptions->InitOption(OPT_SHOW_TOOLBAR, true);
 	pOptions->InitOption(OPT_SHOW_STATUSBAR, true);
 	pOptions->InitOption(OPT_SHOW_TABBAR, true);
+	pOptions->InitOption(OPT_REBAR_STATE, _T(""));
 	pOptions->InitOption(OPT_TOOLBAR_SIZE, 0, 0, 2);
 	pOptions->InitOption(OPT_RESIZE_PANES, false);
 
@@ -234,6 +230,7 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_PATCHCREATOR_INCLUDE_CMD_LINE, false);
 	pOptions->InitOption(OPT_PATCHCREATOR_COPY_TO_CLIPBOARD, false);
 
+	pOptions->InitOption(OPT_TABBAR_ON_TITLEBAR, true);
 	pOptions->InitOption(OPT_TABBAR_AUTO_MAXWIDTH, true);
 	pOptions->InitOption(OPT_ACTIVE_FRAME_MAX, true);
 	pOptions->InitOption(OPT_ACTIVE_PANE, 0, 0, 2);
@@ -241,6 +238,11 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_MRU_MAX, 9, 0, 128);
 
 	pOptions->InitOption(OPT_COLOR_SCHEME, _T("Default"));
+
+	pOptions->InitOption(OPT_SYSCOLOR_HOOK_ENABLED, false);
+	pOptions->InitOption(OPT_SYSCOLOR_HOOK_COLORS, _T(""));
+
+	pOptions->InitOption(OPT_MOUSE_HOOK_ENABLED, true);
 
 	Options::CustomColors::Init(pOptions);
 	Options::DiffOptions::Init(pOptions);

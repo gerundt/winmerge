@@ -59,6 +59,18 @@ msgstr "Копиране избраните редове вляво"
 msgid "Copy Selected Line(s) from Left"
 msgstr "Копиране избраните редове от ляво"
 
+msgid "Copy Selected Diff (Left) to Clipboard\tCtrl+&1"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Middle) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&3"
+msgstr ""
+
 msgid "Select Line &Difference\tF4"
 msgstr "&Избиране на различията на реда\tF4"
 
@@ -343,11 +355,23 @@ msgstr "&Настройки…"
 msgid "&View"
 msgstr "И&зглед"
 
+msgid "Ta&b Bar"
+msgstr "Лента с &раздели"
+
+msgid "&View Tab Bar"
+msgstr ""
+
+msgid "&On Title Bar"
+msgstr ""
+
 msgid "&Toolbar"
 msgstr "Лента с &инструменти"
 
 msgid "&Small"
 msgstr "&Малък"
+
+msgid "&Medium"
+msgstr ""
 
 msgid "&Big"
 msgstr "&Голям"
@@ -355,11 +379,11 @@ msgstr "&Голям"
 msgid "&Huge"
 msgstr "&Огромен"
 
+msgid "Men&u Bar"
+msgstr ""
+
 msgid "&Status Bar"
 msgstr "&Лента за състоянието"
-
-msgid "Ta&b Bar"
-msgstr "Лента с &раздели"
 
 msgid "&Tools"
 msgstr "&Инструменти"
@@ -1074,6 +1098,9 @@ msgstr "Пренебрегване на &числа"
 msgid "Ignore c&omment differences"
 msgstr "Пренебрегване на различията в &коментари"
 
+msgid "Ignore &missing trailing EOL"
+msgstr ""
+
 msgid "&Include subfolders"
 msgstr "&Включително подпапки"
 
@@ -1287,6 +1314,9 @@ msgstr "Автоматично &презареждане на променени
 msgid "Language:"
 msgstr "Език:"
 
+msgid "Defaults"
+msgstr "По подразбиране"
+
 msgid "Find"
 msgstr "Търсене"
 
@@ -1431,6 +1461,66 @@ msgstr "Различия в думи:"
 msgid "Selected Word Diff:"
 msgstr "В избраните думи:"
 
+msgid "Dialog"
+msgstr "Диалог"
+
+msgid "Keywords:"
+msgstr "Ключови думи:"
+
+msgid "Function names:"
+msgstr "Имена на функции:"
+
+msgid "Comments:"
+msgstr "Коментари:"
+
+msgid "Numbers:"
+msgstr "Числа:"
+
+msgid "Operators:"
+msgstr "Оператори:"
+
+msgid "Strings:"
+msgstr "Низове:"
+
+msgid "Preprocessor:"
+msgstr "Предпроцесор:"
+
+msgid "User 1:"
+msgstr "Потребител 1:"
+
+msgid "User 2:"
+msgstr "Потребител 2:"
+
+msgid "Bold"
+msgstr "Получер"
+
+msgid "&Use customized text colors"
+msgstr "&Задаване на цветове за текст"
+
+msgid "Whitespace:"
+msgstr "Интервали:"
+
+msgid "Regular text:"
+msgstr "Нормален текст:"
+
+msgid "Selection:"
+msgstr "Избран:"
+
+msgid "Margin:"
+msgstr "Поле:"
+
+msgid "Search Marker:"
+msgstr "При търсене:"
+
+msgid "User Defined Marker1:"
+msgstr "Маркер 1:"
+
+msgid "User Defined Marker2:"
+msgstr "Маркер 2:"
+
+msgid "User Defined Marker3:"
+msgstr "Маркер 3:"
+
 msgid "&Use folder compare colors"
 msgstr "&Задаване на цветове при сравняване на папки"
 
@@ -1446,8 +1536,8 @@ msgstr "Несъществуващи елементи:"
 msgid "Items filtered:"
 msgstr "Филтрирани елементи:"
 
-msgid "Margin:"
-msgstr "Поле:"
+msgid "&Use custom system colors (Some UI elements may not apply)"
+msgstr ""
 
 msgid "System"
 msgstr "Системни"
@@ -1512,9 +1602,6 @@ msgstr "Включително командния &ред"
 msgid "Open to e&xternal editor"
 msgstr "Отваряне с външе&н редактор"
 
-msgid "Defaults"
-msgstr "По подразбиране"
-
 msgid "Display Columns"
 msgstr "Видими колони"
 
@@ -1533,8 +1620,11 @@ msgstr "Разширени настройки"
 msgid "Select Plugin"
 msgstr "Избиране на добавка"
 
-msgid "Plugin &Name:"
+msgid "Plugin &name:"
 msgstr "Д&обавка:"
+
+msgid "&Target files:"
+msgstr ""
 
 msgid "Extensions list:"
 msgstr "Разширения:"
@@ -1551,7 +1641,7 @@ msgstr ""
 msgid "&Open files in the same window type after unpacking"
 msgstr ""
 
-msgid "&Plugin Pipeline:"
+msgid "&Plugin pipeline:"
 msgstr "Кон&вейер:"
 
 msgid "&Alias..."
@@ -1769,51 +1859,6 @@ msgstr "Внасяне…"
 msgid "Export..."
 msgstr "Изнасяне…"
 
-msgid "Dialog"
-msgstr "Диалог"
-
-msgid "Keywords:"
-msgstr "Ключови думи:"
-
-msgid "Function names:"
-msgstr "Имена на функции:"
-
-msgid "Comments:"
-msgstr "Коментари:"
-
-msgid "Numbers:"
-msgstr "Числа:"
-
-msgid "Operators:"
-msgstr "Оператори:"
-
-msgid "Strings:"
-msgstr "Низове:"
-
-msgid "Preprocessor:"
-msgstr "Предпроцесор:"
-
-msgid "User 1:"
-msgstr "Потребител 1:"
-
-msgid "User 2:"
-msgstr "Потребител 2:"
-
-msgid "Bold"
-msgstr "Получер"
-
-msgid "Search Marker:"
-msgstr "При търсене:"
-
-msgid "User Defined Marker1:"
-msgstr "Маркер 1:"
-
-msgid "User Defined Marker2:"
-msgstr "Маркер 2:"
-
-msgid "User Defined Marker3:"
-msgstr "Маркер 3:"
-
 msgid "Folder Compare Report"
 msgstr "Отчет за сравняване на папки"
 
@@ -1961,18 +2006,6 @@ msgstr "Разрешаване на нов ред в &кавичките"
 msgid "&Quote character:"
 msgstr "&Знак за кавички:"
 
-msgid "&Use customized text colors"
-msgstr "&Задаване на цветове за текст"
-
-msgid "Whitespace:"
-msgstr "Интервали:"
-
-msgid "Regular text:"
-msgstr "Нормален текст:"
-
-msgid "Selection:"
-msgstr "Избран:"
-
 msgid "Backup Files"
 msgstr "Резервни файлове"
 
@@ -2029,6 +2062,9 @@ msgstr "Добавки"
 
 msgid "&Enable plugins"
 msgstr "Включване на &добавките"
+
+msgid "Plugin &type:"
+msgstr ""
 
 msgid "File filters:"
 msgstr "Филтри за файлове:"
@@ -2159,9 +2195,6 @@ msgid "&Hex View"
 msgstr "&Шестнадесетичен изглед"
 
 msgid "Edit Plugin"
-msgstr ""
-
-msgid "Plugin &type:"
 msgstr ""
 
 msgid "&Category:"
@@ -2941,6 +2974,9 @@ msgstr "Всички към… (%1)"
 #, c-format
 msgid "Differences to... (%1)"
 msgstr "Различия към… (%1)"
+
+msgid "Some selected items are identical or skipped.\nDo you want to copy only the items with differences?"
+msgstr ""
 
 #, c-format
 msgid "Left (%1)"
@@ -4213,6 +4249,27 @@ msgstr ""
 msgid "New plugin description"
 msgstr ""
 
+msgid "All"
+msgstr ""
+
+msgid "1st"
+msgstr ""
+
+msgid "2nd"
+msgstr ""
+
+msgid "3rd"
+msgstr ""
+
+msgid "1st and 2nd"
+msgstr ""
+
+msgid "1st and 3rd"
+msgstr ""
+
+msgid "2nd and 3rd"
+msgstr ""
+
 msgid "Filter applied"
 msgstr ""
 
@@ -4288,6 +4345,24 @@ msgstr ""
 msgid "Character"
 msgstr ""
 
+msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
+msgstr ""
+
+msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
+msgstr ""
+
+msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
+msgstr ""
+
 msgid "Prettification"
 msgstr ""
 
@@ -4307,6 +4382,9 @@ msgid "Decompilation"
 msgstr ""
 
 msgid "URL Handling"
+msgstr ""
+
+msgid "Decoding / Encoding"
 msgstr ""
 
 msgid "Make Uppercase"
@@ -4424,6 +4502,9 @@ msgid "Disassemble Native Code"
 msgstr ""
 
 msgid "Convert Text with AI..."
+msgstr ""
+
+msgid "Unescape Java properties files"
 msgstr ""
 
 msgid "Make characters uppercase"
@@ -4622,6 +4703,9 @@ msgid "AI-assisted text conversion functions"
 msgstr ""
 
 msgid "Text converter using OpenAI API.\r\nUsage: AIConvertText PROMPT"
+msgstr ""
+
+msgid "Unescape and display escaped Java properties files."
 msgstr ""
 
 msgid "CompareMSExcelFiles.sct WinMerge Plugin Options"

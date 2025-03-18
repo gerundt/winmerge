@@ -63,6 +63,18 @@ msgstr "將所選行複製到左側"
 msgid "Copy Selected Line(s) from Left"
 msgstr "從左側複製所選行"
 
+msgid "Copy Selected Diff (Left) to Clipboard\tCtrl+&1"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Middle) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&3"
+msgstr ""
+
 #, c-format
 msgid "Select Line &Difference\tF4"
 msgstr "選取行內差異 (&D)\tF4"
@@ -389,12 +401,25 @@ msgid "&View"
 msgstr "檢視 (&V)"
 
 #, c-format
+msgid "Ta&b Bar"
+msgstr "頁籤列 (&B)"
+
+msgid "&View Tab Bar"
+msgstr ""
+
+msgid "&On Title Bar"
+msgstr ""
+
+#, c-format
 msgid "&Toolbar"
 msgstr "工具列 (&T)"
 
 #, c-format
 msgid "&Small"
 msgstr "小圖示 (&S)"
+
+msgid "&Medium"
+msgstr ""
 
 #, c-format
 msgid "&Big"
@@ -404,13 +429,12 @@ msgstr "大圖示 (&B)"
 msgid "&Huge"
 msgstr "超大圖示 (&H)"
 
+msgid "Men&u Bar"
+msgstr ""
+
 #, c-format
 msgid "&Status Bar"
 msgstr "狀態列 (&S)"
-
-#, c-format
-msgid "Ta&b Bar"
-msgstr "頁籤列 (&B)"
 
 #, c-format
 msgid "&Tools"
@@ -1303,6 +1327,9 @@ msgstr "忽略數字 (&B)"
 msgid "Ignore c&omment differences"
 msgstr "忽略註解差異 (&O)"
 
+msgid "Ignore &missing trailing EOL"
+msgstr ""
+
 #, c-format
 msgid "&Include subfolders"
 msgstr "包括子資料夾 (&I)"
@@ -1559,6 +1586,10 @@ msgid "Language:"
 msgstr "語言："
 
 #, c-format
+msgid "Defaults"
+msgstr "預設值"
+
+#, c-format
 msgid "Find"
 msgstr "尋找"
 
@@ -1742,6 +1773,87 @@ msgstr "字層次的差異："
 msgid "Selected Word Diff:"
 msgstr "已選取的字的差異："
 
+#, c-format
+msgid "Dialog"
+msgstr "對話"
+
+#, c-format
+msgid "Keywords:"
+msgstr "關鍵字："
+
+#, c-format
+msgid "Function names:"
+msgstr "函數名："
+
+#, c-format
+msgid "Comments:"
+msgstr "註："
+
+#, c-format
+msgid "Numbers:"
+msgstr "數字："
+
+#, c-format
+msgid "Operators:"
+msgstr "運算子："
+
+#, c-format
+msgid "Strings:"
+msgstr "字串："
+
+# What is preprocessor? Is it prediffer? The term "preprocessor" cannot be found elsewhere.
+#, c-format
+msgid "Preprocessor:"
+msgstr "前處理器："
+
+#, c-format
+msgid "User 1:"
+msgstr "使用者 1："
+
+#, c-format
+msgid "User 2:"
+msgstr "使用者 2："
+
+#, c-format
+msgid "Bold"
+msgstr "粗體"
+
+#, c-format
+msgid "&Use customized text colors"
+msgstr "使用自訂文字色彩 (&U)"
+
+#, c-format
+msgid "Whitespace:"
+msgstr "空白："
+
+#, c-format
+msgid "Regular text:"
+msgstr "類型表式文："
+
+#, c-format
+msgid "Selection:"
+msgstr "選取："
+
+#, c-format
+msgid "Margin:"
+msgstr "邊距："
+
+#, c-format
+msgid "Search Marker:"
+msgstr "搜尋標記："
+
+#, c-format
+msgid "User Defined Marker1:"
+msgstr "使用者自定義標記1："
+
+#, c-format
+msgid "User Defined Marker2:"
+msgstr "使用者自定義標記2："
+
+#, c-format
+msgid "User Defined Marker3:"
+msgstr "使用者自定義標記3："
+
 msgid "&Use folder compare colors"
 msgstr "使用資料夾比較顏色(&U)"
 
@@ -1757,9 +1869,8 @@ msgstr "所有項目不存在："
 msgid "Items filtered:"
 msgstr "篩選項目："
 
-#, c-format
-msgid "Margin:"
-msgstr "邊距："
+msgid "&Use custom system colors (Some UI elements may not apply)"
+msgstr ""
 
 #, c-format
 msgid "System"
@@ -1846,10 +1957,6 @@ msgid "Open to e&xternal editor"
 msgstr "開啟外部編輯器 (&X)"
 
 #, c-format
-msgid "Defaults"
-msgstr "預設值"
-
-#, c-format
 msgid "Display Columns"
 msgstr "顯示欄位"
 
@@ -1870,8 +1977,11 @@ msgstr "額外屬性"
 msgid "Select Plugin"
 msgstr "選擇外掛程式"
 
-msgid "Plugin &Name:"
+msgid "Plugin &name:"
 msgstr "外掛程式名稱 (&N)："
+
+msgid "&Target files:"
+msgstr ""
 
 #, c-format
 msgid "Extensions list:"
@@ -1890,7 +2000,7 @@ msgstr "顯示所有外掛，不檢查副檔名"
 msgid "&Open files in the same window type after unpacking"
 msgstr "解壓縮後以相同視窗類型開啟檔案(&O)"
 
-msgid "&Plugin Pipeline:"
+msgid "&Plugin pipeline:"
 msgstr "外掛程式管線 (&P)："
 
 msgid "&Alias..."
@@ -2161,67 +2271,6 @@ msgid "Export..."
 msgstr "匯出..."
 
 #, c-format
-msgid "Dialog"
-msgstr "對話"
-
-#, c-format
-msgid "Keywords:"
-msgstr "關鍵字："
-
-#, c-format
-msgid "Function names:"
-msgstr "函數名："
-
-#, c-format
-msgid "Comments:"
-msgstr "註："
-
-#, c-format
-msgid "Numbers:"
-msgstr "數字："
-
-#, c-format
-msgid "Operators:"
-msgstr "運算子："
-
-#, c-format
-msgid "Strings:"
-msgstr "字串："
-
-# What is preprocessor? Is it prediffer? The term "preprocessor" cannot be found elsewhere.
-#, c-format
-msgid "Preprocessor:"
-msgstr "前處理器："
-
-#, c-format
-msgid "User 1:"
-msgstr "使用者 1："
-
-#, c-format
-msgid "User 2:"
-msgstr "使用者 2："
-
-#, c-format
-msgid "Bold"
-msgstr "粗體"
-
-#, c-format
-msgid "Search Marker:"
-msgstr "搜尋標記："
-
-#, c-format
-msgid "User Defined Marker1:"
-msgstr "使用者自定義標記1："
-
-#, c-format
-msgid "User Defined Marker2:"
-msgstr "使用者自定義標記2："
-
-#, c-format
-msgid "User Defined Marker3:"
-msgstr "使用者自定義標記3："
-
-#, c-format
 msgid "Folder Compare Report"
 msgstr "比較目錄後的報告"
 
@@ -2408,22 +2457,6 @@ msgid "&Quote character:"
 msgstr "引號字元 (&Q)："
 
 #, c-format
-msgid "&Use customized text colors"
-msgstr "使用自訂文字色彩 (&U)"
-
-#, c-format
-msgid "Whitespace:"
-msgstr "空白："
-
-#, c-format
-msgid "Regular text:"
-msgstr "類型表式文："
-
-#, c-format
-msgid "Selection:"
-msgstr "選取："
-
-#, c-format
 msgid "Backup Files"
 msgstr "備份檔案"
 
@@ -2497,6 +2530,9 @@ msgstr "外掛程式"
 #, c-format
 msgid "&Enable plugins"
 msgstr "啟用外掛程式 (&E)"
+
+msgid "Plugin &type:"
+msgstr ""
 
 msgid "File filters:"
 msgstr "檔案篩選器："
@@ -2644,9 +2680,6 @@ msgid "&Hex View"
 msgstr "二進制顯示 (&H)"
 
 msgid "Edit Plugin"
-msgstr ""
-
-msgid "Plugin &type:"
 msgstr ""
 
 msgid "&Category:"
@@ -3504,6 +3537,9 @@ msgstr "全部到... (%1)"
 #, c-format
 msgid "Differences to... (%1)"
 msgstr "差異到... (%1)"
+
+msgid "Some selected items are identical or skipped.\nDo you want to copy only the items with differences?"
+msgstr ""
 
 #, c-format
 msgid "Left (%1)"
@@ -4914,6 +4950,27 @@ msgstr ""
 msgid "New plugin description"
 msgstr ""
 
+msgid "All"
+msgstr ""
+
+msgid "1st"
+msgstr ""
+
+msgid "2nd"
+msgstr ""
+
+msgid "3rd"
+msgstr ""
+
+msgid "1st and 2nd"
+msgstr ""
+
+msgid "1st and 3rd"
+msgstr ""
+
+msgid "2nd and 3rd"
+msgstr ""
+
 msgid "Filter applied"
 msgstr "已套用篩選器"
 
@@ -4991,6 +5048,24 @@ msgstr ""
 msgid "Character"
 msgstr ""
 
+msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
+msgstr "\n上一個差異 (Alt+Up)\n(滑鼠右鍵+滾輪上滾)\n(Alt+滾輪上滾)"
+
+msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
+msgstr "\n下一個差異 (Alt+Down)\n(滑鼠右鍵+滾輪下滾)\n(Alt+滾輪下滾)"
+
+msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
+msgstr "\n複製到右側 (Alt+Right)\n(滑鼠右鍵+滾輪右滾)\n(Alt+滾輪右滾)\n(Alt+Shift+滾輪下滾)"
+
+msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
+msgstr "\n複製到左側 (Alt+Left)\n(滑鼠右鍵+滾輪左滾)\n(Alt+滾輪左滾)\n(Alt+Shift+滾輪上滾)"
+
+msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
+msgstr "\n複製到右側後到下一個 (Ctrl+Alt+Right)\n(Ctrl+Alt+滾輪右滾)\n(Ctrl+Alt+Shift+滾輪下滾)"
+
+msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
+msgstr "\n複製到左側後到下一個 (Ctrl+Alt+Left)\n(Ctrl+Alt+滾輪左滾)\n(Ctrl+Alt+Shift+滾輪上滾)"
+
 msgid "Prettification"
 msgstr "美化"
 
@@ -5011,6 +5086,9 @@ msgstr "反編譯"
 
 msgid "URL Handling"
 msgstr "URL 處理"
+
+msgid "Decoding / Encoding"
+msgstr ""
 
 msgid "Make Uppercase"
 msgstr "轉換成大寫"
@@ -5127,6 +5205,9 @@ msgid "Disassemble Native Code"
 msgstr "反組譯機器碼"
 
 msgid "Convert Text with AI..."
+msgstr ""
+
+msgid "Unescape Java properties files"
 msgstr ""
 
 msgid "Make characters uppercase"
@@ -5372,6 +5453,9 @@ msgid "AI-assisted text conversion functions"
 msgstr ""
 
 msgid "Text converter using OpenAI API.\r\nUsage: AIConvertText PROMPT"
+msgstr ""
+
+msgid "Unescape and display escaped Java properties files."
 msgstr ""
 
 msgid "CompareMSExcelFiles.sct WinMerge Plugin Options"

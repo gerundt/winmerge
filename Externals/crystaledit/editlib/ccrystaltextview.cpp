@@ -126,17 +126,6 @@ using CrystalLineParser::TEXTBLOCK;
 #endif
 
 
-// The vcruntime.h version of _countf() gives syntax errors starting with VS 15.7.2,
-// but only with `CCrystalTextView::m_SourceDefs` (which is local to this .cpp file), 
-// and only for X64 compilations (Win32 is ok, probably because no alignment issues
-// are involved).  I think that this could be related to C++17 compliance issues.
-// This patch reverts to a 'traditional' definition of _countf(), a pre-existing 
-// part of the CCrystalTextView package.
-#undef _countof
-#ifndef _countof
-#define _countof(array) (sizeof(array)/sizeof(array[0]))
-#endif
-
 #define DEFAULT_PRINT_MARGIN        1000    //  10 millimeters
 
 #ifndef WM_MOUSEHWHEEL
@@ -325,7 +314,7 @@ DoSetTextType (CrystalLineParser::TextDefinition *def)
 bool CCrystalTextView::
 SetTextType (const tchar_t* pszExt)
 {
-  m_CurSourceDef = CrystalLineParser::m_SourceDefs;
+  m_CurSourceDef = &CrystalLineParser::m_SourceDefs[0];
 
   CrystalLineParser::TextDefinition *def = CrystalLineParser::GetTextType (pszExt);
 
@@ -337,8 +326,8 @@ SetTextType (CrystalLineParser::TextType enuType)
 {
   CrystalLineParser::TextDefinition *def;
 
-  m_CurSourceDef = def = CrystalLineParser::m_SourceDefs;
-  for (int i = 0; i < _countof (CrystalLineParser::m_SourceDefs); i++, def++)
+  m_CurSourceDef = def = &CrystalLineParser::m_SourceDefs[0];
+  for (size_t i = 0; i < CrystalLineParser::m_SourceDefs.size(); i++, def++)
     {
       if (def->type == enuType)
         {
@@ -2870,7 +2859,13 @@ UpdateCaret ()
           CreateSolidCaret (nCaretWidth, nCaretHeight);
         }
       else
-        CreateSolidCaret (2, nCaretHeight);
+        {
+          DWORD caretWidth = 1;
+          SystemParametersInfo (SPI_GETCARETWIDTH, 0, &caretWidth, 0);
+          const int dpi = CClientDC (this).GetDeviceCaps (LOGPIXELSX);
+          const int nCaretWidth = MulDiv (caretWidth, dpi, 96);
+          CreateSolidCaret (nCaretWidth, nCaretHeight);
+        }
 
       SetCaretPos (TextToClient (m_ptCursorPos));
       ShowCaret ();
@@ -5750,8 +5745,7 @@ FindTextInBlock (const tchar_t* pszText, const CEPoint & ptStartPosition,
               size_t nPos = ::FindStringHelper (line, line.GetLength (), static_cast<const tchar_t*>(line) + ptCurrentPos.x, what, dwFlags, m_nLastFindWhatLen, m_rxnode, &m_rxmatch);
               if (nPos != -1)
                 {
-                  if (m_pszMatched != nullptr)
-                    free(m_pszMatched);
+                  free(m_pszMatched);
                   m_pszMatched = tc::tcsdup (line);
                   if (nEolns)
                     {
@@ -5789,8 +5783,7 @@ FindTextInBlock (const tchar_t* pszText, const CEPoint & ptStartPosition,
                 }
               else
                 {
-                  if (m_pszMatched != nullptr)
-                    free(m_pszMatched);
+                  free(m_pszMatched);
                   m_pszMatched = nullptr;
                 }
 
@@ -5845,8 +5838,7 @@ FindText (const LastSearchInfos * lastSearch)
 
   //  Save search parameters for 'F3' command
   m_bLastSearch = true;
-  if (m_pszLastFindWhat != nullptr)
-    free (m_pszLastFindWhat);
+  free (m_pszLastFindWhat);
   m_pszLastFindWhat = tc::tcsdup (lastSearch->m_sText);
   m_dwLastSearchFlags = dwSearchFlags;
 
@@ -6301,7 +6293,7 @@ OnSourceType (UINT nId)
 void CCrystalTextView::
 OnUpdateSourceType (CCmdUI * pCmdUI)
 {
-  pCmdUI->SetRadio (CrystalLineParser::m_SourceDefs + (pCmdUI->m_nID - ID_SOURCE_PLAIN) == m_CurSourceDef);
+  pCmdUI->SetRadio (&CrystalLineParser::m_SourceDefs[(pCmdUI->m_nID - ID_SOURCE_PLAIN)] == m_CurSourceDef);
 }
 
 int

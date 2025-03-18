@@ -14,6 +14,8 @@
 #include <vector>
 #include <memory>
 #include <optional>
+#include "MyReBar.h"
+#include "MenuBar.h"
 #include "MDITabBar.h"
 #include "BasicFlatStatusBar.h"
 #include "PathContext.h"
@@ -146,8 +148,7 @@ public:
 	HMENU NewWebPageDiffViewMenu();
 	HMENU NewOpenViewMenu();
 	HMENU NewDefaultMenu(int ID = 0);
-	HMENU GetPrediffersSubmenu(HMENU mainMenu);
-	void UpdatePrediffersMenu();
+	void UpdatePrediffersMenu(CMenu* pPredifferMenu);
 
 	bool DoFileOrFolderOpen(const PathContext *pFiles = nullptr,
 		const fileopenflags_t dwFlags[] = nullptr, const String strDesc[] = nullptr,
@@ -205,6 +206,7 @@ public:
 		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
 		const OpenWebPageParams *pOpenParams = nullptr);
 
+	void UpdateTitleBarAndTabBar();
 	void UpdateResources();
 	void ApplyDiffOptions();
 	void SelectFilter();
@@ -222,6 +224,7 @@ public:
 	DirWatcher* GetDirWatcher() { return m_pDirWatcher.get(); }
 	void WatchDocuments(IMergeDoc* pMergeDoc);
 	void UnwatchDocuments(IMergeDoc* pMergeDoc);
+	CMenuBar* GetMenuBar() { return &m_wndMenuBar; }
 	CToolBar* GetToolbar() { return &m_wndToolBar; }
 	static void WaitAndDoMessageLoop(bool& completed, int ms);
 
@@ -248,7 +251,8 @@ public:
 protected:
 	// control bar embedded members
 	CBasicFlatStatusBar  m_wndStatusBar;
-	CReBar m_wndReBar;
+	CMyReBar m_wndReBar;
+	CMenuBar m_wndMenuBar;
 	CToolBar m_wndToolBar;
 	CMDITabBar m_wndTabBar;
 	CTypedPtrArray<CPtrArray, CMDIChildWnd*> m_arrChild;
@@ -274,6 +278,11 @@ protected:
 				}
 				break;
 			}
+			case WM_MDISETMENU:
+				GetMainFrame()->SetMenuBarState(AFX_MBS_HIDDEN);
+				GetMainFrame()->GetMenuBar()->AttachMenu(CMenu::FromHandle(reinterpret_cast<HMENU>(wParam)));
+				return TRUE;
+				break;
 			case WM_TIMER:
 				if (wParam == m_nRedrawTimer)
 				{
@@ -333,6 +342,7 @@ protected:
 	std::vector<TempFilePtr> m_tempFiles; /**< List of possibly needed temp files. */
 	DropHandler *m_pDropHandler;
 	std::unique_ptr<DirWatcher> m_pDirWatcher;
+	std::optional<bool> m_bTabsOnTitleBar;
 
 // Generated message map functions
 protected:
@@ -363,6 +373,8 @@ protected:
 	afx_msg void OnViewStatusBar();
 	afx_msg void OnUpdateViewTabBar(CCmdUI* pCmdUI);
 	afx_msg void OnViewTabBar();
+	afx_msg void OnUpdateViewTabBarOnTitleBar(CCmdUI* pCmdUI);
+	afx_msg void OnViewTabBarOnTitleBar();
 	afx_msg void OnUpdateResizePanes(CCmdUI* pCmdUI);
 	afx_msg void OnResizePanes();
 	afx_msg void OnFileOpenProject();
@@ -372,6 +384,8 @@ protected:
 	afx_msg void OnUpdateWindowCloseAll(CCmdUI* pCmdUI);
 	afx_msg void OnSaveProject();
 	afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadID);
+	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnToolbarSize(UINT id);
 	afx_msg void OnUpdateToolbarSize(CCmdUI* pCmdUI);
 	afx_msg BOOL OnToolTipText(UINT, NMHDR* pNMHDR, LRESULT* pResult);
@@ -383,6 +397,7 @@ protected:
 	afx_msg void OnUpdatePluginName(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateStatusNum(CCmdUI* pCmdUI);
 	afx_msg void OnToolbarButtonDropDown(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnMenubarButtonDropDown(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDiffWhitespace(UINT nID);
 	afx_msg void OnUpdateDiffWhitespace(CCmdUI* pCmdUI);
 	afx_msg void OnDiffIgnoreBlankLines();
@@ -397,6 +412,8 @@ protected:
 	afx_msg void OnUpdateDiffIgnoreCP(CCmdUI* pCmdUI);
 	afx_msg void OnDiffIgnoreComments();
 	afx_msg void OnUpdateDiffIgnoreComments(CCmdUI* pCmdUI);
+	afx_msg void OnDiffIgnoreMissingTrailingEol();
+	afx_msg void OnUpdateDiffIgnoreMissingTrailingEol(CCmdUI* pCmdUI);
 	afx_msg void OnIncludeSubfolders();
 	afx_msg void OnUpdateIncludeSubfolders(CCmdUI* pCmdUI);
 	afx_msg void OnCompareMethod(UINT nID);
@@ -418,6 +435,10 @@ protected:
 	afx_msg LRESULT OnChildFrameRemoved(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnChildFrameActivate(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnChildFrameActivated(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnUpdateMenuBarMenuItem(CCmdUI* pCmdUI);
+	afx_msg void OnViewMenuBar();
+	afx_msg void OnUpdateViewMenuBar(CCmdUI* pCmdUI);
+	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -435,4 +456,7 @@ private:
 	void LoadToolbarImages();
 	HMENU NewMenu( int view, int ID );
 	bool CompareFilesIfFilesAreLarge(IDirDoc* pDirDoc, int nFiles, const FileLocation ifileloc[]);
+	void UpdateSystemMenu();
+	std::unique_ptr<WCHAR[]> m_upszLongTextW;
+	std::unique_ptr<CHAR[]> m_upszLongTextA;
 };

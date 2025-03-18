@@ -269,9 +269,9 @@ void CHexMergeFrame::UpdateHeaderSizes()
 		}
 	}
 	
-	if (!std::equal(m_nLastSplitPos, m_nLastSplitPos + nPaneCount - 1, w))
+	if (!std::equal(m_nLastSplitPos, m_nLastSplitPos + nPaneCount, w))
 	{
-		std::copy_n(w, nPaneCount - 1, m_nLastSplitPos);
+		std::copy_n(w, nPaneCount, m_nLastSplitPos);
 
 		// resize controls in header dialog bar
 		m_wndFilePathBar.Resize(w);
@@ -348,7 +348,7 @@ void CHexMergeFrame::OnIdleUpdateCmdUI()
 		SCROLLINFO si, siView[3];
 		// Synchronize horizontal scrollbars
 		pView[0]->GetScrollInfo(SB_HORZ, &si, SIF_ALL | SIF_DISABLENOSCROLL);
-		m_HScrollInfo[0] = si;
+		m_HScrollInfo[0] = siView[0] = si;
 		for (pane = 1; pane < nColumns; ++pane)
 		{
 			SCROLLINFO siCur;
@@ -380,7 +380,7 @@ void CHexMergeFrame::OnIdleUpdateCmdUI()
 
 		// Synchronize vertical scrollbars
 		pView[0]->GetScrollInfo(SB_VERT, &si, SIF_ALL | SIF_DISABLENOSCROLL);
-		m_VScrollInfo[0] = si;
+		m_VScrollInfo[0] = siView[0] = si;
 		for (pane = 1; pane < nColumns; ++pane)
 		{
 			SCROLLINFO siCur;

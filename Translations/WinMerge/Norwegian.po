@@ -61,6 +61,18 @@ msgstr "Kopier valgte linje(r) til venstre"
 msgid "Copy Selected Line(s) from Left"
 msgstr "Kopier valgte linje(r) fra venstre"
 
+msgid "Copy Selected Diff (Left) to Clipboard\tCtrl+&1"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Middle) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&3"
+msgstr ""
+
 msgid "Select Line &Difference\tF4"
 msgstr "&Marker linjeforskjell\tF4"
 
@@ -345,11 +357,23 @@ msgstr "&Innstillinger..."
 msgid "&View"
 msgstr "&Vis"
 
+msgid "Ta&b Bar"
+msgstr "F&anelinje"
+
+msgid "&View Tab Bar"
+msgstr ""
+
+msgid "&On Title Bar"
+msgstr ""
+
 msgid "&Toolbar"
 msgstr "Verkt&øylinje"
 
 msgid "&Small"
 msgstr "&Liten"
+
+msgid "&Medium"
+msgstr ""
 
 msgid "&Big"
 msgstr "&Stor"
@@ -357,11 +381,11 @@ msgstr "&Stor"
 msgid "&Huge"
 msgstr ""
 
+msgid "Men&u Bar"
+msgstr ""
+
 msgid "&Status Bar"
 msgstr "Stat&uslinje"
-
-msgid "Ta&b Bar"
-msgstr "F&anelinje"
 
 msgid "&Tools"
 msgstr "&Verktøy"
@@ -1076,6 +1100,9 @@ msgstr ""
 msgid "Ignore c&omment differences"
 msgstr ""
 
+msgid "Ignore &missing trailing EOL"
+msgstr ""
+
 msgid "&Include subfolders"
 msgstr "&Inkluder undermapper"
 
@@ -1289,6 +1316,9 @@ msgstr ""
 msgid "Language:"
 msgstr ""
 
+msgid "Defaults"
+msgstr "Standardverdier"
+
 msgid "Find"
 msgstr "Søk"
 
@@ -1435,6 +1465,66 @@ msgstr "Ordforskjell:"
 msgid "Selected Word Diff:"
 msgstr "Valgt ordforskjell:"
 
+msgid "Dialog"
+msgstr "Dialog"
+
+msgid "Keywords:"
+msgstr "Nøkkelord:"
+
+msgid "Function names:"
+msgstr "Funksjonsnavn:"
+
+msgid "Comments:"
+msgstr "Kommentarer:"
+
+msgid "Numbers:"
+msgstr "Nummere:"
+
+msgid "Operators:"
+msgstr "Operatorer:"
+
+msgid "Strings:"
+msgstr "Strenger:"
+
+msgid "Preprocessor:"
+msgstr "Preprosessor:"
+
+msgid "User 1:"
+msgstr "Bruker 1:"
+
+msgid "User 2:"
+msgstr "Bruker 2:"
+
+msgid "Bold"
+msgstr "Fet"
+
+msgid "&Use customized text colors"
+msgstr "&Bruk egendefinerte tekstfarger"
+
+msgid "Whitespace:"
+msgstr "Blanktegn:"
+
+msgid "Regular text:"
+msgstr "Normal tekst:"
+
+msgid "Selection:"
+msgstr "Markering:"
+
+msgid "Margin:"
+msgstr ""
+
+msgid "Search Marker:"
+msgstr ""
+
+msgid "User Defined Marker1:"
+msgstr ""
+
+msgid "User Defined Marker2:"
+msgstr ""
+
+msgid "User Defined Marker3:"
+msgstr ""
+
 msgid "&Use folder compare colors"
 msgstr ""
 
@@ -1450,7 +1540,7 @@ msgstr ""
 msgid "Items filtered:"
 msgstr ""
 
-msgid "Margin:"
+msgid "&Use custom system colors (Some UI elements may not apply)"
 msgstr ""
 
 msgid "System"
@@ -1516,9 +1606,6 @@ msgstr "Inklud&er kommandolinje"
 msgid "Open to e&xternal editor"
 msgstr "Åpne i e&ksternt redigeringsprogram"
 
-msgid "Defaults"
-msgstr "Standardverdier"
-
 msgid "Display Columns"
 msgstr "Visningskolonner"
 
@@ -1537,7 +1624,10 @@ msgstr ""
 msgid "Select Plugin"
 msgstr ""
 
-msgid "Plugin &Name:"
+msgid "Plugin &name:"
+msgstr ""
+
+msgid "&Target files:"
 msgstr ""
 
 msgid "Extensions list:"
@@ -1555,7 +1645,7 @@ msgstr ""
 msgid "&Open files in the same window type after unpacking"
 msgstr ""
 
-msgid "&Plugin Pipeline:"
+msgid "&Plugin pipeline:"
 msgstr ""
 
 msgid "&Alias..."
@@ -1776,51 +1866,6 @@ msgstr "Importer..."
 msgid "Export..."
 msgstr "Eksporter..."
 
-msgid "Dialog"
-msgstr "Dialog"
-
-msgid "Keywords:"
-msgstr "Nøkkelord:"
-
-msgid "Function names:"
-msgstr "Funksjonsnavn:"
-
-msgid "Comments:"
-msgstr "Kommentarer:"
-
-msgid "Numbers:"
-msgstr "Nummere:"
-
-msgid "Operators:"
-msgstr "Operatorer:"
-
-msgid "Strings:"
-msgstr "Strenger:"
-
-msgid "Preprocessor:"
-msgstr "Preprosessor:"
-
-msgid "User 1:"
-msgstr "Bruker 1:"
-
-msgid "User 2:"
-msgstr "Bruker 2:"
-
-msgid "Bold"
-msgstr "Fet"
-
-msgid "Search Marker:"
-msgstr ""
-
-msgid "User Defined Marker1:"
-msgstr ""
-
-msgid "User Defined Marker2:"
-msgstr ""
-
-msgid "User Defined Marker3:"
-msgstr ""
-
 msgid "Folder Compare Report"
 msgstr "Mappesammenlignings-rapport"
 
@@ -1968,18 +2013,6 @@ msgstr ""
 msgid "&Quote character:"
 msgstr ""
 
-msgid "&Use customized text colors"
-msgstr "&Bruk egendefinerte tekstfarger"
-
-msgid "Whitespace:"
-msgstr "Blanktegn:"
-
-msgid "Regular text:"
-msgstr "Normal tekst:"
-
-msgid "Selection:"
-msgstr "Markering:"
-
 msgid "Backup Files"
 msgstr "Sikkerhetskopifiler"
 
@@ -2036,6 +2069,9 @@ msgstr "Programtillegg"
 
 msgid "&Enable plugins"
 msgstr "&Aktiver programtillegg"
+
+msgid "Plugin &type:"
+msgstr ""
 
 msgid "File filters:"
 msgstr ""
@@ -2166,9 +2202,6 @@ msgid "&Hex View"
 msgstr ""
 
 msgid "Edit Plugin"
-msgstr ""
-
-msgid "Plugin &type:"
 msgstr ""
 
 msgid "&Category:"
@@ -2952,6 +2985,9 @@ msgstr ""
 
 #, c-format
 msgid "Differences to... (%1)"
+msgstr ""
+
+msgid "Some selected items are identical or skipped.\nDo you want to copy only the items with differences?"
 msgstr ""
 
 #, c-format
@@ -4223,6 +4259,27 @@ msgstr ""
 msgid "New plugin description"
 msgstr ""
 
+msgid "All"
+msgstr ""
+
+msgid "1st"
+msgstr ""
+
+msgid "2nd"
+msgstr ""
+
+msgid "3rd"
+msgstr ""
+
+msgid "1st and 2nd"
+msgstr ""
+
+msgid "1st and 3rd"
+msgstr ""
+
+msgid "2nd and 3rd"
+msgstr ""
+
 msgid "Filter applied"
 msgstr ""
 
@@ -4299,6 +4356,24 @@ msgstr ""
 msgid "Character"
 msgstr ""
 
+msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
+msgstr ""
+
+msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
+msgstr ""
+
+msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
+msgstr ""
+
 msgid "Prettification"
 msgstr ""
 
@@ -4318,6 +4393,9 @@ msgid "Decompilation"
 msgstr ""
 
 msgid "URL Handling"
+msgstr ""
+
+msgid "Decoding / Encoding"
 msgstr ""
 
 msgid "Make Uppercase"
@@ -4435,6 +4513,9 @@ msgid "Disassemble Native Code"
 msgstr ""
 
 msgid "Convert Text with AI..."
+msgstr ""
+
+msgid "Unescape Java properties files"
 msgstr ""
 
 msgid "Make characters uppercase"
@@ -4630,6 +4711,9 @@ msgid "AI-assisted text conversion functions"
 msgstr ""
 
 msgid "Text converter using OpenAI API.\r\nUsage: AIConvertText PROMPT"
+msgstr ""
+
+msgid "Unescape and display escaped Java properties files."
 msgstr ""
 
 msgid "CompareMSExcelFiles.sct WinMerge Plugin Options"

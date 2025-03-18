@@ -392,14 +392,56 @@ IsUser2Keyword (const tchar_t *pszChars, int nLength)
   return ISXKEYWORD (s_apszUser2KeywordList, pszChars, nLength);
 }
 
+static inline void
+DefineIdentiferBlock(const tchar_t *pszChars, int nLength, CrystalLineParser::TEXTBLOCK * pBuf, int &nActualItems, int nIdentBegin, int I)
+{
+  if (IsPythonKeyword (pszChars + nIdentBegin, I - nIdentBegin))
+    {
+      DEFINE_BLOCK (nIdentBegin, COLORINDEX_KEYWORD);
+    }
+  else if (IsUser1Keyword (pszChars + nIdentBegin, I - nIdentBegin))
+    {
+      DEFINE_BLOCK (nIdentBegin, COLORINDEX_USER1);
+    }
+  else if (IsUser2Keyword (pszChars + nIdentBegin, I - nIdentBegin))
+    {
+      DEFINE_BLOCK (nIdentBegin, COLORINDEX_USER2);
+    }
+  else if (CrystalLineParser::IsXNumber (pszChars + nIdentBegin, I - nIdentBegin))
+    {
+      DEFINE_BLOCK (nIdentBegin, COLORINDEX_NUMBER);
+    }
+  else
+    {
+      bool bFunction = false;
+
+      for (int j = I; j < nLength; j++)
+        {
+          if (!xisspace (pszChars[j]))
+            {
+              if (pszChars[j] == '(')
+                {
+                  bFunction = true;
+                }
+              break;
+            }
+        }
+      if (bFunction)
+        {
+          DEFINE_BLOCK (nIdentBegin, COLORINDEX_FUNCNAME);
+        }
+    }
+}
+
 unsigned
 CrystalLineParser::ParseLinePython (unsigned dwCookie, const tchar_t *pszChars, int nLength, TEXTBLOCK * pBuf, int &nActualItems)
 {
   if (nLength == 0)
-    return dwCookie & COOKIE_EXT_COMMENT;
+    return dwCookie & (COOKIE_EXT_COMMENT | COOKIE_RAWSTRING | 0xFF000000);
 
   bool bRedefineBlock = true;
   bool bDecIndex = false;
+  int nTripleQuotesBegin = -3;
   int nIdentBegin = -1;
   int nPrevI = -1;
   int I=0;
@@ -421,7 +463,7 @@ CrystalLineParser::ParseLinePython (unsigned dwCookie, const tchar_t *pszChars, 
             {
               DEFINE_BLOCK (nPos, COLORINDEX_COMMENT);
             }
-          else if (dwCookie & (COOKIE_CHAR | COOKIE_STRING))
+          else if (dwCookie & (COOKIE_CHAR | COOKIE_STRING | COOKIE_RAWSTRING))
             {
               DEFINE_BLOCK (nPos, COLORINDEX_STRING);
             }
@@ -467,6 +509,18 @@ out:
           continue;
         }
 
+      //  Triple quotes """....""" or '''...'''
+      if (dwCookie & COOKIE_RAWSTRING)
+        {
+          const char ch = COOKIE_GET_RAWSTRING_DELIMITER(dwCookie);
+          if (I >= 2 && I >= nTripleQuotesBegin + 5 && pszChars[I] == ch && pszChars[nPrevI] == ch && *tc::tcharprev(pszChars, pszChars + nPrevI) == ch)
+            {
+              dwCookie &= ~COOKIE_RAWSTRING;
+              bRedefineBlock = true;
+            }
+          continue;
+        }
+
       //  Char constant '..'
       if (dwCookie & COOKIE_CHAR)
         {
@@ -485,15 +539,37 @@ out:
           break;
         }
 
-      //  Normal text
+      //  Normal text or Triple quotes
       if (pszChars[I] == '"')
         {
+          //  Triple quotes
+          if (I + 2 < nLength && pszChars[I + 1] == '"' && pszChars[I + 2] == '"')
+            {
+              nTripleQuotesBegin = I;
+              DEFINE_BLOCK (I, COLORINDEX_STRING);
+              dwCookie |= COOKIE_RAWSTRING;
+              COOKIE_SET_RAWSTRING_DELIMITER(dwCookie, '"');
+              continue;
+            }
+
+          //  Normal text
           DEFINE_BLOCK (I, COLORINDEX_STRING);
           dwCookie |= COOKIE_STRING;
           continue;
         }
+
       if (pszChars[I] == '\'')
         {
+          //  Triple quotes
+          if (I + 2 < nLength && pszChars[I + 1] == '\'' && pszChars[I + 2] == '\'')
+            {
+              nTripleQuotesBegin = I;
+              DEFINE_BLOCK (I, COLORINDEX_STRING);
+              dwCookie |= COOKIE_RAWSTRING;
+              COOKIE_SET_RAWSTRING_DELIMITER(dwCookie, '\'');
+              continue;
+            }
+
           // if (I + 1 < nLength && pszChars[I + 1] == '\'' || I + 2 < nLength && pszChars[I + 1] != '\\' && pszChars[I + 2] == '\'' || I + 3 < nLength && pszChars[I + 1] == '\\' && pszChars[I + 3] == '\'')
           if (!I || !xisalnum (pszChars[nPrevI]))
             {
@@ -516,42 +592,7 @@ out:
         {
           if (nIdentBegin >= 0)
             {
-              if (IsPythonKeyword (pszChars + nIdentBegin, I - nIdentBegin))
-                {
-                  DEFINE_BLOCK (nIdentBegin, COLORINDEX_KEYWORD);
-                }
-              else if (IsUser1Keyword (pszChars + nIdentBegin, I - nIdentBegin))
-                {
-                  DEFINE_BLOCK (nIdentBegin, COLORINDEX_USER1);
-                }
-              else if (IsUser2Keyword (pszChars + nIdentBegin, I - nIdentBegin))
-                {
-                  DEFINE_BLOCK (nIdentBegin, COLORINDEX_USER2);
-                }
-              else if (IsXNumber (pszChars + nIdentBegin, I - nIdentBegin))
-                {
-                  DEFINE_BLOCK (nIdentBegin, COLORINDEX_NUMBER);
-                }
-              else
-                {
-                  bool bFunction = false;
-
-                  for (int j = I; j < nLength; j++)
-                    {
-                      if (!xisspace (pszChars[j]))
-                        {
-                          if (pszChars[j] == '(')
-                            {
-                              bFunction = true;
-                            }
-                          break;
-                        }
-                    }
-                  if (bFunction)
-                    {
-                      DEFINE_BLOCK (nIdentBegin, COLORINDEX_FUNCNAME);
-                    }
-                }
+              DefineIdentiferBlock(pszChars, nLength, pBuf, nActualItems, nIdentBegin, I);
               bRedefineBlock = true;
               bDecIndex = true;
               nIdentBegin = -1;
@@ -561,45 +602,10 @@ out:
 
   if (nIdentBegin >= 0)
     {
-      if (IsPythonKeyword (pszChars + nIdentBegin, I - nIdentBegin))
-        {
-          DEFINE_BLOCK (nIdentBegin, COLORINDEX_KEYWORD);
-        }
-      else if (IsUser1Keyword (pszChars + nIdentBegin, I - nIdentBegin))
-        {
-          DEFINE_BLOCK (nIdentBegin, COLORINDEX_USER1);
-        }
-      else if (IsUser2Keyword (pszChars + nIdentBegin, I - nIdentBegin))
-        {
-          DEFINE_BLOCK (nIdentBegin, COLORINDEX_USER2);
-        }
-      else if (IsXNumber (pszChars + nIdentBegin, I - nIdentBegin))
-        {
-          DEFINE_BLOCK (nIdentBegin, COLORINDEX_NUMBER);
-        }
-      else
-        {
-          bool bFunction = false;
-
-          for (int j = I; j < nLength; j++)
-            {
-              if (!xisspace (pszChars[j]))
-                {
-                  if (pszChars[j] == '(')
-                    {
-                      bFunction = true;
-                    }
-                  break;
-                }
-            }
-          if (bFunction)
-            {
-              DEFINE_BLOCK (nIdentBegin, COLORINDEX_FUNCNAME);
-            }
-        }
+      DefineIdentiferBlock(pszChars, nLength, pBuf, nActualItems, nIdentBegin, I);
     }
 
   if (pszChars[nLength - 1] != '\\' || IsMBSTrail(pszChars, nLength - 1))
-    dwCookie &= COOKIE_EXT_COMMENT;
+    dwCookie &= (COOKIE_EXT_COMMENT | COOKIE_RAWSTRING | 0xFF000000);
   return dwCookie;
 }

@@ -60,6 +60,18 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட வரி(க�
 msgid "Copy Selected Line(s) from Left"
 msgstr "இடமிருந்து தேர்ந்தெடுக்கப்பட்ட வரி(களை) நகலெடுக்கவும்"
 
+msgid "Copy Selected Diff (Left) to Clipboard\tCtrl+&1"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Middle) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&3"
+msgstr ""
+
 msgid "Select Line &Difference\tF4"
 msgstr "வரி &வேறுபாடு\tF4 தேர்ந்தெடு"
 
@@ -344,11 +356,23 @@ msgstr "&விருப்பங்கள்..."
 msgid "&View"
 msgstr "&பார்வை"
 
+msgid "Ta&b Bar"
+msgstr "Ta&b Bar"
+
+msgid "&View Tab Bar"
+msgstr ""
+
+msgid "&On Title Bar"
+msgstr ""
+
 msgid "&Toolbar"
 msgstr "&கருவிப்பட்டி"
 
 msgid "&Small"
 msgstr "&சிறியது"
+
+msgid "&Medium"
+msgstr ""
 
 msgid "&Big"
 msgstr "&பெரிய"
@@ -356,11 +380,11 @@ msgstr "&பெரிய"
 msgid "&Huge"
 msgstr "&பெரிய"
 
+msgid "Men&u Bar"
+msgstr ""
+
 msgid "&Status Bar"
 msgstr "&நிலைப் பட்டி"
-
-msgid "Ta&b Bar"
-msgstr "Ta&b Bar"
 
 msgid "&Tools"
 msgstr "&கருவிகள்"
@@ -1075,6 +1099,9 @@ msgstr "எண்&பெர்களை புறக்கணிக்கவு�
 msgid "Ignore c&omment differences"
 msgstr "க&கருத்து வேறுபாடுகளை புறக்கணிக்கவும்"
 
+msgid "Ignore &missing trailing EOL"
+msgstr ""
+
 msgid "&Include subfolders"
 msgstr "&உள்கோப்புகளை சேர்"
 
@@ -1288,6 +1315,9 @@ msgstr ""
 msgid "Language:"
 msgstr "மொழி:"
 
+msgid "Defaults"
+msgstr "இயல்புநிலைகள்"
+
 msgid "Find"
 msgstr "கண்டுபிடி"
 
@@ -1432,6 +1462,66 @@ msgstr "சொல் வேறுபாடு:"
 msgid "Selected Word Diff:"
 msgstr "தேர்ந்தெடுக்கப்பட்ட வார்த்தை வேறுபாடு:"
 
+msgid "Dialog"
+msgstr "உரையாடல்"
+
+msgid "Keywords:"
+msgstr "திறவுச்சொற்கள்:"
+
+msgid "Function names:"
+msgstr "செயல்பாடு பெயர்கள்:"
+
+msgid "Comments:"
+msgstr "கருத்துகள்:"
+
+msgid "Numbers:"
+msgstr "எண்கள்:"
+
+msgid "Operators:"
+msgstr "ஆபரேட்டர்கள்:"
+
+msgid "Strings:"
+msgstr "சரங்கள்:"
+
+msgid "Preprocessor:"
+msgstr "முன்செயலி:"
+
+msgid "User 1:"
+msgstr "பயனர் 1:"
+
+msgid "User 2:"
+msgstr "பயனர் 2:"
+
+msgid "Bold"
+msgstr "தடித்த"
+
+msgid "&Use customized text colors"
+msgstr "&பிரத்தியேகப்படுத்தப்பட்ட உரை வண்ணங்களைப் பயன்படுத்தவும்"
+
+msgid "Whitespace:"
+msgstr "வெள்ளைவெளி:"
+
+msgid "Regular text:"
+msgstr "வழக்கமான உரை:"
+
+msgid "Selection:"
+msgstr "தேர்வு:"
+
+msgid "Margin:"
+msgstr "விளிம்பு:"
+
+msgid "Search Marker:"
+msgstr "தேடல் குறிப்பான்:"
+
+msgid "User Defined Marker1:"
+msgstr "பயனர் வரையறுக்கப்பட்ட மார்க்கர்1:"
+
+msgid "User Defined Marker2:"
+msgstr "பயனர் வரையறுக்கப்பட்ட மார்க்கர்2:"
+
+msgid "User Defined Marker3:"
+msgstr "பயனர் வரையறுக்கப்பட்ட மார்க்கர்3:"
+
 msgid "&Use folder compare colors"
 msgstr "நிறங்களை ஒப்பிட்டு கோப்புறையை பயன்படுத்தவும்"
 
@@ -1447,8 +1537,8 @@ msgstr "உருப்படிகள் அனைத்தும் இல்�
 msgid "Items filtered:"
 msgstr "வடிகட்டப்பட்ட உருப்படிகள்:"
 
-msgid "Margin:"
-msgstr "விளிம்பு:"
+msgid "&Use custom system colors (Some UI elements may not apply)"
+msgstr ""
 
 msgid "System"
 msgstr "அமைப்பு"
@@ -1513,9 +1603,6 @@ msgstr "கட்டளை வரியைச் சேர்&செய்"
 msgid "Open to e&xternal editor"
 msgstr "மின்&புற எடிட்டருக்கு திற"
 
-msgid "Defaults"
-msgstr "இயல்புநிலைகள்"
-
 msgid "Display Columns"
 msgstr "காட்சி நெடுவரிசைகள்"
 
@@ -1534,8 +1621,11 @@ msgstr "கூடுதல் பண்புகள்"
 msgid "Select Plugin"
 msgstr "செருகுநிரலை தேர்ந்தெடு"
 
-msgid "Plugin &Name:"
+msgid "Plugin &name:"
 msgstr "சொருகி &பெயர்:"
+
+msgid "&Target files:"
+msgstr ""
 
 msgid "Extensions list:"
 msgstr "நீட்டிப்பு பட்டியல்:"
@@ -1552,8 +1642,8 @@ msgstr "எல்லா செருகுநிரல்களையும் �
 msgid "&Open files in the same window type after unpacking"
 msgstr "&திறந்த பிறகு அதே சாளர வகை கோப்புகளை திறக்கவும்"
 
-msgid "&Plugin Pipeline:"
-msgstr "&Plugin Pipeline:"
+msgid "&Plugin pipeline:"
+msgstr "&Plugin pipeline:"
 
 msgid "&Alias..."
 msgstr ""
@@ -1770,51 +1860,6 @@ msgstr "இறக்குமதி..."
 msgid "Export..."
 msgstr "ஏற்றுமதி..."
 
-msgid "Dialog"
-msgstr "உரையாடல்"
-
-msgid "Keywords:"
-msgstr "திறவுச்சொற்கள்:"
-
-msgid "Function names:"
-msgstr "செயல்பாடு பெயர்கள்:"
-
-msgid "Comments:"
-msgstr "கருத்துகள்:"
-
-msgid "Numbers:"
-msgstr "எண்கள்:"
-
-msgid "Operators:"
-msgstr "ஆபரேட்டர்கள்:"
-
-msgid "Strings:"
-msgstr "சரங்கள்:"
-
-msgid "Preprocessor:"
-msgstr "முன்செயலி:"
-
-msgid "User 1:"
-msgstr "பயனர் 1:"
-
-msgid "User 2:"
-msgstr "பயனர் 2:"
-
-msgid "Bold"
-msgstr "தடித்த"
-
-msgid "Search Marker:"
-msgstr "தேடல் குறிப்பான்:"
-
-msgid "User Defined Marker1:"
-msgstr "பயனர் வரையறுக்கப்பட்ட மார்க்கர்1:"
-
-msgid "User Defined Marker2:"
-msgstr "பயனர் வரையறுக்கப்பட்ட மார்க்கர்2:"
-
-msgid "User Defined Marker3:"
-msgstr "பயனர் வரையறுக்கப்பட்ட மார்க்கர்3:"
-
 msgid "Folder Compare Report"
 msgstr "கோப்புறை ஒப்பீட்டு அறிக்கை"
 
@@ -1962,18 +2007,6 @@ msgstr "&மேற்கோள்களில் புதிய வரிகள
 msgid "&Quote character:"
 msgstr "&மேற்கோள் எழுத்து:"
 
-msgid "&Use customized text colors"
-msgstr "&பிரத்தியேகப்படுத்தப்பட்ட உரை வண்ணங்களைப் பயன்படுத்தவும்"
-
-msgid "Whitespace:"
-msgstr "வெள்ளைவெளி:"
-
-msgid "Regular text:"
-msgstr "வழக்கமான உரை:"
-
-msgid "Selection:"
-msgstr "தேர்வு:"
-
 msgid "Backup Files"
 msgstr "காப்பு கோப்புகள்"
 
@@ -2030,6 +2063,9 @@ msgstr "செருகுகள்"
 
 msgid "&Enable plugins"
 msgstr "&செருகுநிரல்களை இயக்கு"
+
+msgid "Plugin &type:"
+msgstr ""
 
 msgid "File filters:"
 msgstr "கோப்பு வடிப்பான்கள்:"
@@ -2160,9 +2196,6 @@ msgid "&Hex View"
 msgstr "&ஹெக்ஸ் வியூ"
 
 msgid "Edit Plugin"
-msgstr ""
-
-msgid "Plugin &type:"
 msgstr ""
 
 msgid "&Category:"
@@ -2942,6 +2975,9 @@ msgstr "அனைத்திற்கும்... (%1)"
 #, c-format
 msgid "Differences to... (%1)"
 msgstr "வேறுபாடுகள்... (%1)"
+
+msgid "Some selected items are identical or skipped.\nDo you want to copy only the items with differences?"
+msgstr ""
 
 #, c-format
 msgid "Left (%1)"
@@ -4216,6 +4252,27 @@ msgstr ""
 msgid "New plugin description"
 msgstr ""
 
+msgid "All"
+msgstr ""
+
+msgid "1st"
+msgstr ""
+
+msgid "2nd"
+msgstr ""
+
+msgid "3rd"
+msgstr ""
+
+msgid "1st and 2nd"
+msgstr ""
+
+msgid "1st and 3rd"
+msgstr ""
+
+msgid "2nd and 3rd"
+msgstr ""
+
 msgid "Filter applied"
 msgstr "வடிகட்டி பயன்படுத்தப்பட்டது"
 
@@ -4293,6 +4350,24 @@ msgstr ""
 msgid "Character"
 msgstr ""
 
+msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
+msgstr ""
+
+msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
+msgstr ""
+
+msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
+msgstr ""
+
 msgid "Prettification"
 msgstr "அழகானமாக்கல்"
 
@@ -4313,6 +4388,9 @@ msgstr "தொகுப்பு"
 
 msgid "URL Handling"
 msgstr "URL கையாளுதல்"
+
+msgid "Decoding / Encoding"
+msgstr ""
 
 msgid "Make Uppercase"
 msgstr "பெரிய எழுத்தை உருவாக்கு"
@@ -4429,6 +4507,9 @@ msgid "Disassemble Native Code"
 msgstr "நேட்டிவ் குறியீட்டை பிரிக்கவும்"
 
 msgid "Convert Text with AI..."
+msgstr ""
+
+msgid "Unescape Java properties files"
 msgstr ""
 
 msgid "Make characters uppercase"
@@ -4688,6 +4769,9 @@ msgid "AI-assisted text conversion functions"
 msgstr ""
 
 msgid "Text converter using OpenAI API.\r\nUsage: AIConvertText PROMPT"
+msgstr ""
+
+msgid "Unescape and display escaped Java properties files."
 msgstr ""
 
 msgid "CompareMSExcelFiles.sct WinMerge Plugin Options"

@@ -63,6 +63,18 @@ msgstr "Kopiuj zaznaczone wiersze do lewej"
 msgid "Copy Selected Line(s) from Left"
 msgstr "Kopiuj zaznaczone wiersze z lewej"
 
+msgid "Copy Selected Diff (Left) to Clipboard\tCtrl+&1"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Middle) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&3"
+msgstr ""
+
 msgid "Select Line &Difference\tF4"
 msgstr "Zaznacz różniące się wiersze\tF4"
 
@@ -347,11 +359,23 @@ msgstr "Opcje..."
 msgid "&View"
 msgstr "Widok"
 
+msgid "Ta&b Bar"
+msgstr "Pasek kart"
+
+msgid "&View Tab Bar"
+msgstr ""
+
+msgid "&On Title Bar"
+msgstr ""
+
 msgid "&Toolbar"
 msgstr "Pasek narzędzi"
 
 msgid "&Small"
 msgstr "Mały"
+
+msgid "&Medium"
+msgstr ""
 
 msgid "&Big"
 msgstr "Duży"
@@ -359,11 +383,11 @@ msgstr "Duży"
 msgid "&Huge"
 msgstr "Ogromny"
 
+msgid "Men&u Bar"
+msgstr ""
+
 msgid "&Status Bar"
 msgstr "Pasek stanu"
-
-msgid "Ta&b Bar"
-msgstr "Pasek kart"
 
 msgid "&Tools"
 msgstr "Narzędzia"
@@ -1078,6 +1102,9 @@ msgstr "Ignoruj liczby"
 msgid "Ignore c&omment differences"
 msgstr "Ignoruj różnice w komentarzach"
 
+msgid "Ignore &missing trailing EOL"
+msgstr ""
+
 msgid "&Include subfolders"
 msgstr "Uwzględn&ij podfoldery"
 
@@ -1291,6 +1318,9 @@ msgstr "Automatycznie przeładuj zmodyfikowane pliki:"
 msgid "Language:"
 msgstr "Język:"
 
+msgid "Defaults"
+msgstr "Domyślne"
+
 msgid "Find"
 msgstr "Znajdź"
 
@@ -1435,6 +1465,66 @@ msgstr "Różniące się słowa:"
 msgid "Selected Word Diff:"
 msgstr "Zaznaczone różniące się słowa:"
 
+msgid "Dialog"
+msgstr "Okno dialogowe"
+
+msgid "Keywords:"
+msgstr "Słowa kluczowe:"
+
+msgid "Function names:"
+msgstr "Nazwy funkcji:"
+
+msgid "Comments:"
+msgstr "Komentarze:"
+
+msgid "Numbers:"
+msgstr "Liczby:"
+
+msgid "Operators:"
+msgstr "Operatory:"
+
+msgid "Strings:"
+msgstr "Ciągi znaków:"
+
+msgid "Preprocessor:"
+msgstr "Preprocesor:"
+
+msgid "User 1:"
+msgstr "Użytkownik 1:"
+
+msgid "User 2:"
+msgstr "Użytkownik 2:"
+
+msgid "Bold"
+msgstr "Pogrubienie"
+
+msgid "&Use customized text colors"
+msgstr "Użyj niestandardowych kolorów tekstu"
+
+msgid "Whitespace:"
+msgstr "Odstęp:"
+
+msgid "Regular text:"
+msgstr "Czcionka regularna:"
+
+msgid "Selection:"
+msgstr "Zaznaczenie:"
+
+msgid "Margin:"
+msgstr "Margines:"
+
+msgid "Search Marker:"
+msgstr "Znaleziony marker:"
+
+msgid "User Defined Marker1:"
+msgstr "Zdefiniowany przez użytkownika Marker1:"
+
+msgid "User Defined Marker2:"
+msgstr "Zdefiniowany przez użytkownika Marker2:"
+
+msgid "User Defined Marker3:"
+msgstr "Zdefiniowany przez użytkownika Marker3:"
+
 msgid "&Use folder compare colors"
 msgstr "Użyj kolorów do porównania folderów"
 
@@ -1450,8 +1540,8 @@ msgstr "Wszystkie nieistniejące elementy:"
 msgid "Items filtered:"
 msgstr "Przefiltrowane elementy:"
 
-msgid "Margin:"
-msgstr "Margines:"
+msgid "&Use custom system colors (Some UI elements may not apply)"
+msgstr ""
 
 msgid "System"
 msgstr "System"
@@ -1516,9 +1606,6 @@ msgstr "Uwzględnij wiersz poleceń"
 msgid "Open to e&xternal editor"
 msgstr "Otwórz w zewnętrznym edytorze"
 
-msgid "Defaults"
-msgstr "Domyślne"
-
 msgid "Display Columns"
 msgstr "Wyświetl kolumny"
 
@@ -1537,8 +1624,11 @@ msgstr "Dodatkowe właściwości"
 msgid "Select Plugin"
 msgstr "Wybierz wtyczkę"
 
-msgid "Plugin &Name:"
+msgid "Plugin &name:"
 msgstr "Nazwa wtyczki:"
+
+msgid "&Target files:"
+msgstr ""
 
 msgid "Extensions list:"
 msgstr "Lista rozszerzeń:"
@@ -1555,7 +1645,7 @@ msgstr "Wyświetl wszystkie wtyczki (nie sprawdzaj po rozszerzeniu)"
 msgid "&Open files in the same window type after unpacking"
 msgstr "Po rozpakowaniu otwórz pliki w tym samym typie okna"
 
-msgid "&Plugin Pipeline:"
+msgid "&Plugin pipeline:"
 msgstr "Wtyczka pipeline:"
 
 msgid "&Alias..."
@@ -1765,51 +1855,6 @@ msgstr "Importuj..."
 msgid "Export..."
 msgstr "Eksportuj..."
 
-msgid "Dialog"
-msgstr "Okno dialogowe"
-
-msgid "Keywords:"
-msgstr "Słowa kluczowe:"
-
-msgid "Function names:"
-msgstr "Nazwy funkcji:"
-
-msgid "Comments:"
-msgstr "Komentarze:"
-
-msgid "Numbers:"
-msgstr "Liczby:"
-
-msgid "Operators:"
-msgstr "Operatory:"
-
-msgid "Strings:"
-msgstr "Ciągi znaków:"
-
-msgid "Preprocessor:"
-msgstr "Preprocesor:"
-
-msgid "User 1:"
-msgstr "Użytkownik 1:"
-
-msgid "User 2:"
-msgstr "Użytkownik 2:"
-
-msgid "Bold"
-msgstr "Pogrubienie"
-
-msgid "Search Marker:"
-msgstr "Znaleziony marker:"
-
-msgid "User Defined Marker1:"
-msgstr "Zdefiniowany przez użytkownika Marker1:"
-
-msgid "User Defined Marker2:"
-msgstr "Zdefiniowany przez użytkownika Marker2:"
-
-msgid "User Defined Marker3:"
-msgstr "Zdefiniowany przez użytkownika Marker3:"
-
 msgid "Folder Compare Report"
 msgstr "Raport porównania folderów"
 
@@ -1957,18 +2002,6 @@ msgstr "Zezwalaj na nowe wiersze w cudzysłowie"
 msgid "&Quote character:"
 msgstr "Znak cudzysłowu:"
 
-msgid "&Use customized text colors"
-msgstr "Użyj niestandardowych kolorów tekstu"
-
-msgid "Whitespace:"
-msgstr "Odstęp:"
-
-msgid "Regular text:"
-msgstr "Czcionka regularna:"
-
-msgid "Selection:"
-msgstr "Zaznaczenie:"
-
 msgid "Backup Files"
 msgstr "Pliki kopii zapasowej"
 
@@ -2025,6 +2058,9 @@ msgstr "Wtyczki"
 
 msgid "&Enable plugins"
 msgstr "Włącz wtyczki"
+
+msgid "Plugin &type:"
+msgstr "Typ wtyczki:"
 
 msgid "File filters:"
 msgstr "Filtry pliku:"
@@ -2156,9 +2192,6 @@ msgstr "Widok szesnastkowy"
 
 msgid "Edit Plugin"
 msgstr ""
-
-msgid "Plugin &type:"
-msgstr "Typ wtyczki:"
 
 msgid "&Category:"
 msgstr "Kategoria:"
@@ -2734,6 +2767,9 @@ msgstr "Wszystkie do... (%1)"
 msgid "Differences to... (%1)"
 msgstr "Różnice do... (%1)"
 
+msgid "Some selected items are identical or skipped.\nDo you want to copy only the items with differences?"
+msgstr ""
+
 #, c-format
 msgid "Left (%1)"
 msgstr "Lewy (%1)"
@@ -2800,7 +2836,7 @@ msgid "You are about to close the window that is comparing folders. Are you sure
 msgstr "Zamierzasz zamknąć okno porównujące foldery. Czy na pewno chcesz zamknąć okno?"
 
 msgid "You are about to close the folder comparison window that took a significant amount of time. Are you sure you want to close the window?"
-msgstr "Zamierzasz zamknąć okno porównywania folderu, któremy poświęcono znaczną ilość czasu. Czy na pewno chcesz zamknąć okno?"
+msgstr "Zamierzasz zamknąć okno porównywania folderu, któremu poświęcono znaczną ilość czasu. Czy na pewno chcesz zamknąć okno?"
 
 msgid "The file or folder name is invalid."
 msgstr "Nazwa pliku lub folderu jest nieprawidłowa."
@@ -3837,6 +3873,27 @@ msgstr ""
 msgid "New plugin description"
 msgstr ""
 
+msgid "All"
+msgstr ""
+
+msgid "1st"
+msgstr ""
+
+msgid "2nd"
+msgstr ""
+
+msgid "3rd"
+msgstr ""
+
+msgid "1st and 2nd"
+msgstr ""
+
+msgid "1st and 3rd"
+msgstr ""
+
+msgid "2nd and 3rd"
+msgstr ""
+
 msgid "Filter applied"
 msgstr "Zastosowano filtr"
 
@@ -3910,6 +3967,24 @@ msgstr "Wiersz"
 msgid "Character"
 msgstr "Znak"
 
+msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
+msgstr ""
+
+msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
+msgstr ""
+
+msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
+msgstr ""
+
 msgid "Prettification"
 msgstr "Upiększanie"
 
@@ -3930,6 +4005,9 @@ msgstr "Dekompilacja"
 
 msgid "URL Handling"
 msgstr "Obsługa adresów URL"
+
+msgid "Decoding / Encoding"
+msgstr ""
 
 msgid "Make Uppercase"
 msgstr "Zrób duże litery"
@@ -4047,6 +4125,9 @@ msgstr "Dezasembluj kod natywny"
 
 msgid "Convert Text with AI..."
 msgstr "Konwertuj tekst za pomocą AI..."
+
+msgid "Unescape Java properties files"
+msgstr ""
 
 msgid "Make characters uppercase"
 msgstr "Zrób duże litery"
@@ -4186,6 +4267,9 @@ msgstr "Funkcje konwersji tekstu wspomagane AI"
 
 msgid "Text converter using OpenAI API.\r\nUsage: AIConvertText PROMPT"
 msgstr "Konwerter tekstu wykorzystujący API OpenAI.\r\nUżycie: AIConvertText PROMPT"
+
+msgid "Unescape and display escaped Java properties files."
+msgstr ""
 
 msgid "CompareMSExcelFiles.sct WinMerge Plugin Options"
 msgstr "Opcje wtyczki WinMerge CompareMSExcelFiles.sct"

@@ -62,6 +62,18 @@ msgstr ""
 msgid "Copy Selected Line(s) from Left"
 msgstr ""
 
+msgid "Copy Selected Diff (Left) to Clipboard\tCtrl+&1"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Middle) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&3"
+msgstr ""
+
 #, c-format
 msgid "Select Line &Difference\tF4"
 msgstr "&D انتخاب خط تفاوت \tF4"
@@ -389,12 +401,25 @@ msgid "&View"
 msgstr "&V نما "
 
 #, c-format
+msgid "Ta&b Bar"
+msgstr "&b ميله جهش "
+
+msgid "&View Tab Bar"
+msgstr ""
+
+msgid "&On Title Bar"
+msgstr ""
+
+#, c-format
 msgid "&Toolbar"
 msgstr "&T ميله ابزار "
 
 #, c-format
 msgid "&Small"
 msgstr "&S کوچک "
+
+msgid "&Medium"
+msgstr ""
 
 #, c-format
 msgid "&Big"
@@ -404,13 +429,12 @@ msgstr "&B بزرگ"
 msgid "&Huge"
 msgstr ""
 
+msgid "Men&u Bar"
+msgstr ""
+
 #, c-format
 msgid "&Status Bar"
 msgstr "&S ميله وضعيت "
-
-#, c-format
-msgid "Ta&b Bar"
-msgstr "&b ميله جهش "
 
 #, c-format
 msgid "&Tools"
@@ -1297,6 +1321,9 @@ msgstr ""
 msgid "Ignore c&omment differences"
 msgstr ""
 
+msgid "Ignore &missing trailing EOL"
+msgstr ""
+
 #, c-format
 msgid "&Include subfolders"
 msgstr "&I شامل زيرپوشه ها "
@@ -1552,6 +1579,10 @@ msgid "Language:"
 msgstr ""
 
 #, c-format
+msgid "Defaults"
+msgstr " پيش فرضها "
+
+#, c-format
 msgid "Find"
 msgstr " يافتن "
 
@@ -1735,6 +1766,86 @@ msgstr " تفاوت واژه : "
 msgid "Selected Word Diff:"
 msgstr " تفاوت واژه انتخابي : "
 
+#, c-format
+msgid "Dialog"
+msgstr "پنجره محاوره  "
+
+#, c-format
+msgid "Keywords:"
+msgstr " کليدواژه ها : "
+
+#, c-format
+msgid "Function names:"
+msgstr " نام کليدکارها : "
+
+#, c-format
+msgid "Comments:"
+msgstr " توضيحات : "
+
+#, c-format
+msgid "Numbers:"
+msgstr " شماره ها : "
+
+#, c-format
+msgid "Operators:"
+msgstr " عملگرها : "
+
+#, c-format
+msgid "Strings:"
+msgstr " رشته ها : "
+
+#, c-format
+msgid "Preprocessor:"
+msgstr " پيش پرداز : "
+
+#, c-format
+msgid "User 1:"
+msgstr " کاربر 1 : "
+
+#, c-format
+msgid "User 2:"
+msgstr " کاربر 2 : "
+
+#, c-format
+msgid "Bold"
+msgstr " تيره "
+
+#, c-format
+msgid "&Use customized text colors"
+msgstr "&U  استفاده از رنگهاي متن سفارشي "
+
+#, c-format
+msgid "Whitespace:"
+msgstr " فاصله سفيد : "
+
+#, c-format
+msgid "Regular text:"
+msgstr " متن منظم : "
+
+#, c-format
+msgid "Selection:"
+msgstr " انتخاب : "
+
+#, c-format
+msgid "Margin:"
+msgstr ""
+
+#, c-format
+msgid "Search Marker:"
+msgstr ""
+
+#, c-format
+msgid "User Defined Marker1:"
+msgstr ""
+
+#, c-format
+msgid "User Defined Marker2:"
+msgstr ""
+
+#, c-format
+msgid "User Defined Marker3:"
+msgstr ""
+
 msgid "&Use folder compare colors"
 msgstr ""
 
@@ -1750,8 +1861,7 @@ msgstr ""
 msgid "Items filtered:"
 msgstr ""
 
-#, c-format
-msgid "Margin:"
+msgid "&Use custom system colors (Some UI elements may not apply)"
 msgstr ""
 
 #, c-format
@@ -1839,10 +1949,6 @@ msgid "Open to e&xternal editor"
 msgstr "&x بازکردن با ويراستار خارجي "
 
 #, c-format
-msgid "Defaults"
-msgstr " پيش فرضها "
-
-#, c-format
 msgid "Display Columns"
 msgstr " نمايش ستون ها "
 
@@ -1863,7 +1969,10 @@ msgstr ""
 msgid "Select Plugin"
 msgstr ""
 
-msgid "Plugin &Name:"
+msgid "Plugin &name:"
+msgstr ""
+
+msgid "&Target files:"
 msgstr ""
 
 #, c-format
@@ -1883,7 +1992,7 @@ msgstr ""
 msgid "&Open files in the same window type after unpacking"
 msgstr ""
 
-msgid "&Plugin Pipeline:"
+msgid "&Plugin pipeline:"
 msgstr ""
 
 msgid "&Alias..."
@@ -2152,66 +2261,6 @@ msgid "Export..."
 msgstr " صدور ... "
 
 #, c-format
-msgid "Dialog"
-msgstr "پنجره محاوره  "
-
-#, c-format
-msgid "Keywords:"
-msgstr " کليدواژه ها : "
-
-#, c-format
-msgid "Function names:"
-msgstr " نام کليدکارها : "
-
-#, c-format
-msgid "Comments:"
-msgstr " توضيحات : "
-
-#, c-format
-msgid "Numbers:"
-msgstr " شماره ها : "
-
-#, c-format
-msgid "Operators:"
-msgstr " عملگرها : "
-
-#, c-format
-msgid "Strings:"
-msgstr " رشته ها : "
-
-#, c-format
-msgid "Preprocessor:"
-msgstr " پيش پرداز : "
-
-#, c-format
-msgid "User 1:"
-msgstr " کاربر 1 : "
-
-#, c-format
-msgid "User 2:"
-msgstr " کاربر 2 : "
-
-#, c-format
-msgid "Bold"
-msgstr " تيره "
-
-#, c-format
-msgid "Search Marker:"
-msgstr ""
-
-#, c-format
-msgid "User Defined Marker1:"
-msgstr ""
-
-#, c-format
-msgid "User Defined Marker2:"
-msgstr ""
-
-#, c-format
-msgid "User Defined Marker3:"
-msgstr ""
-
-#, c-format
 msgid "Folder Compare Report"
 msgstr " گزارش همسنجي پوشه "
 
@@ -2398,22 +2447,6 @@ msgid "&Quote character:"
 msgstr ""
 
 #, c-format
-msgid "&Use customized text colors"
-msgstr "&U  استفاده از رنگهاي متن سفارشي "
-
-#, c-format
-msgid "Whitespace:"
-msgstr " فاصله سفيد : "
-
-#, c-format
-msgid "Regular text:"
-msgstr " متن منظم : "
-
-#, c-format
-msgid "Selection:"
-msgstr " انتخاب : "
-
-#, c-format
 msgid "Backup Files"
 msgstr "پرونده هاي پشتيبان "
 
@@ -2487,6 +2520,9 @@ msgstr " افزايه ها"
 #, c-format
 msgid "&Enable plugins"
 msgstr "&E فعال سازي افزايه ها "
+
+msgid "Plugin &type:"
+msgstr ""
 
 msgid "File filters:"
 msgstr ""
@@ -2634,9 +2670,6 @@ msgid "&Hex View"
 msgstr ""
 
 msgid "Edit Plugin"
-msgstr ""
-
-msgid "Plugin &type:"
 msgstr ""
 
 msgid "&Category:"
@@ -3469,6 +3502,9 @@ msgstr ""
 
 #, c-format
 msgid "Differences to... (%1)"
+msgstr ""
+
+msgid "Some selected items are identical or skipped.\nDo you want to copy only the items with differences?"
 msgstr ""
 
 #, c-format
@@ -4805,6 +4841,27 @@ msgstr ""
 msgid "New plugin description"
 msgstr ""
 
+msgid "All"
+msgstr ""
+
+msgid "1st"
+msgstr ""
+
+msgid "2nd"
+msgstr ""
+
+msgid "3rd"
+msgstr ""
+
+msgid "1st and 2nd"
+msgstr ""
+
+msgid "1st and 3rd"
+msgstr ""
+
+msgid "2nd and 3rd"
+msgstr ""
+
 msgid "Filter applied"
 msgstr ""
 
@@ -4878,6 +4935,24 @@ msgstr ""
 msgid "Character"
 msgstr ""
 
+msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
+msgstr ""
+
+msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
+msgstr ""
+
+msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
+msgstr ""
+
 msgid "Prettification"
 msgstr ""
 
@@ -4897,6 +4972,9 @@ msgid "Decompilation"
 msgstr ""
 
 msgid "URL Handling"
+msgstr ""
+
+msgid "Decoding / Encoding"
 msgstr ""
 
 msgid "Make Uppercase"
@@ -5014,6 +5092,9 @@ msgid "Disassemble Native Code"
 msgstr ""
 
 msgid "Convert Text with AI..."
+msgstr ""
+
+msgid "Unescape Java properties files"
 msgstr ""
 
 msgid "Make characters uppercase"
@@ -5153,6 +5234,9 @@ msgid "AI-assisted text conversion functions"
 msgstr ""
 
 msgid "Text converter using OpenAI API.\r\nUsage: AIConvertText PROMPT"
+msgstr ""
+
+msgid "Unescape and display escaped Java properties files."
 msgstr ""
 
 msgid "CompareMSExcelFiles.sct WinMerge Plugin Options"

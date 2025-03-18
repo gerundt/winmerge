@@ -49,6 +49,7 @@
 #include "SyntaxColors.h"
 #include "Shell.h"
 #include "DirTravel.h"
+#include "MouseHook.h"
 #include <numeric>
 #include <functional>
 
@@ -100,6 +101,7 @@ CDirView::CDirView()
 		, m_pColItems(nullptr)
 		, m_nActivePane(-1)
 		, m_nExpandSubdirs(DO_NOT_EXPAND)
+		, m_bUserCancelEdit(false)
 {
 	m_dwDefaultStyle &= ~LVS_TYPEMASK;
 	// Show selection all the time, so user can see current item even when
@@ -557,7 +559,7 @@ int CDirView::RedisplayChildren(DIFFITEM *diffpos, int level, UINT &index, int &
 
 		if (di.diffcode.isResultDiff() || (!di.diffcode.existAll() && !di.diffcode.isResultFiltered()))
 			++alldiffs;
-		if (di.diffcode.isResultNone() || di.diffcode.isResultError() || di.diffcode.isResultAbort())
+		if (di.diffcode.isResultError() || di.diffcode.isResultAbort())
 			result = -1;
 
 		bool bShowable = IsShowable(ctxt, di, m_dirfilter);
@@ -626,7 +628,8 @@ void CDirView::Redisplay()
 	int alldiffs = 0;
 	DIFFITEM *diffpos = ctxt.GetFirstDiffPosition();
 	const int result = RedisplayChildren(diffpos, 0, cnt, alldiffs);
-	GetParentFrame()->SetLastCompareResult(result < 0 ? -1 : alldiffs);
+	const unsigned int threadState = pDoc->m_diffThread.GetThreadState();
+	GetParentFrame()->SetLastCompareResult((threadState != CDiffThread::THREAD_COMPLETED || result < 0) ? -1 : alldiffs);
 	SortColumnsAppropriately();
 	SetRedraw(TRUE);
 	m_pList->SetItemCount(static_cast<int>(m_listViewItems.size()));
@@ -638,6 +641,8 @@ void CDirView::Redisplay()
  */
 void CDirView::OnContextMenu(CWnd*, CPoint point)
 {
+	if (CMouseHook::IsRightWheelScrolling())
+		return;
 	if (GetListCtrl().GetItemCount() == 0)
 		return;
 	// Make sure window is active
@@ -705,10 +710,7 @@ static void NTAPI FormatContextMenu(BCMenu *pPopup, UINT uIDItem, int n1, int n2
  */
 static void NTAPI CheckContextMenu(BCMenu *pPopup, UINT uIDItem, BOOL bCheck)
 {
-	if (bCheck)
-		pPopup->CheckMenuItem(uIDItem, MF_CHECKED);
-	else
-		pPopup->CheckMenuItem(uIDItem, MF_UNCHECKED);
+	pPopup->CheckMenuItem(uIDItem, bCheck ? MF_CHECKED : MF_UNCHECKED);
 }
 
 /**
@@ -826,9 +828,9 @@ void CDirView::OnDirCopy(UINT id)
 	if (GetDocument()->m_nDirs < 3)
 	{
 		if (to_right)
-			DoDirAction(&DirActions::Copy<SIDE_LEFT, SIDE_RIGHT>, _("Copying files..."));
+			OnCtxtDirCopy<SIDE_LEFT, SIDE_RIGHT>();
 		else
-			DoDirAction(&DirActions::Copy<SIDE_RIGHT, SIDE_LEFT>, _("Copying files..."));
+			OnCtxtDirCopy<SIDE_RIGHT, SIDE_LEFT>();
 	}
 	else
 	{
@@ -837,11 +839,11 @@ void CDirView::OnDirCopy(UINT id)
 			switch (m_nActivePane)
 			{
 			case 0:
-				DoDirAction(&DirActions::Copy<SIDE_LEFT, SIDE_MIDDLE>, _("Copying files..."));
+				OnCtxtDirCopy<SIDE_LEFT, SIDE_MIDDLE>();
 				break;
 			case 1:
 			case 2:
-				DoDirAction(&DirActions::Copy<SIDE_MIDDLE, SIDE_RIGHT>, _("Copying files..."));
+				OnCtxtDirCopy<SIDE_MIDDLE, SIDE_RIGHT>();
 				break;
 			}
 		}
@@ -851,10 +853,10 @@ void CDirView::OnDirCopy(UINT id)
 			{
 			case 0:
 			case 1:
-				DoDirAction(&DirActions::Copy<SIDE_MIDDLE, SIDE_LEFT>, _("Copying files..."));
+				OnCtxtDirCopy<SIDE_MIDDLE, SIDE_LEFT>();
 				break;
 			case 2:
-				DoDirAction(&DirActions::Copy<SIDE_RIGHT, SIDE_MIDDLE>, _("Copying files..."));
+				OnCtxtDirCopy<SIDE_RIGHT, SIDE_MIDDLE>();
 				break;
 			}
 		}
@@ -865,7 +867,20 @@ void CDirView::OnDirCopy(UINT id)
 template<SIDE_TYPE srctype, SIDE_TYPE dsttype>
 void CDirView::OnCtxtDirCopy()
 {
-	DoDirAction(&DirActions::Copy<srctype, dsttype>, _("Copying files..."));
+	bool copyOnlyDiffItems = true;
+	Counts counts = Count(&DirActions::IsItemIdenticalOrSkipped);
+	if (counts.count > 0)
+	{
+		int ans = AfxMessageBox(_("Some selected items are identical or skipped.\nDo you want to copy only the items with differences?").c_str(),
+			MB_YESNOCANCEL | MB_ICONWARNING | MB_DONT_ASK_AGAIN, IDS_COPY_ONLYDIFFITEMS);
+		if (ans == IDCANCEL)
+			return;
+		copyOnlyDiffItems = (ans == IDYES);
+	}
+	if (copyOnlyDiffItems)
+		DoDirAction(&DirActions::CopyDiffItems<srctype, dsttype>, _("Copying files..."));
+	else
+		DoDirAction(&DirActions::Copy<srctype, dsttype>, _("Copying files..."));
 }
 
 /// User chose (context menu) Copy left to...
@@ -936,6 +951,7 @@ void CDirView::DoDirAction(DirActions::method_type func, const String& status_me
 		FileActionScript *rsltScript;
 		rsltScript = std::accumulate(begin, end, &actionScript, MakeDirActions(func));
 		ASSERT(rsltScript == &actionScript);
+		actionScript.RemoveDuplicates();
 		// Now we prompt, and execute actions
 		ConfirmAndPerformActions(actionScript);
 	} catch (ContentsChangedException& e) {
@@ -973,6 +989,7 @@ void CDirView::DoDirActionTo(SIDE_TYPE stype, DirActions::method_type func, cons
 		FileActionScript *rsltScript;
 		rsltScript = std::accumulate(begin, end, &actionScript, MakeDirActions(func));
 		ASSERT(rsltScript == &actionScript);
+		actionScript.RemoveDuplicates();
 		// Now we prompt, and execute actions
 		ConfirmAndPerformActions(actionScript);
 	} catch (ContentsChangedException& e) {
@@ -3603,7 +3620,7 @@ void CDirView::OnODFindItem(NMHDR* pNMHDR, LRESULT* pResult)
 		for (size_t i = pFindItem->iStart; i < m_listViewItems.size(); ++i)
 		{
 			DIFFITEM *di = GetItemKey(static_cast<int>(i));
-			if (di)
+			if (di && !IsDiffItemSpecial(di))
 			{
 				String filename = strutils::makelower(di->diffFileInfo[0].filename);
 

@@ -63,12 +63,24 @@ msgstr "A kijelölt sor(ok) balra másolása"
 msgid "Copy Selected Line(s) from Left"
 msgstr "A kijelölt sor(ok) másolása balról"
 
+msgid "Copy Selected Diff (Left) to Clipboard\tCtrl+&1"
+msgstr "A kijelölt különbség (bal) vágólapra másolása\tCtrl+&1"
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&2"
+msgstr "A kijelölt különbség (jobb) vágólapra másolása\tCtrl+&2"
+
+msgid "Copy Selected Diff (Middle) to Clipboard\tCtrl+&2"
+msgstr "A kijelölt különbség (középső) vágólapra másolása\tCtrl+&2"
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&3"
+msgstr "A kijelölt különbség (jobb) vágólapra másolása\tCtrl+&3"
+
 #, c-format
 msgid "Select Line &Difference\tF4"
 msgstr "Eltérés kijelölése\tF4"
 
 msgid "Add this change to Substitution &Filters"
-msgstr "Adja hozzá ezt a változást a Helyettesítő szűrőkhöz"
+msgstr "Adja hozzá ezt a változást a Helyettesítő &szűrőkhöz"
 
 msgid "Add to &Line Filters"
 msgstr "&Hozzáadás a sorszűrőkhöz"
@@ -390,12 +402,25 @@ msgid "&View"
 msgstr "&Nézet"
 
 #, c-format
+msgid "Ta&b Bar"
+msgstr "Lapsáv"
+
+msgid "&View Tab Bar"
+msgstr "&Nézet lapsáv"
+
+msgid "&On Title Bar"
+msgstr "&A címsoron"
+
+#, c-format
 msgid "&Toolbar"
 msgstr "Eszköztár"
 
 #, c-format
 msgid "&Small"
 msgstr "Kicsi"
+
+msgid "&Medium"
+msgstr "Közepes"
 
 #, c-format
 msgid "&Big"
@@ -405,13 +430,12 @@ msgstr "Nagy"
 msgid "&Huge"
 msgstr "Hatalmas"
 
+msgid "Men&u Bar"
+msgstr "Menü sáv"
+
 #, c-format
 msgid "&Status Bar"
 msgstr "&Állapotsor"
-
-#, c-format
-msgid "Ta&b Bar"
-msgstr "Fülsáv"
 
 #, c-format
 msgid "&Tools"
@@ -1298,6 +1322,9 @@ msgstr "Számok mellőzése"
 msgid "Ignore c&omment differences"
 msgstr "Megjegyzés különbségek mellőzése"
 
+msgid "Ignore &missing trailing EOL"
+msgstr "&Hiányzó sorvégzáró figyelmen kívül hagyása"
+
 #, c-format
 msgid "&Include subfolders"
 msgstr "&Alkönyvtárakkal együtt"
@@ -1551,6 +1578,10 @@ msgid "Language:"
 msgstr "Nyelv:"
 
 #, c-format
+msgid "Defaults"
+msgstr "Alaphelyzetbe"
+
+#, c-format
 msgid "Find"
 msgstr "Keresés"
 
@@ -1734,6 +1765,86 @@ msgstr "Szó eltérés:"
 msgid "Selected Word Diff:"
 msgstr "Kijelölt szó eltérés:"
 
+#, c-format
+msgid "Dialog"
+msgstr "Párbeszédablak"
+
+#, c-format
+msgid "Keywords:"
+msgstr "Kulcsszavak:"
+
+#, c-format
+msgid "Function names:"
+msgstr "Függvény nevek:"
+
+#, c-format
+msgid "Comments:"
+msgstr "Megjegyzések:"
+
+#, c-format
+msgid "Numbers:"
+msgstr "Számok:"
+
+#, c-format
+msgid "Operators:"
+msgstr "Operátorok:"
+
+#, c-format
+msgid "Strings:"
+msgstr "Sztringek:"
+
+#, c-format
+msgid "Preprocessor:"
+msgstr "Előfeldolgozó:"
+
+#, c-format
+msgid "User 1:"
+msgstr "Felhasználó 1:"
+
+#, c-format
+msgid "User 2:"
+msgstr "Felhasználó 2:"
+
+#, c-format
+msgid "Bold"
+msgstr "Félkövér"
+
+#, c-format
+msgid "&Use customized text colors"
+msgstr "Egyéni szövegszínek használata"
+
+#, c-format
+msgid "Whitespace:"
+msgstr "Szóköz:"
+
+#, c-format
+msgid "Regular text:"
+msgstr "Sima szöveg:"
+
+#, c-format
+msgid "Selection:"
+msgstr "Kijelölés:"
+
+#, c-format
+msgid "Margin:"
+msgstr "Margó:"
+
+#, c-format
+msgid "Search Marker:"
+msgstr "Keresés jelölő:"
+
+#, c-format
+msgid "User Defined Marker1:"
+msgstr "Saját jelölő 1:"
+
+#, c-format
+msgid "User Defined Marker2:"
+msgstr "Saját jelölő 2:"
+
+#, c-format
+msgid "User Defined Marker3:"
+msgstr "Saját jelölő 3:"
+
 msgid "&Use folder compare colors"
 msgstr "Színek használata"
 
@@ -1749,9 +1860,8 @@ msgstr "Hiányzó elemek:"
 msgid "Items filtered:"
 msgstr "Szűrt elemek:"
 
-#, c-format
-msgid "Margin:"
-msgstr "Margó:"
+msgid "&Use custom system colors (Some UI elements may not apply)"
+msgstr "&Egyéni rendszerszínek használata (egyes UI elemek nem alkalmazhatók)"
 
 #, c-format
 msgid "System"
@@ -1838,10 +1948,6 @@ msgid "Open to e&xternal editor"
 msgstr "Megnyitás a külső szerkesztővel"
 
 #, c-format
-msgid "Defaults"
-msgstr "Alaphelyzetbe"
-
-#, c-format
 msgid "Display Columns"
 msgstr "Oszlopok mutatása"
 
@@ -1862,8 +1968,11 @@ msgstr "További tulajdonságok"
 msgid "Select Plugin"
 msgstr "Bővítmény kiválasztása"
 
-msgid "Plugin &Name:"
+msgid "Plugin &name:"
 msgstr "Bővítmény neve:"
+
+msgid "&Target files:"
+msgstr "&Célfájlok:"
 
 #, c-format
 msgid "Extensions list:"
@@ -1882,7 +1991,7 @@ msgstr "Az összes bővítmény megjelenítése, ne ellenőrizze a kiterjesztés
 msgid "&Open files in the same window type after unpacking"
 msgstr "Kicsomagolás után a fájlok megnyitása ugyanabban az ablakban"
 
-msgid "&Plugin Pipeline:"
+msgid "&Plugin pipeline:"
 msgstr "Bővítmény pipeline"
 
 msgid "&Alias..."
@@ -2153,66 +2262,6 @@ msgid "Export..."
 msgstr "Exportálás"
 
 #, c-format
-msgid "Dialog"
-msgstr "Párbeszédablak"
-
-#, c-format
-msgid "Keywords:"
-msgstr "Kulcsszavak:"
-
-#, c-format
-msgid "Function names:"
-msgstr "Függvény nevek:"
-
-#, c-format
-msgid "Comments:"
-msgstr "Megjegyzések:"
-
-#, c-format
-msgid "Numbers:"
-msgstr "Számok:"
-
-#, c-format
-msgid "Operators:"
-msgstr "Operátorok:"
-
-#, c-format
-msgid "Strings:"
-msgstr "Sztringek:"
-
-#, c-format
-msgid "Preprocessor:"
-msgstr "Előfeldolgozó:"
-
-#, c-format
-msgid "User 1:"
-msgstr "Felhasználó 1:"
-
-#, c-format
-msgid "User 2:"
-msgstr "Felhasználó 2:"
-
-#, c-format
-msgid "Bold"
-msgstr "Félkövér"
-
-#, c-format
-msgid "Search Marker:"
-msgstr "Keresés jelölő:"
-
-#, c-format
-msgid "User Defined Marker1:"
-msgstr "Saját jelölő 1:"
-
-#, c-format
-msgid "User Defined Marker2:"
-msgstr "Saját jelölő 2:"
-
-#, c-format
-msgid "User Defined Marker3:"
-msgstr "Saját jelölő 3:"
-
-#, c-format
 msgid "Folder Compare Report"
 msgstr "Könyvtár összehasonítási jelentés"
 
@@ -2399,22 +2448,6 @@ msgid "&Quote character:"
 msgstr "Idézőjel:"
 
 #, c-format
-msgid "&Use customized text colors"
-msgstr "Egyéni szövegszínek használata"
-
-#, c-format
-msgid "Whitespace:"
-msgstr "Szóköz:"
-
-#, c-format
-msgid "Regular text:"
-msgstr "Sima szöveg:"
-
-#, c-format
-msgid "Selection:"
-msgstr "Kijelölés:"
-
-#, c-format
 msgid "Backup Files"
 msgstr "Visszaállítási fájlok"
 
@@ -2488,6 +2521,9 @@ msgstr "Bővítmények"
 #, c-format
 msgid "&Enable plugins"
 msgstr "Bővítmények bekapcsolása"
+
+msgid "Plugin &type:"
+msgstr "Bővítmény &típusa:"
 
 msgid "File filters:"
 msgstr "Fájlszűrők:"
@@ -2636,9 +2672,6 @@ msgstr "Hexadecimális nézet"
 
 msgid "Edit Plugin"
 msgstr "Bővítmény szerkesztése"
-
-msgid "Plugin &type:"
-msgstr "Bővítmény &típusa:"
 
 msgid "&Category:"
 msgstr "&Kategória:"
@@ -3490,6 +3523,9 @@ msgstr "Az összesből a...(%1)"
 #, c-format
 msgid "Differences to... (%1)"
 msgstr "Különbségek ehhez...(%1)"
+
+msgid "Some selected items are identical or skipped.\nDo you want to copy only the items with differences?"
+msgstr "Néhány kiválasztott elem azonos vagy kimaradt.\nCsak a különbségeket tartalmazó elemeket szeretné másolni?"
 
 #, c-format
 msgid "Left (%1)"
@@ -4890,6 +4926,27 @@ msgstr "'%1' bővítmény pipeline alias"
 msgid "New plugin description"
 msgstr "Új bővítmény leírás"
 
+msgid "All"
+msgstr "Összes"
+
+msgid "1st"
+msgstr "1."
+
+msgid "2nd"
+msgstr "2."
+
+msgid "3rd"
+msgstr "3."
+
+msgid "1st and 2nd"
+msgstr "1. és 2."
+
+msgid "1st and 3rd"
+msgstr "1. és 3."
+
+msgid "2nd and 3rd"
+msgstr "2. és 3."
+
 msgid "Filter applied"
 msgstr "Szűrő alkalmazva"
 
@@ -4963,6 +5020,24 @@ msgstr "Sor"
 msgid "Character"
 msgstr "Karakter"
 
+msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
+msgstr "\nElőző különbség (Alt+fel)\n(Jobb gomb+görgő fel)\n(Alt+görgő fel)"
+
+msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
+msgstr "\nKövetkező különbség (Alt+le)\n(Jobb gomb+görgő le)\n(Alt+görgő le)"
+
+msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
+msgstr "\nMásolás jobbra (Alt+jobbra)\n(Jobb gomb+görgő jobbra)\n(Alt+görgő jobbra)\n(Alt+Shift+görgő le)"
+
+msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
+msgstr "\nMásolás balra (Alt+balra)\n(Jobb gomb+görgő balra)\n(Alt+görgő balra)\n(Alt+Shift+görgő fel)"
+
+msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
+msgstr "\nMásolás jobbra és előre (Ctrl+Alt+jobbra)\n(Ctrl+Alt+görgő jobbra)\n(Ctrl+Alt+Shift+görgő le)"
+
+msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
+msgstr "\nMásolás balra és előre (Ctrl+Alt+balra)\n(Ctrl+Alt+görgő balra)\n(Ctrl+Alt+Shift+görgő fel)"
+
 msgid "Prettification"
 msgstr "Megjelenés optimalizálás"
 
@@ -4983,6 +5058,9 @@ msgstr "Visszafejtés"
 
 msgid "URL Handling"
 msgstr "URL-kezelés"
+
+msgid "Decoding / Encoding"
+msgstr "Dekódolás / kódolás"
 
 msgid "Make Uppercase"
 msgstr "Nagybetűsítés"
@@ -5100,6 +5178,9 @@ msgstr "Natív kód kibontása"
 
 msgid "Convert Text with AI..."
 msgstr "Text konvertálása MI-vel..."
+
+msgid "Unescape Java properties files"
+msgstr "Java tulajdonságfájlok feloldása"
 
 msgid "Make characters uppercase"
 msgstr "Nagybetűsítés"
@@ -5239,6 +5320,9 @@ msgstr "MI által támogatott szövegkonverziós funkciók"
 
 msgid "Text converter using OpenAI API.\r\nUsage: AIConvertText PROMPT"
 msgstr "Szövegkonvertáló OpenAI API-val.\r\nUsage: AIConvertText PROMPT"
+
+msgid "Unescape and display escaped Java properties files."
+msgstr ""
 
 msgid "CompareMSExcelFiles.sct WinMerge Plugin Options"
 msgstr "CompareMSExcelFiles.sct WinMerge beépülő opciói"

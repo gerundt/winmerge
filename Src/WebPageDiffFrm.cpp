@@ -554,38 +554,6 @@ int CWebPageDiffFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 /**
-* @brief We must use this function before a call to SetDockState
-*
-* @note Without this, SetDockState will assert or crash if a bar from the
-* CDockState is missing in the current CMergeEditFrame.
-* The bars are identified with their ID. This means the missing bar bug is triggered
-* when we run WinMerge after changing the ID of a bar.
-*/
-bool CWebPageDiffFrame::EnsureValidDockState(CDockState& state)
-{
-	for (int i = (int)state.m_arrBarInfo.GetSize() - 1; i >= 0; i--)
-	{
-		bool barIsCorrect = true;
-		CControlBarInfo* pInfo = (CControlBarInfo*)state.m_arrBarInfo[i];
-		if (pInfo == nullptr)
-			barIsCorrect = false;
-		else
-		{
-			if (!pInfo->m_bFloating)
-			{
-				pInfo->m_pBar = GetControlBar(pInfo->m_nBarID);
-				if (pInfo->m_pBar == nullptr)
-					barIsCorrect = false; //toolbar id's probably changed	
-			}
-		}
-
-		if (!barIsCorrect)
-			state.m_arrBarInfo.RemoveAt(i);
-	}
-	return true;
-}
-
-/**
  * @brief Save the window's position, free related resources, and destroy the window
  */
 BOOL CWebPageDiffFrame::DestroyWindow() 
@@ -832,9 +800,9 @@ void CWebPageDiffFrame::UpdateHeaderSizes()
 				w[pane] = rcMergeWindow.Width() / nPaneCount - 4;
 		}
 
-		if (!std::equal(m_nLastSplitPos, m_nLastSplitPos + nPaneCount - 1, w))
+		if (!std::equal(m_nLastSplitPos, m_nLastSplitPos + nPaneCount, w))
 		{
-			std::copy_n(w, nPaneCount - 1, m_nLastSplitPos);
+			std::copy_n(w, nPaneCount, m_nLastSplitPos);
 
 			// resize controls in header dialog bar
 			m_wndFilePathBar.Resize(w);
@@ -894,7 +862,7 @@ bool CWebPageDiffFrame::OpenUrls(IWebDiffCallback* callback)
 	for (int pane = 0; pane < m_filePaths.GetSize(); ++pane)
 	{
 		strTempFileName[pane] = m_filePaths[pane];
-		if (!m_infoUnpacker.Unpacking(&m_unpackerSubcodes[pane], strTempFileName[pane], filteredFilenames, {strTempFileName[pane]}))
+		if (!m_infoUnpacker.Unpacking(pane, &m_unpackerSubcodes[pane], strTempFileName[pane], filteredFilenames, {strTempFileName[pane]}))
 		{
 //			return false;
 		}

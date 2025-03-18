@@ -136,6 +136,7 @@ void CEditReplaceDlg::OnChangeEditText ()
 {
   UpdateData();
   UpdateControls();
+  m_bFound = false;
 }
 void CEditReplaceDlg::OnChangeSelected ()
 {
@@ -146,6 +147,7 @@ void CEditReplaceDlg::OnChangeSelected ()
     m_ctlFindText.SetWindowText(m_sText);
   }
   UpdateControls();
+  m_bFound = false;
 }
 
 void CEditReplaceDlg::
@@ -168,6 +170,18 @@ OnInitDialog ()
 {
   LangTranslateDialog(m_hWnd);
   CDialog::OnInitDialog ();
+
+  LOGFONT lf{}, lfOld{};
+  CFont *pOldFont = m_ctlFindText.GetFont ();
+  if (pOldFont)
+    {
+      pOldFont->GetLogFont (&lfOld);
+      m_pBuddy->GetFont (lf);
+      lf.lfHeight = lfOld.lfHeight;
+      m_font.CreateFontIndirect (&lf);
+      m_ctlFindText.SetFont (&m_font);
+      m_ctlReplText.SetFont (&m_font);
+    }
 
   CMemComboBox::LoadSettings();
   m_ctlReplText.m_sGroup = _T ("ReplaceText");
