@@ -51,6 +51,7 @@
 #include "charsets.h"
 #include "markdown.h"
 #include "stringdiffs.h"
+#include "Logger.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -366,7 +367,7 @@ int CMergeDoc::Rescan(bool &bBinary, IDENTLEVEL &identical,
 	{
 		if (Changed[nBuffer] == FileChange::Removed)
 		{
-			String msg = strutils::format_string1(_("The file\n%1\nhas disappeared. Please save a copy of the file to continue."), m_filePaths[nBuffer]);
+			String msg = strutils::format_string1(_("File\n%1\nnot found. Save a copy to continue."), m_filePaths[nBuffer]);
 			ShowMessageBox(msg, MB_ICONWARNING);
 			bool bSaveResult = false;
 			bool ok = DoSaveAs(m_filePaths[nBuffer].c_str(), bSaveResult, nBuffer);
@@ -594,7 +595,7 @@ void CMergeDoc::CheckFileChanged(void)
 		if (IsFileChangedOnDisk(m_filePaths[nBuffer].c_str(), fileInfo, false, nBuffer)
 			 == FileChange::Changed)
 		{
-			String msg = strutils::format_string1(_("Another application has updated file\n%1\nsince WinMerge scanned it last time.\n\nDo you want to reload the file?"), m_filePaths[nBuffer]);
+			String msg = strutils::format_string1(_("Another application updated\n%1\nsince last scan.\n\nReload?"), m_filePaths[nBuffer]);
 			if (ShowMessageBox(msg, MB_YESNO | MB_ICONWARNING | MB_DONT_ASK_AGAIN, IDS_FILECHANGED_RESCAN) == IDYES)
 			{
 				OnFileReload();
@@ -779,16 +780,14 @@ void CMergeDoc::ShowRescanError(int nRescanResult, IDENTLEVEL identical)
 
 	if (nRescanResult == RESCAN_FILE_ERR)
 	{
-		s = _("An error occurred while comparing the files.");
-		LogErrorString(s);
+		s = _("An error occurred while comparing files.");
 		ShowMessageBox(s, MB_ICONSTOP);
 		return;
 	}
 
 	if (nRescanResult == RESCAN_TEMP_ERR)
 	{
-		s = _("Temporary files could not be created. Check your temporary path settings.");
-		LogErrorString(s);
+		s = _("Could not create temporary files. Check your temporary path settings.");
 		ShowMessageBox(s, MB_ICONSTOP);
 		return;
 	}
@@ -851,7 +850,7 @@ bool CMergeDoc::TrySaveAs(String &strPath, int &nSaveResult, String & sError,
 	}
 	else
 	{
-		str = strutils::format_string2(_("Saving file failed.\n%1\n%2\nDo you want to:\n\t- use a different filename (Press OK)\n\t- abort the current operation (Press Cancel)?"), strPath, sError);
+		str = strutils::format_string2(_("Saving file failed.\n%1\n%2\n\t- Use different filename (OK)\n\t- Abort (Cancel)?"), strPath, sError);
 	}
 
 	// SAVE_NO_FILENAME is temporarily used for scratchpad.
@@ -934,7 +933,7 @@ bool CMergeDoc::DoSave(const tchar_t* szPath, bool &bSaveSuccess, int nBuffer)
 	fileChanged = IsFileChangedOnDisk(szPath, fileInfo, true, nBuffer);
 	if (fileChanged == FileChange::Changed)
 	{
-		String msg = strutils::format_string1(_("Another application has updated file\n%1\nsince WinMerge loaded it.\n\nOverwrite changed file?"), szPath);
+		String msg = strutils::format_string1(_("Another application updated\n%1\nsince WinMerge loaded it.\n\nOverwrite?"), szPath);
 		if (ShowMessageBox(msg, MB_ICONWARNING | MB_YESNO) == IDNO)
 		{
 			bSaveSuccess = true;
@@ -1011,6 +1010,8 @@ bool CMergeDoc::DoSave(const tchar_t* szPath, bool &bSaveSuccess, int nBuffer)
 		UpdateHeaderPath(nBuffer);
 		bSaveSuccess = true;
 		result = true;
+
+		CMergeFrameCommon::LogFileSaved(m_filePaths[nBuffer]);
 	}
 	else if (nSaveErrorCode == SAVE_CANCELLED)
 	{
@@ -1073,6 +1074,8 @@ bool CMergeDoc::DoSaveAs(const tchar_t* szPath, bool &bSaveSuccess, int nBuffer)
 		UpdateHeaderPath(nBuffer);
 		bSaveSuccess = true;
 		result = true;
+
+		CMergeFrameCommon::LogFileSaved(m_filePaths[nBuffer]);
 	}
 	return result;
 }
@@ -1466,35 +1469,7 @@ void CMergeDoc::OnUpdateStatusRO(CCmdUI* pCmdUI)
  */
 void CMergeDoc::OnUpdateStatusNum(CCmdUI* pCmdUI) 
 {
-	tchar_t sCnt[32] = { 0 };
-	String s;
-	const int nDiffs = m_diffList.GetSignificantDiffs();
-	
-	// Files are identical - show text "Identical"
-	if (nDiffs <= 0)
-		s = _("Identical");
-	
-	// There are differences, but no selected diff
-	// - show amount of diffs
-	else if (GetCurrentDiff() < 0)
-	{
-		s = nDiffs == 1 ? _("1 Difference Found") : _("%1 Differences Found");
-		_itot_s(nDiffs, sCnt, 10);
-		strutils::replace(s, _T("%1"), sCnt);
-	}
-	
-	// There are differences and diff selected
-	// - show diff number and amount of diffs
-	else
-	{
-		tchar_t sIdx[32] = { 0 };
-		s = _("Difference %1 of %2");
-		const int signInd = m_diffList.GetSignificantIndex(GetCurrentDiff());
-		_itot_s(signInd + 1, sIdx, 10);
-		strutils::replace(s, _T("%1"), sIdx);
-		_itot_s(nDiffs, sCnt, 10);
-		strutils::replace(s, _T("%2"), sCnt);
-	}
+	const String s = CMergeFrameCommon::GetDiffStatusString(GetCurrentDiff(), m_diffList.GetSignificantDiffs());
 	pCmdUI->SetText(s.c_str());
 }
 
@@ -2046,9 +2021,7 @@ bool CMergeDoc::CloseNow()
  */
 CString CMergeDoc::GetTooltipString() const
 {
-	PrediffingInfo infoPrediffer;
-	GetPrediffer(&infoPrediffer);
-	return CMergeFrameCommon::GetTooltipString(m_filePaths, m_strDesc, &m_infoUnpacker, &infoPrediffer, m_nTrivialDiffs > 0).c_str();
+	return CMergeFrameCommon::GetTooltipString(*this).c_str();
 }
 
 /**
@@ -2173,7 +2146,7 @@ FileLoadResult::flags_t CMergeDoc::LoadOneFile(int index, const String& filename
 	else
 	{
 		if (m_strDesc[index].empty())
-			m_strDesc[index] = (index == 0) ? _("Untitled left") : ((m_nBuffers < 3 || index == 2) ? _("Untitled right") : _("Untitled middle"));
+			m_strDesc[index] = (index == 0) ? _("Untitled Left") : ((m_nBuffers < 3 || index == 2) ? _("Untitled Right") : _("Untitled Middle"));
 		m_nBufferType[index] = BUFFERTYPE::UNNAMED;
 		m_ptBuf[index]->InitNew();
 		m_ptBuf[index]->m_encoding = encoding;
@@ -2300,6 +2273,10 @@ void CMergeDoc::SetTextType(const String& ext)
 bool CMergeDoc::OpenDocs(int nFiles, const FileLocation ifileloc[],
 		const bool bRO[], const String strDesc[])
 {
+	PrediffingInfo prediffer;
+	m_diffWrapper.GetPrediffer(&prediffer);
+	CMergeFrameCommon::LogComparisonStart(nFiles, ifileloc, strDesc, &m_infoUnpacker, &prediffer);
+
 	CWaitCursor waitstatus;
 	IDENTLEVEL identical = IDENTLEVEL::NONE;
 	int nRescanResult = RESCAN_OK;
@@ -2507,6 +2484,8 @@ bool CMergeDoc::OpenDocs(int nFiles, const FileLocation ifileloc[],
 			}
 			
 		}
+
+		CMergeFrameCommon::LogComparisonCompleted(*this);
 
 		// Inform user that files are identical
 		// Don't show message if new buffers created
@@ -2728,9 +2707,7 @@ bool CMergeDoc::IsEditedAfterRescan(int nBuffer) const
  */
 void CMergeDoc::SetTitle(LPCTSTR lpszTitle)
 {
-	PrediffingInfo infoPrediffer;
-	GetPrediffer(&infoPrediffer);
-	String sTitle = (lpszTitle != nullptr) ? lpszTitle : CMergeFrameCommon::GetTitleString(m_filePaths, m_strDesc, &m_infoUnpacker, &infoPrediffer, m_nTrivialDiffs > 0);
+	String sTitle = (lpszTitle != nullptr) ? lpszTitle : CMergeFrameCommon::GetTitleString(*this);
 	CDocument::SetTitle(sTitle.c_str());
 }
 
@@ -2740,11 +2717,11 @@ void CMergeDoc::SetTitle(LPCTSTR lpszTitle)
 void CMergeDoc::UpdateResources()
 {
 	if (m_nBufferType[0] == BUFFERTYPE::UNNAMED)
-		m_strDesc[0] = _("Untitled left");
+		m_strDesc[0] = _("Untitled Left");
 	if (m_nBufferType[m_nBuffers - 1] == BUFFERTYPE::UNNAMED)
-		m_strDesc[m_nBuffers - 1] = _("Untitled right");
+		m_strDesc[m_nBuffers - 1] = _("Untitled Right");
 	if (m_nBuffers == 3 && m_nBufferType[1] == BUFFERTYPE::UNNAMED)
-		m_strDesc[1] = _("Untitled middle");
+		m_strDesc[1] = _("Untitled Middle");
 	for (int nBuffer = 0; nBuffer < m_nBuffers; nBuffer++)
 		UpdateHeaderPath(nBuffer);
 
@@ -2920,7 +2897,7 @@ HMENU CMergeDoc::createPrediffersSubmenu(HMENU hMenu)
 		DeleteMenu(hMenu, 0, MF_BYPOSITION);
 
 	// title
-	AppendMenu(hMenu, MF_STRING, ID_NO_PREDIFFER, _("No prediffer (normal)").c_str());
+	AppendMenu(hMenu, MF_STRING, ID_NO_PREDIFFER, _("No Prediffer (Normal)").c_str());
 	
 	if (!GetOptionsMgr()->GetBool(OPT_PLUGINS_ENABLED))
 		return hMenu;
@@ -2937,10 +2914,10 @@ HMENU CMergeDoc::createPrediffersSubmenu(HMENU hMenu)
 	const auto& [ suggestedPlugins, allPlugins ]= FileTransform::CreatePluginMenuInfos(
 		m_strBothFilenames, FileTransform::PredifferEventNames, ID_PREDIFFERS_FIRST);
 
-	// build the menu : first part, suggested plugins
+	// build the menu : first part, Suggested Plugins
 	// title
 	AppendMenu(hMenu, MF_SEPARATOR, 0, nullptr);
-	AppendMenu(hMenu, MF_STRING, ID_SUGGESTED_PLUGINS, _("Suggested plugins").c_str());
+	AppendMenu(hMenu, MF_STRING, ID_SUGGESTED_PLUGINS, _("Suggested Plugins").c_str());
 
 	for (const auto& [caption, name, id, plugin ] : suggestedPlugins)
 		AppendMenu(hMenu, MF_STRING, id, caption.c_str());
@@ -2948,7 +2925,7 @@ HMENU CMergeDoc::createPrediffersSubmenu(HMENU hMenu)
 	// build the menu : second part, others plugins
 	// title
 	AppendMenu(hMenu, MF_SEPARATOR, 0, nullptr);
-	AppendMenu(hMenu, MF_STRING, ID_NOT_SUGGESTED_PLUGINS, _("All plugins").c_str());
+	AppendMenu(hMenu, MF_STRING, ID_NOT_SUGGESTED_PLUGINS, _("All Plugins").c_str());
 
 	String lastPluginName;
 	String errorMessage;

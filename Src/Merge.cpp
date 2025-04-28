@@ -35,7 +35,9 @@
 #include "DirFrame.h"
 #include "MergeDoc.h"
 #include "DirDoc.h"
+#include "OutputDoc.h"
 #include "DirView.h"
+#include "OutputView.h"
 #include "PropBackups.h"
 #include "FileOrFolderSelect.h"
 #include "FileFilterHelper.h"
@@ -60,12 +62,14 @@
 #include "TestMain.h"
 #include "charsets.h" // For shutdown cleanup
 #include "OptionsProject.h"
+#include "OptionsFont.h"
 #include "MergeAppCOMClass.h"
 #include "RegKey.h"
 #include "Win_VersionHelper.h"
 #include "BCMenu.h"
 #include "MouseHook.h"
 #include "SysColorHook.h"
+#include "Logger.h"
 #include <../src/mfc/afximpl.h>
 
 #ifdef _DEBUG
@@ -104,6 +108,7 @@ CMergeApp::CMergeApp() :
 , m_pDiffTemplate(nullptr)
 , m_pHexMergeTemplate(nullptr)
 , m_pDirTemplate(nullptr)
+, m_pOutputTemplate(nullptr)
 , m_mainThreadScripts(nullptr)
 , m_nLastCompareResult(-1)
 , m_bNonInteractive(false)
@@ -432,6 +437,9 @@ BOOL CMergeApp::InitInstance()
 	if (GetOptionsMgr()->GetBool(OPT_MOUSE_HOOK_ENABLED))
 		CMouseHook::SetMouseHook();
 
+	m_lfDiff = Options::Font::Load(GetOptionsMgr(), OPT_FONT_FILECMP);
+	m_lfDir = Options::Font::Load(GetOptionsMgr(), OPT_FONT_DIRCMP);
+
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
@@ -538,6 +546,21 @@ CMultiDocTemplate* CMergeApp::GetDirTemplate()
 	return m_pDirTemplate;
 }
 
+CMultiDocTemplate* CMergeApp::GetOutputTemplate()
+{
+	if (!m_pOutputTemplate)
+	{
+		// Output view
+		m_pOutputTemplate = new CMultiDocTemplate(
+			IDR_DIRDOCTYPE,
+			RUNTIME_CLASS(COutputDoc),
+			nullptr,
+			RUNTIME_CLASS(COutputView));
+		AddDocTemplate(m_pOutputTemplate);
+	}
+	return m_pOutputTemplate;
+}
+
 static void OpenContributersFile(int&)
 {
 	CMergeApp::OpenFileToExternalEditor(paths::ConcatPath(env::GetProgPath(), ContributorsPath));
@@ -596,6 +619,26 @@ int CMergeApp::ExitInstance()
 	return exitstatus;
 }
 
+static String makeLogString(const tchar_t* lpszPrompt, int result)
+{
+	const std::vector<String> Answers = {
+		_T(""),
+		_("OK"),
+		_("Cancel"),
+		_("Abort"),
+		_("Retry"),
+		_("Ignore"),
+		_("Yes"),
+		_("No"),
+		_("Close"),
+		_("Help"),
+		_("Try Again"),
+		_("Continue"),
+	};
+	String msg = String(lpszPrompt) + _T(": ") + Answers[result];
+	return msg;
+}
+
 int CMergeApp::DoMessageBox(const tchar_t* lpszPrompt, UINT nType, UINT nIDPrompt)
 {
 	// This is a convenient point for breakpointing !!!
@@ -636,7 +679,13 @@ int CMergeApp::DoMessageBox(const tchar_t* lpszPrompt, UINT nType, UINT nIDPromp
 		m_pMainWnd->ShowWindow(SW_RESTORE);
 
 	// Display the message box dialog and return the result.
-	return static_cast<int>(dlgMessage.DoModal());
+	int result = static_cast<int>(dlgMessage.DoModal());
+	String const msg = makeLogString(lpszPrompt, result);
+	if ((nType & MB_ICONMASK) == MB_ICONERROR || (nType & MB_ICONMASK) == MB_ICONWARNING)
+		RootLogger::Warn(msg);
+	else
+		RootLogger::Info(msg);
+	return result;
 }
 
 bool CMergeApp::IsReallyIdle() const
@@ -1302,7 +1351,7 @@ int CMergeApp::HandleReadonlySave(String& strSavePath, bool bMultiFile,
 			if (bMultiFile)
 			{
 				// Multiple files or folder
-				str = strutils::format_string1(_("%1\nis marked read-only. Would you like to override the read-only item?"), strSavePath);
+				str = strutils::format_string1(_("%1\nis read-only. Override?"), strSavePath);
 				userChoice = AfxMessageBox(str.c_str(), MB_YESNOCANCEL |
 						MB_ICONWARNING | MB_DEFBUTTON3 | MB_DONT_ASK_AGAIN |
 						MB_YES_TO_ALL, IDS_SAVEREADONLY_MULTI);
@@ -1310,7 +1359,7 @@ int CMergeApp::HandleReadonlySave(String& strSavePath, bool bMultiFile,
 			else
 			{
 				// Single file
-				str = strutils::format_string1(_("%1 is marked read-only. Would you like to override the read-only file? (No to save as new filename.)"), strSavePath);
+				str = strutils::format_string1(_("%1 is read-only. Override? Or 'No' to save as new filename?"), strSavePath);
 				userChoice = AfxMessageBox(str.c_str(), MB_YESNOCANCEL |
 						MB_ICONWARNING | MB_DEFBUTTON2 | MB_DONT_ASK_AGAIN,
 						IDS_SAVEREADONLY_FMT);
@@ -1360,10 +1409,10 @@ String CMergeApp::GetPackingErrorMessage(int pane, int paneCount, const String& 
 	String pluginName = plugin.GetPluginPipeline();
 	return strutils::format_string2(
 		pane == 0 ? 
-			_("Plugin '%2' cannot pack your changes to the left file back into '%1'.\n\nThe original file will not be changed.\n\nDo you want to save the unpacked version to another file?")
+			_("Plugin '%2' cannot pack changes to left file into '%1'.\n\nOriginal unchanged. Save unpacked version?")
 			: (pane == paneCount - 1) ? 
-				_("Plugin '%2' cannot pack your changes to the right file back into '%1'.\n\nThe original file will not be changed.\n\nDo you want to save the unpacked version to another file?")
-				: _("Plugin '%2' cannot pack your changes to the middle file back into '%1'.\n\nThe original file will not be changed.\n\nDo you want to save the unpacked version to another file?"),
+				_("Plugin '%2' cannot pack changes to right file into '%1'.\n\nOriginal unchanged. Save unpacked version?")
+				: _("Plugin '%2' cannot pack changes to middle file into '%1'.\n\nOriginal unchanged. Save unpacked version?"),
 		path, pluginName);
 }
 
@@ -1393,7 +1442,7 @@ bool CMergeApp::LoadProjectFile(const String& sProject, ProjectFile &project)
 	}
 	catch (Poco::Exception& e)
 	{
-		String sErr = _("Unknown error attempting to open project file.");
+		String sErr = _("Unknown error opening project file.");
 		sErr += ucr::toTString(e.displayText());
 		String msg = strutils::format_string2(_("Cannot open file\n%1\n\n%2"), sProject, sErr);
 		AfxMessageBox(msg.c_str(), MB_ICONSTOP);
@@ -1411,7 +1460,7 @@ bool CMergeApp::SaveProjectFile(const String& sProject, const ProjectFile &proje
 	}
 	catch (Poco::Exception& e)
 	{
-		String sErr = _("Unknown error attempting to save project file.");
+		String sErr = _("Unknown error saving project file.");
 		sErr += ucr::toTString(e.displayText());
 		String msg = strutils::format_string2(_("Cannot open file\n%1\n\n%2"), sProject, sErr);
 		AfxMessageBox(msg.c_str(), MB_ICONSTOP);

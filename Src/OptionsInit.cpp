@@ -41,6 +41,8 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_SELECTED_LANGUAGE, static_cast<int>(LangId));
 
 	// Initialise options (name, default value)
+	pOptions->InitOption(OPT_LOGGING, 0);
+
 	pOptions->InitOption(OPT_SHOW_UNIQUE_LEFT, true);
 	pOptions->InitOption(OPT_SHOW_UNIQUE_MIDDLE, true);
 	pOptions->InitOption(OPT_SHOW_UNIQUE_RIGHT, true);
@@ -59,8 +61,9 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_SHOW_TOOLBAR, true);
 	pOptions->InitOption(OPT_SHOW_STATUSBAR, true);
 	pOptions->InitOption(OPT_SHOW_TABBAR, true);
+	pOptions->InitOption(OPT_SHOW_OUTPUTBAR, false);
 	pOptions->InitOption(OPT_REBAR_STATE, _T(""));
-	pOptions->InitOption(OPT_TOOLBAR_SIZE, 0, 0, 2);
+	pOptions->InitOption(OPT_TOOLBAR_SIZE, 0, 0, 3);
 	pOptions->InitOption(OPT_RESIZE_PANES, false);
 
 	pOptions->InitOption(OPT_SYNTAX_HIGHLIGHT, true);
@@ -155,7 +158,7 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_CMP_TBL_ALLOW_NEWLINES_IN_QUOTES, true);
 	pOptions->InitOption(OPT_CMP_TBL_QUOTE_CHAR, _T("\""));
 
-	pOptions->InitOption(OPT_CMP_IMG_FILEPATTERNS, _T("*.bmp;*.cut;*.dds;*.dng;*.exr;*.g3;*.gif;*.heic;*.hdr;*.ico;*.iff;*.lbm;*.j2k;*.j2c;*.jng;*.jp2;*.jpg;*.jif;*.jpeg;*.jpe;*.jxr;*.wdp;*.hdp;*.koa;*.mng;*.pcd;*.pcx;*.pfm;*.pct;*.pict;*.pic;*.png;*.pbm;*.pgm;*.ppm;*.psd;*.ras;*.sgi;*.rgb;*.rgba;*.bw;*.tga;*.targa;*.tif;*.tiff;*.wap;*.wbmp;*.wbm;*.webp;*.xbm;*.xpm"));
+	pOptions->InitOption(OPT_CMP_IMG_FILEPATTERNS, _T("*.bmp;*.cut;*.dds;*.dng;*.exr;*.g3;*.gif;*.heic;*.hdr;*.ico;*.iff;*.lbm;*.j2k;*.j2c;*.jng;*.jp2;*.jpg;*.jif;*.jpeg;*.jpe;*.jxl;*.jxr;*.wdp;*.hdp;*.koa;*.mng;*.pcd;*.pcx;*.pfm;*.pct;*.pict;*.pic;*.png;*.pbm;*.pgm;*.ppm;*.psd;*.ras;*.sgi;*.rgb;*.rgba;*.bw;*.tga;*.targa;*.tif;*.tiff;*.wap;*.wbmp;*.wbm;*.webp;*.xbm;*.xpm"));
 	pOptions->InitOption(OPT_CMP_IMG_SHOWDIFFERENCES, true);
 	pOptions->InitOption(OPT_CMP_IMG_OVERLAYMODE, 0, 0, 3);
 	pOptions->InitOption(OPT_CMP_IMG_OVERLAYALPHA, 30, 0, 100);

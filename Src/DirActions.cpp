@@ -14,6 +14,7 @@
 #include "DirActions.h"
 #include "MergeApp.h"
 #include "UnicodeString.h"
+#include "Logger.h"
 #include "7zCommon.h"
 #include "ShellFileOperations.h"
 #include "DiffItem.h"
@@ -32,7 +33,7 @@ static void ThrowConfirmationNeededException(const CDiffContext& ctxt, const Str
 
 ContentsChangedException::ContentsChangedException(const String& failpath)
 	: m_msg(strutils::format_string1(
-	        _("Operation aborted!\n\nFolder contents at disks has changed, path\n%1\nwas not found.\n\nPlease refresh the compare."),
+	        _("Operation aborted!\n\nFolder contents changed, path\n%1\nnot found.\n\nRefresh the compare."),
 	        failpath))
 {
 }
@@ -228,7 +229,7 @@ void ConfirmActionList(const CDiffContext& ctxt, const FileActionScript & action
 
 	// Invalid operation
 	default: 
-		LogErrorString(_T("Unknown fileoperation in CDirView::ConfirmActionList()"));
+		RootLogger::Error(_T("Unknown fileoperation in CDirView::ConfirmActionList()"));
 		throw "Unknown fileoperation in ConfirmActionList()";
 		break;
 	}
@@ -501,6 +502,8 @@ bool AreItemsOpenable(const CDiffContext& ctxt, const DIFFITEM &di1, const DIFFI
 /// is it possible to open item ?
 bool IsItemOpenableOn(const DIFFITEM &di, int index)
 {
+	if (di.diffcode.diffcode == 0) return false;
+
 	// impossible if not existing
 	if (!di.diffcode.exists(index)) return false;
 
@@ -511,8 +514,20 @@ bool IsItemOpenableOn(const DIFFITEM &di, int index)
 /// is it possible to open left ... item ?
 bool IsItemOpenableOnWith(const DIFFITEM &di, int index)
 {
-	return (!di.diffcode.isDirectory() && IsItemOpenableOn(di, index));
+	return (di.diffcode.diffcode != 0 && !di.diffcode.isDirectory() && IsItemOpenableOn(di, index));
 }
+
+/**
+ * @brief Is it possible to open the parent folder?
+ * @param [in] di Diff item to check
+ * @param [in] index Index of the item whose parent folder to be opened.
+ * @return True if it is possible to open the parent folder.
+ */
+bool IsParentFolderOpenable(const DIFFITEM& di, int index)
+{
+	return (di.diffcode.diffcode != 0 && di.diffcode.exists(index));
+}
+
 /// is it possible to copy to... left item?
 bool IsItemCopyableToOn(const DIFFITEM &di, int index)
 {
@@ -783,7 +798,7 @@ bool GetOpenOneItem(const CDiffContext& ctxt, DIFFITEM *pos1, const DIFFITEM *pd
 		{
 			String invalid = path1Exists == paths::IS_EXISTING_DIR ? paths[0] : paths[1];
 			errmsg = strutils::format_string1(
-				_("Operation aborted!\n\nFolder contents at disks has changed, path\n%1\nwas not found.\n\nPlease refresh the compare."),
+				_("Operation aborted!\n\nFolder contents changed, path\n%1\nnot found.\n\nRefresh the compare."),
 				invalid);
 			return false;
 		}
@@ -858,7 +873,7 @@ bool GetOpenTwoItems(const CDiffContext& ctxt, SELECTIONTYPE selectionType, DIFF
 		isDir = true;
 		if (paths::GetPairComparability(paths) != paths::IS_EXISTING_DIR)
 		{
-			errmsg = _("The selected folder is invalid.");
+			errmsg = _("Selected folder is invalid.");
 			return false;
 		}
 	}
@@ -964,7 +979,7 @@ bool GetOpenThreeItems(const CDiffContext& ctxt, DIFFITEM *pos1, DIFFITEM *pos2,
 		isDir = true;
 		if (paths::GetPairComparability(paths) != paths::IS_EXISTING_DIR)
 		{
-			errmsg = _("The selected folder is invalid.");
+			errmsg = _("Selected folder is invalid.");
 			return false;
 		} 
 	}
@@ -1221,7 +1236,7 @@ int UpdateCompareFlagsAfterSync(DIFFITEM& di, bool bRecursive)
 /**
  * @brief Update the paths of the diff items recursively.
  * @param[in] nDirs Number of directories to compare.
- * @param[in,out] diÅ@Item to update the path.
+ * @param[in,out] di Item to update the path.
  */
 void UpdatePaths(int nDirs, DIFFITEM& di)
 {

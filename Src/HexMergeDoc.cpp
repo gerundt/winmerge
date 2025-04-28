@@ -158,6 +158,7 @@ int CHexMergeDoc::UpdateLastCompareResult()
 			break;
 	}
 	GetParentFrame()->SetLastCompareResult(bDiff);
+	m_hasDiff = bDiff;
 	return bDiff ? 1 : 0;
 }
 
@@ -300,7 +301,7 @@ bool CHexMergeDoc::DoFileSave(int nBuffer)
 			// Warn user in case file has been changed by someone else
 			if (m_pView[nBuffer]->IsFileChangedOnDisk(m_filePaths.GetPath(nBuffer).c_str()) == IMergeDoc::FileChange::Changed)
 			{
-				String msg = strutils::format_string1(_("Another application has updated file\n%1\nsince WinMerge loaded it.\n\nOverwrite changed file?"), m_filePaths.GetPath(nBuffer));
+				String msg = strutils::format_string1(_("Another application updated\n%1\nsince WinMerge loaded it.\n\nOverwrite?"), m_filePaths.GetPath(nBuffer));
 				if (AfxMessageBox(msg.c_str(), MB_ICONWARNING | MB_YESNO) == IDNO)
 					return false;
 			}
@@ -331,6 +332,8 @@ bool CHexMergeDoc::DoFileSave(int nBuffer)
 						static_cast<unsigned>(-1), static_cast<unsigned>(-1),
 							compareResult == 0);
 				}
+
+				CMergeFrameCommon::LogFileSaved(m_filePaths[nBuffer]);
 			}
 		}
 	}
@@ -365,6 +368,9 @@ bool CHexMergeDoc::DoFileSaveAs(int nBuffer, bool packing)
 		m_filePaths.SetPath(nBuffer, strPath);
 		UpdateLastCompareResult();
 		UpdateHeaderPath(nBuffer);
+
+		CMergeFrameCommon::LogFileSaved(m_filePaths[nBuffer]);
+
 		return true;
 	}
 	return false;
@@ -476,7 +482,7 @@ bool CHexMergeDoc::CloseNow()
  */
 CString CHexMergeDoc::GetTooltipString() const
 {
-	return CMergeFrameCommon::GetTooltipString(m_filePaths, m_strDesc, &m_infoUnpacker, nullptr).c_str();
+	return CMergeFrameCommon::GetTooltipString(*this).c_str();
 }
 
 /**
@@ -502,7 +508,7 @@ HRESULT CHexMergeDoc::LoadOneFile(int index, const tchar_t* filename, bool readO
 		m_nBufferType[index] = BUFFERTYPE::UNNAMED;
 		m_strDesc[index] = strDesc;
 		if (m_strDesc[index].empty())
-			m_strDesc[index] = (index == 0) ? _("Untitled left") : ((m_nBuffers < 3 || index == 2) ? _("Untitled right") : _("Untitled middle"));
+			m_strDesc[index] = (index == 0) ? _("Untitled Left") : ((m_nBuffers < 3 || index == 2) ? _("Untitled Right") : _("Untitled Middle"));
 	}
 	m_pView[index]->ResizeWindow();
 	return S_OK;
@@ -513,6 +519,8 @@ HRESULT CHexMergeDoc::LoadOneFile(int index, const tchar_t* filename, bool readO
  */
 bool CHexMergeDoc::OpenDocs(int nFiles, const FileLocation fileloc[], const bool bRO[], const String strDesc[])
 {
+	CMergeFrameCommon::LogComparisonStart(nFiles, fileloc, strDesc, &m_infoUnpacker, nullptr);
+
 	CWaitCursor waitstatus;
 	CHexMergeFrame *pf = GetParentFrame();
 	ASSERT(pf != nullptr);
@@ -554,6 +562,8 @@ bool CHexMergeDoc::OpenDocs(int nFiles, const FileLocation fileloc[], const bool
 
 	GetMainFrame()->WatchDocuments(this);
 
+	CMergeFrameCommon::LogComparisonCompleted(*this);
+
 	return bSucceeded;
 }
 
@@ -588,7 +598,7 @@ void CHexMergeDoc::CheckFileChanged(void)
 	{
 		if (m_pView[pane] && m_pView[pane]->IsFileChangedOnDisk(m_filePaths[pane].c_str()) == FileChange::Changed)
 		{
-			String msg = strutils::format_string1(_("Another application has updated file\n%1\nsince WinMerge scanned it last time.\n\nDo you want to reload the file?"), m_filePaths[pane]);
+			String msg = strutils::format_string1(_("Another application updated\n%1\nsince last scan.\n\nReload?"), m_filePaths[pane]);
 			if (AfxMessageBox(msg.c_str(), MB_YESNO | MB_ICONWARNING | MB_DONT_ASK_AGAIN, IDS_FILECHANGED_RESCAN) == IDYES)
 			{
 				OnFileReload();
@@ -688,7 +698,7 @@ void CHexMergeDoc::RefreshOptions()
  */
 void CHexMergeDoc::SetTitle(LPCTSTR lpszTitle)
 {
-	String sTitle = (lpszTitle != nullptr) ? lpszTitle : CMergeFrameCommon::GetTitleString(m_filePaths, m_strDesc, &m_infoUnpacker, nullptr);
+	String sTitle = (lpszTitle != nullptr) ? lpszTitle : CMergeFrameCommon::GetTitleString(*this);
 	CDocument::SetTitle(sTitle.c_str());
 	if (auto* pParentFrame = GetParentFrame())
 		pParentFrame->SetWindowText(sTitle.c_str());
@@ -869,7 +879,7 @@ void CHexMergeDoc::OnUpdateCopyFromRight(CCmdUI* pCmdUI)
 void CHexMergeDoc::OnAllRight()
 {
 	UINT userChoice = 0;
-	String msg = _("Are you sure you want to copy all differences to the other file?");
+	String msg = _("Copy all differences to other file?");
 	userChoice = AfxMessageBox(msg.c_str(), MB_YESNO |
 		MB_ICONWARNING | MB_DEFBUTTON2 | MB_DONT_ASK_AGAIN, IDS_CONFIRM_COPY_ALL_DIFFS);
 	if (userChoice == IDNO)
@@ -896,7 +906,7 @@ void CHexMergeDoc::OnUpdateAllRight(CCmdUI* pCmdUI)
 void CHexMergeDoc::OnAllLeft()
 {
 	UINT userChoice = 0;
-	String msg = _("Are you sure you want to copy all differences to the other file?");
+	String msg = _("Copy all differences to other file?");
 	userChoice = AfxMessageBox(msg.c_str(), MB_YESNO |
 		MB_ICONWARNING | MB_DEFBUTTON2 | MB_DONT_ASK_AGAIN, IDS_CONFIRM_COPY_ALL_DIFFS);
 	if (userChoice == IDNO)

@@ -34,6 +34,7 @@
 #include "Exceptions.h"
 #include "parsers/crystallineparser.h"
 #include "SyntaxColors.h"
+#include "Logger.h"
 #include "MergeApp.h"
 #include "SubstitutionList.h"
 #include "codepage_detect.h"
@@ -755,7 +756,7 @@ bool CDiffWrapper::RunFileDiff()
 			{
 				// display a message box
 				String sError = strutils::format_string2(
-					_("An error occurred while prediffing the file '%1' with the plugin '%2'. The prediffing is not applied any more."),
+					_("Error prediffing '%1' with '%2'. Prediffing disabled."),
 					strFileTemp[file].c_str(),
 					m_infoPrediffer->GetPluginPipeline().c_str());
 				AppErrorMessageBox(sError);
@@ -953,7 +954,7 @@ bool CDiffWrapper::RunFileDiff()
 				}
 				catch (Exception& e)
 				{
-					LogErrorStringUTF8(e.displayText());
+					RootLogger::Error(e.displayText());
 				}
 				strFileTemp[file].erase();
 			}
@@ -982,7 +983,7 @@ void CDiffWrapper::AddDiffRange(DiffList *pDiffList, unsigned begin0, unsigned e
 	}
 	catch (std::exception& e)
 	{
-		AppErrorMessageBox(ucr::toTString(e.what()));
+		RootLogger::Error(e.what());
 	}
 }
 
@@ -994,7 +995,7 @@ void CDiffWrapper::AddDiffRange(DiffList *pDiffList, DIFFRANGE &dr)
 	}
 	catch (std::exception& e)
 	{
-		AppErrorMessageBox(ucr::toTString(e.what()));
+		RootLogger::Error(e.what());
 	}
 }
 

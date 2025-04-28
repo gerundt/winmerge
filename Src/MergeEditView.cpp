@@ -610,7 +610,7 @@ void CMergeEditView::OnInitialUpdate()
 	PushCursors();
 	CCrystalEditViewEx::OnInitialUpdate();
 	PopCursors();
-	LOGFONT lf = dynamic_cast<CMainFrame*>(AfxGetMainWnd())->m_lfDiff;
+	LOGFONT lf = theApp.m_lfDiff;
 	lf.lfHeight = static_cast<LONG>(lf.lfHeight * GetOptionsMgr()->GetInt(OPT_VIEW_ZOOM) / 1000.0);
 	SetFont(lf);
 	SetAlternateDropTarget(new DropHandler(std::bind(&CMergeEditView::OnDropFiles, this, std::placeholders::_1)));
@@ -1292,6 +1292,8 @@ void CMergeEditView::OnEditUndo()
 		GetParentFrame()->SetActiveView(this, true);
 		if(CCrystalEditViewEx::DoEditUndo())
 		{
+			CMergeFrameCommon::LogUndo();
+
 			--pDoc->curUndo;
 			pDoc->UpdateHeaderPath(m_nThisPane);
 			pDoc->FlushAndRescan();
@@ -2270,7 +2272,7 @@ void CMergeEditView::OnUpdateCopyLinesFromRight(CCmdUI* pCmdUI)
 void CMergeEditView::OnAllLeft()
 {
 	UINT userChoice = 0;
-	String msg = _("Are you sure you want to copy all differences to the other file?");
+	String msg = _("Copy all differences to other file?");
 	userChoice = AfxMessageBox(msg.c_str(), MB_YESNO |
 		MB_ICONWARNING | MB_DEFBUTTON2 | MB_DONT_ASK_AGAIN, IDS_CONFIRM_COPY_ALL_DIFFS);
 	if (userChoice == IDNO)
@@ -2306,7 +2308,7 @@ void CMergeEditView::OnUpdateAllLeft(CCmdUI* pCmdUI)
 void CMergeEditView::OnAllRight()
 {
 	UINT userChoice = 0;
-	String msg = _("Are you sure you want to copy all differences to the other file?");
+	String msg = _("Copy all differences to other file?");
 	userChoice = AfxMessageBox(msg.c_str(), MB_YESNO |
 		MB_ICONWARNING | MB_DEFBUTTON2 | MB_DONT_ASK_AGAIN, IDS_CONFIRM_COPY_ALL_DIFFS);
 	if (userChoice == IDNO)
@@ -2477,6 +2479,8 @@ void CMergeEditView::OnEditRedo()
 		GetParentFrame()->SetActiveView(this, true);
 		if(CCrystalEditViewEx::DoEditRedo())
 		{
+			CMergeFrameCommon::LogRedo();
+
 			++pDoc->curUndo;
 			pDoc->UpdateHeaderPath(m_nThisPane);
 			pDoc->FlushAndRescan();

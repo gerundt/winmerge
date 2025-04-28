@@ -20,6 +20,7 @@
 #include "Environment.h"
 #include "TFile.h"
 #include "paths.h"
+#include "Logger.h"
 #include "MergeApp.h"
 
 using Poco::Exception;
@@ -157,7 +158,7 @@ std::vector<PluginForFile::PipelineItem> PluginForFile::ParsePluginPipeline(cons
 		{
 			if (name.empty() || (sep == '|' && !*p))
 			{
-				errorMessage = strutils::format_string1(_("Missing plugin name in plugin pipeline: %1"), pluginPipeline);
+				errorMessage = strutils::format_string1(_("Missing plugin name in pipeline: %1"), pluginPipeline);
 				break;
 			}
 			result.push_back({ name, targetFlags, args, quoteChar });
@@ -167,7 +168,7 @@ std::vector<PluginForFile::PipelineItem> PluginForFile::ParsePluginPipeline(cons
 		}
 	};
 	if (inQuotes)
-		errorMessage = strutils::format_string1(_("Missing quotation mark in plugin pipeline: %1"), pluginPipeline);
+		errorMessage = strutils::format_string1(_("Missing quote in plugin pipeline: %1"), pluginPipeline);
 	return result;
 }
 
@@ -416,7 +417,7 @@ bool PackingInfo::GetPackUnpackPlugin(const String& filteredFilenames, bool bUrl
 						else
 						{
 							plugin = nullptr;
-							errorMessage = strutils::format_string1(_("'%1' is not unpacker plugin"), pluginName);
+							errorMessage = strutils::format_string1(_("'%1' is not an unpacker plugin"), pluginName);
 						}
 						return false;
 					}
@@ -537,7 +538,7 @@ bool PackingInfo::Packing(int target, const String& srcFilepath, const String& d
 	catch (Poco::Exception& e)
 	{
 		DWORD dwErrCode = GetLastError();
-		LogErrorStringUTF8(e.displayText());
+		RootLogger::Error(e.displayText());
 		SetLastError(dwErrCode);
 		return false;
 	}
@@ -742,7 +743,7 @@ bool PrediffingInfo::GetPrediffPlugin(const String& filteredFilenames, bool bRev
 					else
 					{
 						plugin = nullptr;
-						errorMessage = strutils::format_string1(_("'%1' is not prediffer plugin"), pluginName);
+						errorMessage = strutils::format_string1(_("'%1' is not a prediffer plugin"), pluginName);
 					}
 					return false;
 				}
@@ -954,7 +955,7 @@ bool AnyCodepageToUTF8(int codepage, String & filepath, bool bMayOverwrite)
 			}
 			catch (Exception& e)
 			{
-				LogErrorStringUTF8(e.displayText());
+				RootLogger::Error(e.displayText());
 			}
 		}
 		// and change the filepath if everything works
@@ -968,7 +969,7 @@ bool AnyCodepageToUTF8(int codepage, String & filepath, bool bMayOverwrite)
 		}
 		catch (Exception& e)
 		{
-			LogErrorStringUTF8(e.displayText());
+			RootLogger::Error(e.displayText());
 		}
 	}
 

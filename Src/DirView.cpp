@@ -351,7 +351,7 @@ BEGIN_MESSAGE_MAP(CDirView, CListView)
 	ON_UPDATE_COMMAND_UI(ID_DIR_ZIP_BOTH, OnUpdateCtxtDirCopyBothTo)
 	ON_UPDATE_COMMAND_UI(ID_DIR_ZIP_ALL, OnUpdateCtxtDirCopyBothTo)
 	ON_UPDATE_COMMAND_UI(ID_DIR_ZIP_BOTH_DIFFS_ONLY, OnUpdateCtxtDirCopyBothDiffsOnlyTo)
-	// Context menu -> Left/Middle/Right Shell menu
+	// Context menu -> Left/Middle/Right Shell Menu
 	ON_COMMAND_RANGE(ID_DIR_SHELL_CONTEXT_MENU_LEFT, ID_DIR_SHELL_CONTEXT_MENU_ALL, OnCtxtDirShellContextMenu)
 	// Context menu -> Plugin settings
 	ON_COMMAND_RANGE(ID_PREDIFFER_SETTINGS_NONE, ID_PREDIFFER_SETTINGS_SELECT, OnPluginSettings)
@@ -426,7 +426,7 @@ void CDirView::OnInitialUpdate()
 	// Load user-selected font
 	if (GetOptionsMgr()->GetBool(OPT_FONT_DIRCMP + OPT_FONT_USECUSTOM))
 	{
-		m_font.CreateFontIndirect(&GetMainFrame()->m_lfDir);
+		m_font.CreateFontIndirect(&theApp.m_lfDir);
 		CWnd::SetFont(&m_font, TRUE);
 	}
 
@@ -871,7 +871,7 @@ void CDirView::OnCtxtDirCopy()
 	Counts counts = Count(&DirActions::IsItemIdenticalOrSkipped);
 	if (counts.count > 0)
 	{
-		int ans = AfxMessageBox(_("Some selected items are identical or skipped.\nDo you want to copy only the items with differences?").c_str(),
+		int ans = AfxMessageBox(_("Some selected items are identical or skipped.\nCopy only items with differences?").c_str(),
 			MB_YESNOCANCEL | MB_ICONWARNING | MB_DONT_ASK_AGAIN, IDS_COPY_ONLYDIFFITEMS);
 		if (ans == IDCANCEL)
 			return;
@@ -968,11 +968,11 @@ void CDirView::DoDirActionTo(SIDE_TYPE stype, DirActions::method_type func, cons
 	String selectfolder_title;
 
 	if (stype == SIDE_LEFT)
-		selectfolder_title = _("Left side - select destination folder:");
+		selectfolder_title = _("Left Side - Select Destination Folder:");
 	else if (stype == SIDE_MIDDLE)
-		selectfolder_title = _("Middle side - select destination folder:");
+		selectfolder_title = _("Middle Side - Select Destination Folder:");
 	else if (stype == SIDE_RIGHT)
-		selectfolder_title = _("Right side - select destination folder:");
+		selectfolder_title = _("Right Side - Select Destination Folder:");
 
 	if (!SelectFolder(destPath, startPath.c_str(), selectfolder_title))
 		return;
@@ -1022,6 +1022,7 @@ void CDirView::ConfirmAndPerformActions(FileActionScript & actionList)
 		INT_PTR ans = dlg.DoModal();
 		if (ans != IDOK && ans != IDYES)
 			return;
+		RootLogger::Info(e.m_question + _T(": ") + e.m_fromPath + _T(" -> ") + e.m_toPath + _T(": ") + _("Yes"));
 	}
 	PerformActionList(actionList);
 }
@@ -1030,17 +1031,56 @@ void CDirView::ConfirmAndPerformActions(FileActionScript & actionList)
  * @brief Perform an array of actions
  * @note There can be only COPY or DELETE actions, not both!
  */
-void CDirView::PerformActionList(FileActionScript & actionScript)
+void CDirView::PerformActionList(FileActionScript& actionScript)
 {
 	// Check option and enable putting deleted items to Recycle Bin
-	if (GetOptionsMgr()->GetBool(OPT_USE_RECYCLE_BIN))
-		actionScript.UseRecycleBin(true);
-	else
-		actionScript.UseRecycleBin(false);
+	actionScript.UseRecycleBin(GetOptionsMgr()->GetBool(OPT_USE_RECYCLE_BIN));
 
 	actionScript.SetParentWindow(GetMainFrame()->GetSafeHwnd());
 
 	theApp.AddOperation();
+
+	String src, dst, op;
+	const int itemCount = static_cast<int>(actionScript.GetActionItemCount());
+	if (itemCount >= 1)
+	{
+		FileActionItem item = actionScript.GetHeadActionItem();
+		if (itemCount == 1)
+		{
+			src = item.src;
+			dst = item.dest;
+		}
+		else
+		{
+			const CDiffContext& ctxt = GetDiffContext();
+			src = ctxt.GetPath(item.UIOrigin);
+			if (item.atype == FileActionItem::ACT_DEL)
+			{
+				dst = actionScript.UseRecycleBin() ? _("Recycle Bin") : _("Permanently deleted");
+			}
+			else
+			{
+				if (item.UIResult != FileActionItem::UI_DONT_CARE)
+					dst = ctxt.GetPath(item.UIDestination);
+				else
+					dst = (!actionScript.m_destBase.empty()) ? actionScript.m_destBase : item.dest;
+			}
+		}
+		if (item.atype == FileActionItem::ACT_COPY)
+			op = _("Copying files...");
+		else if (item.atype == FileActionItem::ACT_MOVE)
+			op = _("Moving files...");
+		else if (item.atype == FileActionItem::ACT_DEL)
+			op = _("Deleting files...");
+		else
+			ASSERT(FALSE);
+		String msg = op + _T(" (") + src;
+		if (itemCount > 1)
+			msg += _T(", ") + strutils::format_string1(_("Items: %1"), strutils::to_str(itemCount));
+		msg +=  + _T(" -> ") + dst + _T(")");
+		RootLogger::Info(msg);
+	}
+
 	bool succeeded = actionScript.Run();
 	if (succeeded)
 		UpdateAfterFileScript(actionScript);
@@ -1049,6 +1089,11 @@ void CDirView::PerformActionList(FileActionScript & actionScript)
 		throw FileOperationException(_T("File operation failed"));
 	m_firstDiffItem.reset();
 	m_lastDiffItem.reset();
+
+	if (succeeded)
+		RootLogger::Info(_("File operation completed successfully"));
+	if (actionScript.IsCanceled())
+		RootLogger::Info(_("File operation canceled"));
 }
 
 /**
@@ -1396,7 +1441,7 @@ static bool CreateFoldersPair(const PathContext& paths)
 		{
 			String message =
 				strutils::format_string1( 
-					_("The folder exists only in other side and cannot be opened.\n\nDo you want to create a matching folder:\n%1\nto the other side and open these folders?"),
+					_("Create matching folder:\n%1\non the other side and open?"),
 					path);
 			int res = AfxMessageBox(message.c_str(), MB_YESNO | MB_ICONWARNING | MB_DONT_ASK_AGAIN, IDS_CREATE_PAIR_FOLDER);
 			if (res == IDYES)
@@ -1439,7 +1484,7 @@ void CDirView::Open(CDirDoc *pDoc, const PathContext& paths, fileopenflags_t dwF
 		PathContext filteredPaths;
 		FileLocation fileloc[3];
 		String strDesc[3];
-		const String sUntitled[] = { _("Untitled left"), paths.GetSize() < 3 ? _("Untitled right") : _("Untitled middle"), _("Untitled right") };
+		const String sUntitled[] = { _("Untitled Left"), paths.GetSize() < 3 ? _("Untitled Right") : _("Untitled Middle"), _("Untitled Right") };
 		for (int i = 0; i < paths.GetSize(); ++i)
 		{
 			if (paths::DoesPathExist(paths[i]) == paths::DOES_NOT_EXIST)
@@ -1613,7 +1658,7 @@ void CDirView::OpenSelectionAs(UINT id)
 	}
 
 	// Open identical and different files
-	const String sUntitled[] = { _("Untitled left"), paths.GetSize() < 3 ? _("Untitled right") : _("Untitled middle"), _("Untitled right") };
+	const String sUntitled[] = { _("Untitled Left"), paths.GetSize() < 3 ? _("Untitled Right") : _("Untitled Middle"), _("Untitled Right") };
 	fileopenflags_t dwFlags[3] = { 0 };
 	String strDesc[3];
 	PathContext filteredPaths;
@@ -1879,12 +1924,14 @@ void CDirView::GetItemFileNames(int sel, PathContext * paths) const
  */
 void CDirView::DoOpen(SIDE_TYPE stype)
 {
-	int sel = GetSingleSelectedItem();
-	if (sel == -1) return;
-	DirItemIterator dirBegin = SelBegin();
-	String file = GetSelectedFileName(dirBegin, stype, GetDiffContext());
-	if (file.empty()) return;
-	shell::Edit(file.c_str());
+	for (DirItemIterator it = SelBegin(); it != SelEnd(); ++it)
+	{
+		if (IsItemOpenableOn(*it, SideToIndex(GetDiffContext(), stype))) {
+			String file = GetSelectedFileName(it, stype, GetDiffContext());
+			if (!file.empty())
+				shell::Edit(file.c_str());
+		}
+	}
 }
 
 /// Open with dialog for file on selected side
@@ -1901,23 +1948,26 @@ void CDirView::DoOpenWith(SIDE_TYPE stype)
 /// Open selected file  on specified side to external editor
 void CDirView::DoOpenWithEditor(SIDE_TYPE stype)
 {
-	int sel = GetSingleSelectedItem();
-	if (sel == -1) return;
-	DirItemIterator dirBegin = SelBegin();
-	String file = GetSelectedFileName(dirBegin, stype, GetDiffContext());
-	if (file.empty()) return;
-
-	CMergeApp::OpenFileToExternalEditor(file);
+	for (DirItemIterator it = SelBegin(); it != SelEnd(); ++it)
+	{
+		if (IsItemOpenableOnWith(*it, SideToIndex(GetDiffContext(), stype))) {
+			String file = GetSelectedFileName(it, stype, GetDiffContext());
+			if (!file.empty())
+				CMergeApp::OpenFileToExternalEditor(file);
+		}
+	}
 }
 
 void CDirView::DoOpenParentFolder(SIDE_TYPE stype)
 {
-	int sel = GetSingleSelectedItem();
-	if (sel == -1) return;
-	DirItemIterator dirBegin = SelBegin();
-	String file = GetSelectedFileName(dirBegin, stype, GetDiffContext());
-	if (file.empty()) return;
-	shell::OpenParentFolder(file.c_str());
+	for (DirItemIterator it = SelBegin(); it != SelEnd(); ++it)
+	{
+		if (IsParentFolderOpenable(*it, SideToIndex(GetDiffContext(), stype))) {
+			String file = GetSelectedFileName(it, stype, GetDiffContext());
+			if (!file.empty())
+				shell::OpenParentFolder(file.c_str());
+		}
+	}
 }
 
 /// Update context menuitem "Open left | with editor"
@@ -1925,7 +1975,8 @@ template<SIDE_TYPE stype>
 void CDirView::OnUpdateCtxtDirOpenWithEditor(CCmdUI* pCmdUI)
 {
 	Counts counts = Count(&DirActions::IsItemOpenableOnWith<stype>);
-	pCmdUI->Enable(counts.count > 0 && counts.total == 1);
+	int selected = GetSelectedCount();
+	pCmdUI->Enable(counts.count > 0 && selected == counts.count);
 }
 
 // return selected item index, or -1 if none or multiple
@@ -1943,7 +1994,8 @@ template<SIDE_TYPE stype>
 void CDirView::OnUpdateCtxtDirOpen(CCmdUI* pCmdUI)
 {
 	Counts counts = Count(&DirActions::IsItemOpenableOn<stype>);
-	pCmdUI->Enable(counts.count > 0 && counts.total == 1);
+	int selected = GetSelectedCount();
+	pCmdUI->Enable(counts.count > 0 && selected == counts.count);
 }
 
 // Enable/disable Open Left With menu choice on context menu
@@ -1959,7 +2011,8 @@ template<SIDE_TYPE stype>
 void CDirView::OnUpdateCtxtDirOpenParentFolder(CCmdUI* pCmdUI)
 {
 	Counts counts = Count(&DirActions::IsParentFolderOpenable<stype>);
-	pCmdUI->Enable(counts.count > 0 && counts.total == 1);
+	int selected = GetSelectedCount();
+	pCmdUI->Enable(counts.count > 0 && selected == counts.count);
 }
 
 // Used for Open
@@ -2549,6 +2602,8 @@ LRESULT CDirView::OnUpdateUIMessage(WPARAM wParam, LPARAM lParam)
 		if (m_elapsed > TimeToSignalCompare * CLOCKS_PER_SEC)
 			MessageBeep(IDOK);
 		GetMainFrame()->StartFlashing();
+		CMergeFrameCommon::LogComparisonCompleted(*pDoc->GetDiffContext().m_pCompareStats);
+
 	}
 	else if (wParam == CDiffThread::EVENT_COMPARE_PROGRESSED)
 	{
@@ -3420,7 +3475,7 @@ void CDirView::OnUpdateHideFilenames(CCmdUI* pCmdUI)
 template<SIDE_TYPE srctype, SIDE_TYPE dsttype>
 void CDirView::OnCtxtDirMove()
 {
-	DoDirAction(&DirActions::Move<srctype, dsttype>, _("Moveing files..."));
+	DoDirAction(&DirActions::Move<srctype, dsttype>, _("Moving files..."));
 }
 
 /// User chose (context menu) Move left to...

@@ -12,6 +12,8 @@
 #include "MergeEditView.h"
 #include "DiffList.h"
 #include "MergeLineFlags.h"
+#include "MergeFrameCommon.h"
+#include "Logger.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -302,21 +304,21 @@ void CMergeDoc::DoAutoMerge(int dstPane)
 		DoMergeValue(m_ptBuf[0]->getEncoding(), m_ptBuf[1]->getEncoding(), m_ptBuf[2]->getEncoding(), dstPane);
 	if (mergedEncoding.first == Merged)
 	{
-		ShowMessageBox(_("The change of codepage has been merged."), MB_ICONINFORMATION);
+		ShowMessageBox(_("Codepage change merged."), MB_ICONINFORMATION);
 		m_ptBuf[dstPane]->setEncoding(mergedEncoding.second);
 	}
 	else if (mergedEncoding.first == Conflict)
-		ShowMessageBox(_("The changes of codepage are conflicting."), MB_ICONINFORMATION);
+		ShowMessageBox(_("Codepage changes are conflicting."), MB_ICONINFORMATION);
 
 	std::pair<MergeResult, CRLFSTYLE> mergedEOLStyle =
 		DoMergeValue(m_ptBuf[0]->GetCRLFMode(), m_ptBuf[1]->GetCRLFMode(), m_ptBuf[2]->GetCRLFMode(), dstPane);
 	if (mergedEOLStyle.first == Merged)
 	{
-		ShowMessageBox(_("The change of EOL has been merged."), MB_ICONINFORMATION);
+		ShowMessageBox(_("EOL change merged."), MB_ICONINFORMATION);
 		m_ptBuf[dstPane]->SetCRLFMode(mergedEOLStyle.second);
 	}
 	else if (mergedEOLStyle.first == Conflict)
-		ShowMessageBox(_("The changes of EOL are conflicting."), MB_ICONINFORMATION);
+		ShowMessageBox(_("EOL changes are conflicting."), MB_ICONINFORMATION);
 
 	RescanSuppress suppressRescan(*this);
 
@@ -383,7 +385,7 @@ void CMergeDoc::DoAutoMerge(int dstPane)
 
 	ShowMessageBox(
 		strutils::format_string2(
-			_("The number of automatically merged changes: %1\nThe number of unresolved conflicts: %2"),
+			_("Automatic merges: %1\nUnresolved conflicts: %2"),
 			strutils::format(_T("%d"), autoMergedCount),
 			strutils::format(_T("%d"), unresolvedConflictCount)),
 		MB_ICONINFORMATION);
@@ -581,6 +583,8 @@ bool CMergeDoc::ListCopy(int srcPane, int dstPane, int nDiff /* = -1*/,
 		// reset the mod status of the source view because we do make some
 		// changes, but none that concern the source text
 		sbuf.SetModified(bSrcWasMod);
+
+		CMergeFrameCommon::LogCopyDiff(srcPane, dstPane, nDiff);
 	}
 
 	suppressRescan.Clear(); // done suppress Rescan
@@ -674,6 +678,8 @@ bool CMergeDoc::LineListCopy(int srcPane, int dstPane, int nDiff, int firstLine,
 	// reset the mod status of the source view because we do make some
 	// changes, but none that concern the source text
 	sbuf.SetModified(bSrcWasMod);
+
+	CMergeFrameCommon::LogCopyLines(srcPane, dstPane, firstLine, lastLine);
 
 	suppressRescan.Clear(); // done suppress Rescan
 	FlushAndRescan();
@@ -791,6 +797,8 @@ bool CMergeDoc::InlineDiffListCopy(int srcPane, int dstPane, int nDiff, int firs
 	// reset the mod status of the source view because we do make some
 	// changes, but none that concern the source text
 	sbuf.SetModified(bSrcWasMod);
+
+	CMergeFrameCommon::LogCopyInlineDiffs(srcPane, dstPane, nDiff, firstWordDiff, lastWordDiff);
 
 	suppressRescan.Clear(); // done suppress Rescan
 	FlushAndRescan();
@@ -1056,6 +1064,8 @@ bool CMergeDoc::CharacterListCopy(int srcPane, int dstPane, int activePane, int 
 	// reset the mod status of the source view because we do make some
 	// changes, but none that concern the source text
 	sbuf.SetModified(bSrcWasMod);
+
+	CMergeFrameCommon::LogCopyCharacters(srcPane, dstPane,  nDiff, ptStart, ptEnd);
 
 	suppressRescan.Clear(); // done suppress Rescan
 	FlushAndRescan();
