@@ -14,12 +14,12 @@
 #include "stdafx.h"
 #include "MergeEditFrm.h"
 #include "FrameWndHelper.h"
-#include "Merge.h"
 #include "MergeDoc.h"
 #include "MergeEditView.h"
 #include "LocationView.h"
 #include "OptionsDef.h"
 #include "OptionsMgr.h"
+#include "DarkModeLib.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -117,14 +117,19 @@ BOOL CMergeEditFrame::OnCreateClient( LPCREATESTRUCT /*lpcs*/,
 
 	m_wndFilePathBar.SetPaneCount(m_pMergeDoc->m_nBuffers);
 	m_wndFilePathBar.SetOnSetFocusCallback([&](int pane) {
-		m_pMergeDoc->GetView(0, pane)->SetActivePane();
+		const int nGroup = m_pMergeDoc->GetActiveMergeView()->m_nThisGroup;
+		m_pMergeDoc->GetView(nGroup, pane)->SetActivePane();
 	});
 	m_wndFilePathBar.SetOnCaptionChangedCallback([&](int pane, const String& sText) {
+		const int nGroup = m_pMergeDoc->GetActiveMergeView()->m_nThisGroup;
 		m_pMergeDoc->SetDescription(pane, sText);
 		m_pMergeDoc->UpdateHeaderPath(pane);
+		m_pMergeDoc->GetView(nGroup, pane)->SetFocus();
 	});
 	m_wndFilePathBar.SetOnFileSelectedCallback([&](int pane, const String& sFilepath) {
+		const int nGroup = m_pMergeDoc->GetActiveMergeView()->m_nThisGroup;
 		m_pMergeDoc->ChangeFile(pane, sFilepath);
+		m_pMergeDoc->GetView(nGroup, pane)->SetFocus();
 	});
 	m_wndStatusBar.SetPaneCount(m_pMergeDoc->m_nBuffers);
 	
@@ -366,7 +371,7 @@ LRESULT CMergeEditFrame::CPreviewNumPageButton::WindowProc(UINT message, WPARAM 
 	{
 		// Translate the One Page Button and Two Page Button on the Print Preivew toolbar.
 		String text = reinterpret_cast<TCHAR*>(lParam);
-		String translated = tr(text);
+		String translated = I18n::tr(text);
 		if (translated != text)
 		{
 			SetWindowText(translated.c_str());
@@ -395,8 +400,11 @@ void CMergeEditFrame::OnTimer(UINT_PTR nIDEvent)
 		if (pPreviewBar)
 		{
 			pPreviewBar->Invalidate();
-			theApp.TranslateDialog(pPreviewBar->GetSafeHwnd());
+			I18n::TranslateDialog(pPreviewBar->GetSafeHwnd());
 			m_wndPreviewNumPage.SubclassWindow(pPreviewBar->GetDlgItem(AFX_ID_PREVIEW_NUMPAGE)->GetSafeHwnd());
+			HWND hPreviewBar = pPreviewBar->GetSafeHwnd();
+			if (hPreviewBar != nullptr)
+				DarkMode::setChildCtrlsSubclassAndThemeEx(hPreviewBar, true, true);
 		}
 	}
 	else

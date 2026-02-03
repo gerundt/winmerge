@@ -180,9 +180,6 @@ msgstr "הפוך אופקית"
 msgid "&Zoom"
 msgstr "התקרב/התרחק"
 
-msgid "25%"
-msgstr "25%"
-
 msgid "Zoom &In\tCtrl++"
 msgstr "התקרב\tCtrl++"
 
@@ -559,6 +556,9 @@ msgstr "החלף 2 | 3"
 msgid "Swap 1st | &3rd"
 msgstr "החלף 1 | 3"
 
+msgid "Displa&y Filter Bar\tCtrl+Shift+L"
+msgstr ""
+
 msgid "Com&pare Statistics..."
 msgstr "השווה נתונים סטטיסטיים..."
 
@@ -889,6 +889,9 @@ msgstr "פצל"
 msgid "Comp&are"
 msgstr "השווה"
 
+msgid "Compar&e with Renamed/Moved Items"
+msgstr ""
+
 msgid "Compare in New &Window"
 msgstr "השווה בחלון חדש"
 
@@ -1044,8 +1047,11 @@ msgstr "העתק נתיב מלא"
 msgid "Copy &Filename"
 msgstr "העתק שם קובץ"
 
-msgid "&Edit Caption"
-msgstr "ערוך כותרת"
+msgid "&Edit Caption\tF2"
+msgstr "ערוך כותרת\tF2"
+
+msgid "Edit &Path\tCtrl+L"
+msgstr ""
 
 msgid "&Open..."
 msgstr "פתח..."
@@ -1067,6 +1073,9 @@ msgstr "הגדרות השוואה מוקדמת"
 
 msgid "G&o to Diff"
 msgstr "עבור להבדל"
+
+msgid "Move Cursor on &Click"
+msgstr ""
 
 msgid "&No Moved Blocks"
 msgstr "ללא בלוקים שהוזזו"
@@ -1107,6 +1116,9 @@ msgstr "התעלם מהבדלי הערות"
 msgid "Ignore &Missing Trailing EOL"
 msgstr "התעלם מהיעדר סיום שורה"
 
+msgid "Ignore Line &Breaks (Treat as Spaces)"
+msgstr ""
+
 msgid "&Include Subfolders"
 msgstr "כלול תיקיות משנה"
 
@@ -1130,6 +1142,9 @@ msgstr "תאריך שינוי וגודל"
 
 msgid "Size"
 msgstr "גודל"
+
+msgid "Existence"
+msgstr ""
 
 msgid "&Load Project..."
 msgstr "טען פרויקט..."
@@ -1212,6 +1227,459 @@ msgstr "שכפל תוסף..."
 msgid "Clear &All"
 msgstr ""
 
+msgid "&Clear All"
+msgstr ""
+
+msgid "Remove Last Filter &Group"
+msgstr ""
+
+msgid "R&eset to Default (*.*)"
+msgstr ""
+
+msgid "Add E&xclude File"
+msgstr ""
+
+msgid "&System Files"
+msgstr ""
+
+msgid "&Editor Backup Files"
+msgstr ""
+
+msgid "&Compiled Binary Files"
+msgstr ""
+
+msgid "&Log Files"
+msgstr ""
+
+msgid "&Temporary or Cache Files"
+msgstr ""
+
+msgid "Add Excl&ude Folder"
+msgstr ""
+
+msgid "&Version Control"
+msgstr ""
+
+msgid "&Build Artifacts"
+msgstr ""
+
+msgid "&IDE"
+msgstr ""
+
+msgid "Add &File Condition"
+msgstr ""
+
+msgid "File &Size"
+msgstr ""
+
+msgid "Less than 1KB"
+msgstr ""
+
+msgid "1KB or more"
+msgstr ""
+
+msgid "Less than 10KB"
+msgstr ""
+
+msgid "10KB or more"
+msgstr ""
+
+msgid "Less than 100KB"
+msgstr ""
+
+msgid "100KB or more"
+msgstr ""
+
+msgid "Less than 1MB"
+msgstr ""
+
+msgid "1MB or more"
+msgstr ""
+
+msgid "Less than 10MB"
+msgstr ""
+
+msgid "10MB or more"
+msgstr ""
+
+msgid "Less than 100MB"
+msgstr ""
+
+msgid "100MB or more"
+msgstr ""
+
+msgid "Less than 1GB"
+msgstr ""
+
+msgid "1GB or more"
+msgstr ""
+
+msgid "Custom Range..."
+msgstr ""
+
+msgid "&Last Modified"
+msgstr ""
+
+msgid "&Hour"
+msgstr ""
+
+msgid "More than 1 hour ago"
+msgstr ""
+
+msgid "Within 1 hour"
+msgstr ""
+
+msgid "&Day"
+msgstr ""
+
+msgid "Before today"
+msgstr ""
+
+msgid "Today"
+msgstr ""
+
+msgid "Before yesterday"
+msgstr ""
+
+msgid "Yesterday"
+msgstr ""
+
+msgid "Since yesterday"
+msgstr ""
+
+msgid "&Week"
+msgstr ""
+
+msgid "Before this week"
+msgstr ""
+
+msgid "This week"
+msgstr ""
+
+msgid "Before last week"
+msgstr ""
+
+msgid "Last week"
+msgstr ""
+
+msgid "Since last week"
+msgstr ""
+
+msgid "&Month"
+msgstr ""
+
+msgid "Before this month"
+msgstr ""
+
+msgid "This month"
+msgstr ""
+
+msgid "Before last month"
+msgstr ""
+
+msgid "Last month"
+msgstr ""
+
+msgid "Since last month"
+msgstr ""
+
+msgid "&Year"
+msgstr ""
+
+msgid "Before this year"
+msgstr ""
+
+msgid "This year"
+msgstr ""
+
+msgid "Before last year"
+msgstr ""
+
+msgid "Last year"
+msgstr ""
+
+msgid "Since last year"
+msgstr ""
+
+msgid "&Custom Range..."
+msgstr ""
+
+msgid "&Attributes"
+msgstr ""
+
+msgid "Read-only files"
+msgstr ""
+
+msgid "Not read-only files"
+msgstr ""
+
+msgid "Hidden files"
+msgstr ""
+
+msgid "Not hidden files"
+msgstr ""
+
+msgid "System files"
+msgstr ""
+
+msgid "Not system files"
+msgstr ""
+
+msgid "File &Content"
+msgstr ""
+
+msgid "Contains string..."
+msgstr ""
+
+msgid "Does not contain string..."
+msgstr ""
+
+msgid "First line contains string..."
+msgstr ""
+
+msgid "First line does not contain string..."
+msgstr ""
+
+msgid "First 10 lines contain string..."
+msgstr ""
+
+msgid "First 10 lines do not contain string..."
+msgstr ""
+
+msgid "Last 10 lines contain string..."
+msgstr ""
+
+msgid "Last 10 lines do not contain string..."
+msgstr ""
+
+msgid "Last line contains string..."
+msgstr ""
+
+msgid "Last line does not contain string..."
+msgstr ""
+
+msgid "&Line Count"
+msgstr ""
+
+msgid "Less than 10"
+msgstr ""
+
+msgid "10 or more"
+msgstr ""
+
+msgid "Less than 100"
+msgstr ""
+
+msgid "100 or more"
+msgstr ""
+
+msgid "Less than 1000"
+msgstr ""
+
+msgid "1000 or more"
+msgstr ""
+
+msgid "Less than 10000"
+msgstr ""
+
+msgid "10000 or more"
+msgstr ""
+
+msgid "Less than 100000"
+msgstr ""
+
+msgid "100000 or more"
+msgstr ""
+
+msgid "Additional &Properties..."
+msgstr ""
+
+msgid "Add F&older Condition"
+msgstr ""
+
+msgid "&Files"
+msgstr ""
+
+msgid "0 files"
+msgstr ""
+
+msgid "1 file or more"
+msgstr ""
+
+msgid "&Items"
+msgstr ""
+
+msgid "0 items"
+msgstr ""
+
+msgid "1 item or more"
+msgstr ""
+
+msgid "&Total Size"
+msgstr ""
+
+msgid "&Recursive"
+msgstr ""
+
+msgid "Target: &Any (Left/Middle/Right)"
+msgstr ""
+
+msgid "Target: &Left"
+msgstr ""
+
+msgid "Target: &Middle"
+msgstr ""
+
+msgid "Target: &Right"
+msgstr ""
+
+msgid "Add &Difference Condition"
+msgstr ""
+
+msgid "Equal"
+msgstr ""
+
+msgid "Not Equal"
+msgstr ""
+
+msgid "Less Than"
+msgstr ""
+
+msgid "Less Than or Equal to"
+msgstr ""
+
+msgid "Greater Than"
+msgstr ""
+
+msgid "Greater Than or Equal to"
+msgstr ""
+
+msgid "Less than 10B"
+msgstr ""
+
+msgid "10B or more"
+msgstr ""
+
+msgid "Less than 100B"
+msgstr ""
+
+msgid "100B or more"
+msgstr ""
+
+msgid "Less than 1 second"
+msgstr ""
+
+msgid "1 second or more"
+msgstr ""
+
+msgid "Less than 1 minute"
+msgstr ""
+
+msgid "1 minute or more"
+msgstr ""
+
+msgid "Less than 1 hour"
+msgstr ""
+
+msgid "1 hour or more"
+msgstr ""
+
+msgid "Less than 1 day"
+msgstr ""
+
+msgid "1 day or more"
+msgstr ""
+
+msgid "Less than 1 week"
+msgstr ""
+
+msgid "1 week or more"
+msgstr ""
+
+msgid "Target: &Left and Right"
+msgstr ""
+
+msgid "Target: Left and &Middle"
+msgstr ""
+
+msgid "Target: Middle and &Right"
+msgstr ""
+
+msgid "Target: &All"
+msgstr ""
+
+msgid "&Clear conditions"
+msgstr ""
+
+msgid "Compare &Size"
+msgstr ""
+
+msgid "Compare &Date"
+msgstr ""
+
+msgid "Compare &Attributes"
+msgstr ""
+
+msgid "Compare C&ontents"
+msgstr ""
+
+msgid "&Clear Keys"
+msgstr ""
+
+msgid "&Name"
+msgstr ""
+
+msgid "&Base name (without extension)"
+msgstr ""
+
+msgid "Normalized &Unicode Name"
+msgstr ""
+
+msgid "&Date"
+msgstr ""
+
+msgid "&Hash (MD5)"
+msgstr ""
+
+msgid "Insert &replace() Function"
+msgstr ""
+
+msgid "Insert rege&xReplace() Function"
+msgstr ""
+
+msgid "Text &Normalization"
+msgstr ""
+
+msgid "&Lowercase"
+msgstr ""
+
+msgid "&Uppercase"
+msgstr ""
+
+msgid "&Half-width"
+msgstr ""
+
+msgid "&Full-width"
+msgstr ""
+
+msgid "&Chinese Conversion"
+msgstr ""
+
+msgid "&Simplified Chinese"
+msgstr ""
+
+msgid "&Traditional Chinese"
+msgstr ""
+
+msgid "&Japanese Conversion"
+msgstr ""
+
+msgid "&Hiragana"
+msgstr ""
+
+msgid "&Katakana"
+msgstr ""
+
 msgid "About WinMerge"
 msgstr "אודות WinMerge"
 
@@ -1290,6 +1758,117 @@ msgstr "עזרה"
 msgid "&Options..."
 msgstr "אפשרויות..."
 
+msgid "Find"
+msgstr "חפש"
+
+msgid "Fi&nd what:"
+msgstr "חפש את:"
+
+msgid "Match &whole word only"
+msgstr "התאם רק מילים שלמות"
+
+msgid "Match &case"
+msgstr "התאם רישיות"
+
+msgid "Regular &expression"
+msgstr "ביטוי רגולרי"
+
+msgid "D&on't wrap end of file"
+msgstr "אל תגלוש לסוף הקובץ"
+
+msgid "&Don't close this dialog"
+msgstr "אל תסגור חלון זה"
+
+msgid "&Find Next"
+msgstr "חפש הבא"
+
+msgid "Find &Prev"
+msgstr "חפש קודם"
+
+msgid "Replace"
+msgstr "החלף"
+
+msgid "Re&place with:"
+msgstr "החלף ב:"
+
+msgid "&Don't wrap at end of file"
+msgstr "אל תגלוש לסוף הקובץ"
+
+msgid "Replace in"
+msgstr "החלפה ב"
+
+msgid "&Selection"
+msgstr "בחירה"
+
+msgid "Wh&ole file"
+msgstr "כל הקובץ"
+
+msgid "Find Pre&v"
+msgstr "חפש קודם"
+
+msgid "&Replace"
+msgstr "החלף"
+
+msgid "Replace &All"
+msgstr "החלף הכל"
+
+msgid "Markers"
+msgstr "סמנים"
+
+msgid "Enable &markers"
+msgstr "הפעל סמנים"
+
+msgid "New"
+msgstr "חדש"
+
+msgid "&Background color:"
+msgstr "צבע רקע:"
+
+msgid "&Ok"
+msgstr "אישור"
+
+msgid "&Apply"
+msgstr "החל"
+
+msgid "Line Filters"
+msgstr "מסנני שורות"
+
+msgid "Enable Line Filters"
+msgstr "הפעל מסנני שורות"
+
+msgid "Regular Expressions (one per line):"
+msgstr "ביטויים רגולריים (אחד בכל שורה):"
+
+msgid "Edit"
+msgstr "ערוך"
+
+msgid "Remove"
+msgstr "הסר"
+
+msgid "Substitution Filters"
+msgstr "מסנני החלפה"
+
+msgid "Changes to the listed pairs below will be ignored or marked as insignificant. Patches are unaffected."
+msgstr "השינויים שמופיעים בלוחות כזוגות הרשומים מטה יתעלמו או יסומנו כבלתי משמעותיים. טלאים לא יושפעו."
+
+msgid "Enable"
+msgstr "הפעל"
+
+msgid "Add"
+msgstr "הוסף"
+
+msgid "Clear"
+msgstr "נקה"
+
+msgid "Options"
+msgstr "אפשרויות"
+
+msgid "Import..."
+msgstr "ייבוא..."
+
+msgid "Export..."
+msgstr "ייצוא..."
+
 msgid "General"
 msgstr "כללי"
 
@@ -1332,113 +1911,26 @@ msgstr "שפה:"
 msgid "Defaults"
 msgstr "ברירות מחדל"
 
-msgid "Find"
-msgstr "חפש"
-
-msgid "Fi&nd what:"
-msgstr "חפש את:"
-
-msgid "Match &whole word only"
-msgstr "התאם רק מילים שלמות"
-
-msgid "Match &case"
-msgstr "התאם רישיות"
-
-msgid "Regular &expression"
-msgstr "ביטוי רגולרי"
-
-msgid "D&on't wrap end of file"
-msgstr "אל תגלוש לסוף הקובץ"
-
-msgid "&Don't close this dialog"
-msgstr "אל תסגור חלון זה"
-
-msgid "&Find Next"
-msgstr "חפש הבא"
-
-msgid "Find &Prev"
-msgstr "חפש קודם"
-
-msgid "&Ok"
-msgstr "אישור"
-
-msgid "Replace"
-msgstr "החלף"
-
-msgid "Re&place with:"
-msgstr "החלף ב:"
-
-msgid "&Don't wrap at end of file"
-msgstr "אל תגלוש לסוף הקובץ"
-
-msgid "Replace in"
-msgstr "החלפה ב"
-
-msgid "&Selection"
-msgstr "בחירה"
-
-msgid "Wh&ole file"
-msgstr "כל הקובץ"
-
-msgid "Find Pre&v"
-msgstr "חפש קודם"
-
-msgid "&Replace"
-msgstr "החלף"
-
-msgid "Replace &All"
-msgstr "החלף הכל"
-
-msgid "Markers"
-msgstr "סמנים"
-
-msgid "Enable &markers"
-msgstr "הפעל סמנים"
-
-msgid "New"
-msgstr "חדש"
-
-msgid "&Background color:"
-msgstr "צבע רקע:"
-
-msgid "&Apply"
-msgstr "החל"
-
-msgid "Line Filters"
-msgstr "מסנני שורות"
-
-msgid "Enable Line Filters"
-msgstr "הפעל מסנני שורות"
-
-msgid "Regular Expressions (one per line):"
-msgstr "ביטויים רגולריים (אחד בכל שורה):"
-
-msgid "Edit"
-msgstr "ערוך"
-
-msgid "Remove"
-msgstr "הסר"
-
-msgid "Substitution Filters"
-msgstr "מסנני החלפה"
-
-msgid "Changes to the listed pairs below will be ignored or marked as insignificant. Patches are unaffected."
-msgstr "השינויים שמופיעים בלוחות כזוגות הרשומים מטה יתעלמו או יסומנו כבלתי משמעותיים. טלאים לא יושפעו."
-
-msgid "Enable"
-msgstr "הפעל"
-
-msgid "Add"
-msgstr "הוסף"
-
-msgid "Clear"
-msgstr "נקה"
-
 msgid "Colors"
 msgstr "צבעים"
 
-msgid "Color Scheme:"
-msgstr "ערכת צבעים:"
+msgid "Color &mode:"
+msgstr ""
+
+msgid "&Light mode scheme:"
+msgstr ""
+
+msgid "&Dark mode scheme:"
+msgstr ""
+
+msgid "Your custom schemes"
+msgstr ""
+
+msgid "&Save current scheme..."
+msgstr ""
+
+msgid "Delete &current scheme..."
+msgstr ""
 
 msgid "Background"
 msgstr "רקע"
@@ -1563,6 +2055,9 @@ msgstr "שלח קבצים שנמחקו לסל המיחזור"
 msgid "&External editor:"
 msgstr "עורך חיצוני:"
 
+msgid "&Store user data in:"
+msgstr ""
+
 msgid "&Filter folder:"
 msgstr "סינון תיקיה:"
 
@@ -1577,6 +2072,111 @@ msgstr "תיקיה מותאמת אישית:"
 
 msgid "Br&owse..."
 msgstr "עיון..."
+
+msgid "Compare"
+msgstr "השווה"
+
+msgid "Whitespaces"
+msgstr "רווחים"
+
+msgid "&Compare"
+msgstr "השווה"
+
+msgid "&Ignore change"
+msgstr "התעלם משינוי"
+
+msgid "I&gnore all"
+msgstr "התעלם מהכל"
+
+msgid "Ignore blan&k lines"
+msgstr "התעלם משורות ריקות"
+
+msgid "Ignore &case"
+msgstr "התעלם מרישיות"
+
+msgid "Igno&re EOL differences (Windows/Unix/Mac)"
+msgstr ""
+
+msgid "Ignore num&bers"
+msgstr "התעלם ממספרים"
+
+msgid "Ignore codepage &differences"
+msgstr "התעלם מהבדלי קידוד תווים"
+
+msgid "Ignore c&omment differences"
+msgstr "התעלם מהבדלי הערות"
+
+msgid "Ignore &missing trailing EOL"
+msgstr "התעלם מהיעדר סיום שורה"
+
+msgid "Ignore line &breaks (treat as spaces)"
+msgstr ""
+
+msgid "E&nable moved block detection"
+msgstr "הפעל זיהוי בלוקים שהוזזו"
+
+msgid "Align &similar lines"
+msgstr "יישר שורות דומות"
+
+msgid "Diff &algorithm:"
+msgstr "אלגוריתם השוואה:"
+
+msgid "Enable indent &heuristic"
+msgstr "הפעל היגיון הזחה"
+
+msgid "Completely unhighlight the ignored differences"
+msgstr "בטל הדגשה לחלוטין עבור הבדלים שהתעלמו מהם"
+
+msgid "Editor"
+msgstr "עורך"
+
+msgid "&Highlight syntax"
+msgstr "הדגש תחביר"
+
+msgid "&Preserve original EOL"
+msgstr "שמור על תווי סיום שורה מקוריים"
+
+msgid "Tabs"
+msgstr "טאבים"
+
+msgid "&Tab size:"
+msgstr "גודל טאבים:"
+
+msgid "&Insert tabs"
+msgstr "הוסף טאבים"
+
+msgid "Insert &spaces"
+msgstr "הוסף רווחים"
+
+msgid "&Rendering mode:"
+msgstr "מצב עיבוד:"
+
+msgid "&Automatic rescan"
+msgstr "סריקה מחדש אוטומטית"
+
+msgid "Copy &granularity for selected differences:"
+msgstr "רמת פירוט העתקה עבור הבדלים נבחרים:"
+
+msgid "Line Difference Coloring"
+msgstr "צביעת הבדלים בשורות"
+
+msgid "View line differences"
+msgstr "הצג הבדלים בשורות"
+
+msgid "&Character-level"
+msgstr "רמת תו"
+
+msgid "&Word-level:"
+msgstr "רמת מילה:"
+
+msgid "W&ord break characters:"
+msgstr "תווים לפיצול מילים:"
+
+msgid "Some messages can be hidden by the user. Press Reset to make all messages visible again."
+msgstr "WinMerge מאפשר הסתרת חלונות הודעה נפוצים. לחץ על כפתור איפוס כדי להחזיר את כל ההודעות."
+
+msgid "Reset"
+msgstr "אפס"
 
 msgid "Patch Generator"
 msgstr "יוצר טלאים"
@@ -1680,6 +2280,9 @@ msgstr "סה\"כ פריטים:"
 msgid "Items compared:"
 msgstr "פריטים שהושוו:"
 
+msgid "&Close"
+msgstr "סגור"
+
 msgid "Go to"
 msgstr "עבור אל"
 
@@ -1701,110 +2304,14 @@ msgstr "הבדל"
 msgid "&Go to"
 msgstr "עבור אל"
 
-msgid "Compare"
-msgstr "השווה"
-
-msgid "Whitespaces"
-msgstr "רווחים"
-
-msgid "&Compare"
-msgstr "השווה"
-
-msgid "&Ignore change"
-msgstr "התעלם משינוי"
-
-msgid "I&gnore all"
-msgstr "התעלם מהכל"
-
-msgid "Ignore blan&k lines"
-msgstr "התעלם משורות ריקות"
-
-msgid "Ignore &case"
-msgstr "התעלם מרישיות"
-
-msgid "Igno&re EOL differences (Windows/Unix/Mac)"
-msgstr ""
-
-msgid "Ignore num&bers"
-msgstr "התעלם ממספרים"
-
-msgid "Ignore codepage &differences"
-msgstr "התעלם מהבדלי קידוד תווים"
-
-msgid "Ignore c&omment differences"
-msgstr "התעלם מהבדלי הערות"
-
-msgid "Ignore &missing trailing EOL"
-msgstr "התעלם מהיעדר סיום שורה"
-
-msgid "E&nable moved block detection"
-msgstr "הפעל זיהוי בלוקים שהוזזו"
-
-msgid "Align &similar lines"
-msgstr "יישר שורות דומות"
-
-msgid "Diff &algorithm:"
-msgstr "אלגוריתם השוואה:"
-
-msgid "Enable indent &heuristic"
-msgstr "הפעל היגיון הזחה"
-
-msgid "Completely unhighlight the ignored differences"
-msgstr "בטל הדגשה לחלוטין עבור הבדלים שהתעלמו מהם"
-
-msgid "Editor"
-msgstr "עורך"
-
-msgid "&Highlight syntax"
-msgstr "הדגש תחביר"
-
-msgid "&Preserve original EOL"
-msgstr "שמור על תווי סיום שורה מקוריים"
-
-msgid "Tabs"
-msgstr "טאבים"
-
-msgid "&Tab size:"
-msgstr "גודל טאבים:"
-
-msgid "&Insert tabs"
-msgstr "הוסף טאבים"
-
-msgid "Insert &spaces"
-msgstr "הוסף רווחים"
-
-msgid "&Rendering mode:"
-msgstr "מצב עיבוד:"
-
-msgid "&Automatic rescan"
-msgstr "סריקה מחדש אוטומטית"
-
-msgid "Copy &granularity for selected differences:"
-msgstr "רמת פירוט העתקה עבור הבדלים נבחרים:"
-
-msgid "Line Difference Coloring"
-msgstr "צביעת הבדלים בשורות"
-
-msgid "View line differences"
-msgstr "הצג הבדלים בשורות"
-
-msgid "&Character-level"
-msgstr "רמת תו"
-
-msgid "&Word-level:"
-msgstr "רמת מילה:"
-
-msgid "W&ord break characters:"
-msgstr "תווים לפיצול מילים:"
-
-msgid "Some messages can be hidden by the user. Press Reset to make all messages visible again."
-msgstr "WinMerge מאפשר הסתרת חלונות הודעה נפוצים. לחץ על כפתור איפוס כדי להחזיר את כל ההודעות."
-
-msgid "Reset"
-msgstr "אפס"
-
 msgid "File Filters"
 msgstr "מסנני קבצים"
+
+msgid "&Mask / Filter Expression"
+msgstr ""
+
+msgid "Preset &Filters"
+msgstr ""
 
 msgid "Test..."
 msgstr "בדיקה..."
@@ -1820,6 +2327,65 @@ msgstr "ערוך..."
 
 msgid "Delete..."
 msgstr "מחק..."
+
+msgid "Filter Condition"
+msgstr ""
+
+msgid "&Left-hand side:"
+msgstr ""
+
+msgid "&Operator:"
+msgstr ""
+
+msgid "&Right-hand side:"
+msgstr ""
+
+msgid "Expression:"
+msgstr ""
+
+msgid "Codepage"
+msgstr "קידוד תווים"
+
+msgid "Default Codepage"
+msgstr "קידוד ברירת מחדל"
+
+msgid "Select the default codepage for non-Unicode files:"
+msgstr "בחר קידוד ברירת מחדל בעת טעינת קבצים שאינם Unicode:"
+
+msgid "System codepage"
+msgstr "קידוד מערכת"
+
+msgid "According to WinMerge User Interface"
+msgstr "בהתאם לממשק המשתמש של WinMerge"
+
+msgid "Custom codepage:"
+msgstr "קידוד מותאם אישית:"
+
+msgid ""
+"Detect codepage for: .html, .rc, .xml\n"
+"Restart required."
+msgstr ""
+"זהה קידוד עבור סוגי קבצים אלו: .html, .rc, .xml\n"
+"נדרש להפעיל מחדש את ההפעלה."
+
+msgid ""
+"Detect codepage for files with mlang.dll\n"
+"Restart required."
+msgstr ""
+"זהה קידוד עבור קבצי טקסט עם mlang.dll\n"
+"נדרש להפעיל מחדש את ההפעלה."
+
+msgid "Archive Support"
+msgstr "תמיכה בארכיון"
+
+msgid "&Enable archive file support"
+msgstr "הפעל תמיכה בקבצי ארכיון"
+
+msgid "&Detect archive type from file signature"
+msgstr "זהה סוג ארכיון מחתימת הקובץ"
+
+msgid "Items saved to or restored from the project file:"
+msgstr "פריטים שנשמרו או שוחזרו מקובץ הפרויקט:"
 
 msgid "Save Modified Files?"
 msgstr "לשמור קבצים ששונו?"
@@ -1854,47 +2420,6 @@ msgstr "בטל שינויים"
 msgid "Disca&rd All"
 msgstr "בטל הכל"
 
-msgid "Codepage"
-msgstr "קידוד תווים"
-
-msgid "Default Codepage"
-msgstr "קידוד ברירת מחדל"
-
-msgid "Select the default codepage for non-Unicode files:"
-msgstr "בחר קידוד ברירת מחדל בעת טעינת קבצים שאינם Unicode:"
-
-msgid "System codepage"
-msgstr "קידוד מערכת"
-
-msgid "According to WinMerge User Interface"
-msgstr "בהתאם לממשק המשתמש של WinMerge"
-
-msgid "Custom codepage:"
-msgstr "קידוד מותאם אישית:"
-
-msgid ""
-"Detect codepage for: .html, .rc, .xml\n"
-"Restart required."
-msgstr ""
-"זהה קידוד עבור סוגי קבצים אלו: .html, .rc, .xml\n"
-"נדרש להפעיל מחדש את ההפעלה."
-
-msgid ""
-"Detect codepage for files with mlang.dll\n"
-"Restart required."
-msgstr ""
-"זהה קידוד עבור קבצי טקסט עם mlang.dll\n"
-"נדרש להפעיל מחדש את ההפעלה."
-
-msgid "Options"
-msgstr "אפשרויות"
-
-msgid "Import..."
-msgstr "ייבוא..."
-
-msgid "Export..."
-msgstr "ייצוא..."
-
 msgid "Folder Compare Report"
 msgstr "דוח השוואת תיקיות"
 
@@ -1918,18 +2443,6 @@ msgstr "מסנן משותף (לכל המשתמשים במחשב זה)"
 
 msgid "Private Filter (current user only)"
 msgstr "מסנן פרטי (רק עבור המשתמש הנוכחי)"
-
-msgid "Archive Support"
-msgstr "תמיכה בארכיון"
-
-msgid "&Enable archive file support"
-msgstr "הפעל תמיכה בקבצי ארכיון"
-
-msgid "&Detect archive type from file signature"
-msgstr "זהה סוג ארכיון מחתימת הקובץ"
-
-msgid "Items saved to or restored from the project file:"
-msgstr "פריטים שנשמרו או שוחזרו מקובץ הפרויקט:"
 
 msgid "Compare Statistics"
 msgstr "סטטיסטיקות השוואה"
@@ -2014,9 +2527,6 @@ msgstr "תוצאה:"
 
 msgid "&Test"
 msgstr "בדיקה"
-
-msgid "&Close"
-msgstr "סגור"
 
 msgid "Table"
 msgstr "טבלה"
@@ -2178,6 +2688,18 @@ msgstr "סף למעבר להשוואה מהירה (MB):"
 msgid "Switch to &binary compare when size exceeds (MB):"
 msgstr "סף למעבר להשוואה בינארית (MB):"
 
+msgid "Additional comparison condi&tions:"
+msgstr ""
+
+msgid "&Rename/move detection:"
+msgstr ""
+
+msgid "Rename/move detection &keys:"
+msgstr ""
+
+msgid "&Merge renamed items into a single item"
+msgstr ""
+
 msgid "File patterns:"
 msgstr "תבניות קבצים:"
 
@@ -2262,6 +2784,42 @@ msgstr "סיומת קובץ סקריפט:"
 
 msgid "Script &body:"
 msgstr "תוכן סקריפט:"
+
+msgid "Font"
+msgstr ""
+
+msgid "&Font:"
+msgstr ""
+
+msgid "Font st&yle:"
+msgstr ""
+
+msgid "&Size:"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Stri&keout"
+msgstr ""
+
+msgid "&Underline"
+msgstr ""
+
+msgid "&Color:"
+msgstr ""
+
+msgid "Sample"
+msgstr ""
+
+msgid "AaBbYyZz"
+msgstr ""
+
+msgid "Sc&ript:"
+msgstr ""
+
+msgid "<A>Show more fonts</A>"
+msgstr ""
 
 msgid "EXT"
 msgstr ""
@@ -3267,8 +3825,39 @@ msgid "Image files are different"
 msgstr "קבצי תמונה שונים"
 
 #, c-format
+msgid "Files are different (expr: %1)"
+msgstr ""
+
+#, c-format
 msgid "Group%d"
 msgstr "קבוצה %d"
+
+msgctxt "Options dialog|Compare|Folder|Detect renames and moves"
+msgid "Disabled"
+msgstr ""
+
+msgid "Detect renames"
+msgstr ""
+
+msgid "Detect renames and moves"
+msgstr ""
+
+msgid "Renamed"
+msgstr ""
+
+msgid "Moved"
+msgstr ""
+
+msgid "Renamed/Moved"
+msgstr ""
+
+#, c-format
+msgid "(%1 items)"
+msgstr ""
+
+#, c-format
+msgid "%1 (set %2): "
+msgstr ""
 
 #, c-format
 msgid "Elapsed time: %ld ms"
@@ -3428,6 +4017,18 @@ msgstr "אותו קובץ פתוח בשתי החלוניות."
 
 msgid "Selected files are identical."
 msgstr "הקבצים שנבחרו זהים."
+
+msgid "Selected files are identical (with current settings).\r\nChecking binary identity..."
+msgstr ""
+
+msgid "Selected files are identical (with current settings).\r\nBut binary comparison failed."
+msgstr ""
+
+msgid "Selected files are identical (binary match)."
+msgstr ""
+
+msgid "Selected files are identical (with current settings).\r\nBut differ at the binary level."
+msgstr ""
 
 msgid "An error occurred while comparing files."
 msgstr "אירעה שגיאה בעת השוואת הקבצים."
@@ -3792,6 +4393,9 @@ msgstr ""
 "גרסה חדשה של WinMerge זמינה.\n"
 "%1 זמינה כעת (ברשותך %2). האם להוריד אותה כעת?"
 
+msgid " - All rights reserved."
+msgstr ""
+
 msgid "Failed to download latest version information"
 msgstr "הורדת מידע על הגרסה העדכנית נכשלה"
 
@@ -3808,8 +4412,9 @@ msgstr "עבור לשורה %1"
 msgid "Go to Moved Line\tCtrl+Shift+G"
 msgstr "עבור לשורה שהוזזה\tCtrl+Shift+G"
 
+msgctxt "Options dialog|General|Open dialog Auto completion"
 msgid "Disabled"
-msgstr "מושבת"
+msgstr ""
 
 msgid "From file system"
 msgstr "ממערכת הקבצים"
@@ -3899,6 +4504,10 @@ msgstr "DirectWrite טבעי"
 
 msgid "DirectWrite Natural Symmetric"
 msgstr "DirectWrite טבעי סימטרי"
+
+msgctxt "Options dialog|General|Close windows with Esc"
+msgid "Disabled"
+msgstr ""
 
 msgid "MDI child window or main window"
 msgstr "חלון בן MDI או חלון ראשי"
@@ -4032,17 +4641,28 @@ msgstr "מיקום וטקסט שורה-אחר-שורה"
 msgid "Word-by-word position and text"
 msgstr "מיקום וטקסט מילה-אחר-מילה"
 
-msgid "AppData folder"
-msgstr "תיקיית AppData"
+msgid "AppData (Roaming) folder"
+msgstr ""
 
 msgid "Install folder"
 msgstr "תיקיית התקנה"
+
+msgid "Documents folder"
+msgstr ""
+
+msgctxt "Options dialog|General|Single instance mode"
+msgid "Disabled"
+msgstr ""
 
 msgid "Allow only one instance to run"
 msgstr "אפשר להריץ מופע אחד בלבד"
 
 msgid "Allow only one instance; wait for termination"
 msgstr "אפשר להריץ מופע אחד בלבד והמתן לסיומו"
+
+msgctxt "Options dialog|General|Auto-reload modified files"
+msgid "Disabled"
+msgstr ""
 
 msgid "Only on window activated"
 msgstr "רק כאשר חלון מופעל"
@@ -4139,6 +4759,10 @@ msgstr "שני ושלישי"
 
 msgid "Filter applied"
 msgstr "המסנן הופעל"
+
+#, c-format
+msgid "Compare %1"
+msgstr ""
 
 #, c-format
 msgid "Clipboard at %s"
@@ -4325,6 +4949,100 @@ msgid "File operation completed successfully"
 msgstr ""
 
 msgid "File operation canceled"
+msgstr ""
+
+msgid "No error"
+msgstr ""
+
+msgid "Filter expression is empty"
+msgstr ""
+
+msgid "Unknown character in filter expression"
+msgstr ""
+
+msgid "Unterminated string literal"
+msgstr ""
+
+msgid "Syntax error in filter expression"
+msgstr ""
+
+msgid "Failed to parse filter expression"
+msgstr ""
+
+msgid "Invalid literal value"
+msgstr ""
+
+msgid "Invalid regular expression"
+msgstr ""
+
+msgid "Undefined identifier"
+msgstr ""
+
+msgid "Invalid number of arguments"
+msgstr ""
+
+msgid "Filter name not found"
+msgstr ""
+
+msgid "Division by zero in filter expression"
+msgstr ""
+
+msgid "Unknown error"
+msgstr ""
+
+msgid "Invalid property name"
+msgstr ""
+
+msgid "Equals"
+msgstr ""
+
+msgid "Does not equal"
+msgstr ""
+
+msgid "Less than"
+msgstr ""
+
+msgid "Less than or equal to"
+msgstr ""
+
+msgid "Greater than or equal to"
+msgstr ""
+
+msgid "Greater than"
+msgstr ""
+
+msgid "Between"
+msgstr ""
+
+msgid "Not Between"
+msgstr ""
+
+msgid "Contains"
+msgstr ""
+
+msgid "Not Contains"
+msgstr ""
+
+msgid "Contains (regex)"
+msgstr ""
+
+msgid "Not Contains (regex)"
+msgstr ""
+
+msgid "Light"
+msgstr ""
+
+msgid "Dark"
+msgstr ""
+
+msgid "Follow system"
+msgstr ""
+
+#, c-format
+msgid "e.g. %1"
+msgstr ""
+
+msgid "WinMerge detected a previous crash. Please report this if possible."
 msgstr ""
 
 msgid "Prettification"
@@ -4767,6 +5485,9 @@ msgstr ""
 "אין אפשרות לקבל מאקרואים.\r\n"
 "   כדי לאפשר ל-WinMerge להשוות מאקרואים, השתמש ב-MS Office לשינוי ההגדרות ב'אבטחת מאקרו' עבור היישום הנוכחי.\r\n"
 "   יש להפעיל את האפשרות 'אמון בגישה לפרויקט Visual Basic' כדי להשתמש בפונקציה זו ב-WinMerge.\r\n"
+
+msgid "Replace line breaks in formulas with spaces"
+msgstr ""
 
 msgid "Compare VBA macros"
 msgstr "השווה מאקרואים VBA"

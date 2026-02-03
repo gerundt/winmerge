@@ -12,7 +12,6 @@ if exist "%InstallDir%\Common7\Tools\vsdevcmd.bat" (
 )
 
 if "%1" == "" (
-  call :BuildBin ARM || goto :eof
   call :BuildBin ARM64 || goto :eof
   call :BuildBin x86|| goto :eof
   call :BuildBin x64 || goto :eof
@@ -23,7 +22,7 @@ if "%1" == "" (
 goto :eof
 
 :BuildBin
-MSBuild WinMerge.vs2022.sln /t:Rebuild /p:Configuration="Release" /p:Platform="%1" || goto :eof
+MSBuild WinMerge.sln /t:Rebuild /p:Configuration="Release" /p:Platform="%1" || goto :eof
 endlocal
 
 if exist "%SIGNBAT_PATH%" (

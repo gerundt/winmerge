@@ -5,21 +5,23 @@
 # * Afyonlu <afyonlu@users.sourceforge.net>
 # * Ozkan UNVER <turquaz37915 at users.sourceforge.net>
 # * Kaya Zeren <translator at zeron.net>
+# * Ahmet Murat Özhan <ozhanmurat@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: WinMerge\n"
 "Report-Msgid-Bugs-To: https://github.com/WinMerge/winmerge/issues/\n"
-"POT-Creation-Date: 2025-01-20 20:14+0000\n"
-"PO-Revision-Date: 2023-10-28 09:38+0300\n"
-"Last-Translator: Kaya Zeren <translator@zeron.net>\n"
+"POT-Creation-Date: 2025-08-24 14:39+0000\n"
+"PO-Revision-Date: 2026-01-26 11:11+0300\n"
+"Last-Translator: Ahmet Murat Özhan <ozhanmurat@gmail.com>\n"
 "Language-Team: Turkish <winmerge-translate@lists.sourceforge.net>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Turkish\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 3.8\n"
 
 #. LANGUAGE, SUBLANGUAGE
 msgid "LANG_ENGLISH, SUBLANG_ENGLISH_US"
@@ -77,7 +79,7 @@ msgid "Select Line &Difference\tF4"
 msgstr "Satır &farkını seç\tF4"
 
 msgid "Add to Substitution &Filters"
-msgstr "&Bu değişikliği değişiklik süzgeçlerine ekle"
+msgstr "Değiştirme &süzgeçlerine ekle"
 
 msgid "Add to &Line Filters"
 msgstr "Satır süz&geçlerine ekle"
@@ -180,10 +182,6 @@ msgstr "&Yatay çevir"
 
 msgid "&Zoom"
 msgstr "&Yakınlaştır"
-
-#, c-format
-msgid "25%"
-msgstr "%25"
 
 msgid "Zoom &In\tCtrl++"
 msgstr "&Yakınlaştır\tCtrl++"
@@ -385,7 +383,7 @@ msgid "Men&u Bar"
 msgstr "Me&nü çubuğu"
 
 msgid "&Output Pane"
-msgstr ""
+msgstr "&Çıktı bölmesi"
 
 msgid "&Status Bar"
 msgstr "&Durum çubuğu"
@@ -560,6 +558,9 @@ msgstr "2. ile 3. ögeyi değiştir"
 
 msgid "Swap 1st | &3rd"
 msgstr "1. ile 3. ögeyi değiştir"
+
+msgid "Displa&y Filter Bar\tCtrl+Shift+L"
+msgstr "Filtre Çubuğunu Görün&tüle\tCtrl+Shift+L"
 
 msgid "Com&pare Statistics..."
 msgstr "Karşılaştırma istatistikleri..."
@@ -766,7 +767,7 @@ msgid "Lo&cation Pane"
 msgstr "&Konum panosu"
 
 msgid "Output Pane"
-msgstr ""
+msgstr "Çıktı panosu"
 
 msgid "Ne&xt Conflict\tAlt+Shift+Down"
 msgstr "S&onraki çelişki\tAlt+Shift+Aşağı"
@@ -890,6 +891,9 @@ msgstr "Bö&l"
 
 msgid "Comp&are"
 msgstr "K&arşılaştır"
+
+msgid "Compar&e with Renamed/Moved Items"
+msgstr "Yeniden adlandırılan/taşınan ögelerle &karşılaştır"
 
 msgid "Compare in New &Window"
 msgstr "Yeni &pencerede karşılaştır"
@@ -1046,8 +1050,11 @@ msgstr "Tam yolu &kopyala"
 msgid "Copy &Filename"
 msgstr "&Dosya adını kopyala"
 
-msgid "&Edit Caption"
-msgstr "&Başlığı düzenle"
+msgid "&Edit Caption\tF2"
+msgstr "&Başlığı düzenle\tF2"
+
+msgid "Edit &Path\tCtrl+L"
+msgstr "&Yolu Düzenle\tCtrl+L"
 
 msgid "&Open..."
 msgstr "&Aç..."
@@ -1070,8 +1077,11 @@ msgstr "Ön farklılaştırıcı ayarları"
 msgid "G&o to Diff"
 msgstr "Fa&rka git"
 
+msgid "Move Cursor on &Click"
+msgstr "&Tıklandığında İmle&ci Taşı"
+
 msgid "&No Moved Blocks"
-msgstr "&Taşınmış blok yok"
+msgstr "Taşı&nmış blok yok"
 
 msgid "&All Moved Blocks"
 msgstr "T&aşınmış blokların tümü"
@@ -1109,6 +1119,9 @@ msgstr "Yo&rum farklılıkları yok sayılsın"
 msgid "Ignore &Missing Trailing EOL"
 msgstr "&Sondaki eksik satır sonu yok sayılsın"
 
+msgid "Ignore Line &Breaks (Treat as Spaces)"
+msgstr "Satır &Sonlarını Yok Say (Boşluk Olarak Ele Al)"
+
 msgid "&Include Subfolders"
 msgstr "A&lt klasörler katılsın"
 
@@ -1132,6 +1145,9 @@ msgstr "Değiştirilme tarihi ve boyut"
 
 msgid "Size"
 msgstr "Boyut"
+
+msgid "Existence"
+msgstr "Varlık"
 
 msgid "&Load Project..."
 msgstr "Proje yük&le..."
@@ -1212,7 +1228,460 @@ msgid "&Duplicate Plugin..."
 msgstr "Çif&t eklentisi..."
 
 msgid "Clear &All"
-msgstr ""
+msgstr "&Tümünü temizle"
+
+msgid "&Clear All"
+msgstr "Tümünü &temizle"
+
+msgid "Remove Last Filter &Group"
+msgstr "Son filtre &grubunu kaldır"
+
+msgid "R&eset to Default (*.*)"
+msgstr "V&arsayılanlara sıfırla (*.*)"
+
+msgid "Add E&xclude File"
+msgstr "Hariç t&utma dosyası ekle"
+
+msgid "&System Files"
+msgstr "&Sistem dosyaları"
+
+msgid "&Editor Backup Files"
+msgstr "&Editör yedekleme dosyaları"
+
+msgid "&Compiled Binary Files"
+msgstr "&Derlenmiş ikili dosyalar"
+
+msgid "&Log Files"
+msgstr "Gün&lük dosyaları"
+
+msgid "&Temporary or Cache Files"
+msgstr "&Geçici veya önbellek dosyaları"
+
+msgid "Add Excl&ude Folder"
+msgstr "Hariç t&utma klasörü ekle"
+
+msgid "&Version Control"
+msgstr "&Versiyon kontrolü"
+
+msgid "&Build Artifacts"
+msgstr "&Yapı ögeleri"
+
+msgid "&IDE"
+msgstr "&IDE"
+
+msgid "Add &File Condition"
+msgstr "&Dosya koşulu ekle"
+
+msgid "File &Size"
+msgstr "Do&sya boyutu"
+
+msgid "Less than 1KB"
+msgstr "1 KB'den az"
+
+msgid "1KB or more"
+msgstr "1 KB veya daha fazla"
+
+msgid "Less than 10KB"
+msgstr "10 KB'den az"
+
+msgid "10KB or more"
+msgstr "10 KB veya daha fazla"
+
+msgid "Less than 100KB"
+msgstr "100 KB'den az"
+
+msgid "100KB or more"
+msgstr "100 KB veya daha fazla"
+
+msgid "Less than 1MB"
+msgstr "1 MB'den az"
+
+msgid "1MB or more"
+msgstr "1 MB veya daha fazla"
+
+msgid "Less than 10MB"
+msgstr "10 MB'den az"
+
+msgid "10MB or more"
+msgstr "10 MB veya daha fazla"
+
+msgid "Less than 100MB"
+msgstr "100 MB'den az"
+
+msgid "100MB or more"
+msgstr "100 MB veya daha fazla"
+
+msgid "Less than 1GB"
+msgstr "1 GB'den az"
+
+msgid "1GB or more"
+msgstr "1 GB veya daha fazla"
+
+msgid "Custom Range..."
+msgstr "Özel aralık..."
+
+msgid "&Last Modified"
+msgstr "Son değişik&lik"
+
+msgid "&Hour"
+msgstr "&Saat"
+
+msgid "More than 1 hour ago"
+msgstr "1 saatten fazla önce"
+
+msgid "Within 1 hour"
+msgstr "1 saat içinde"
+
+msgid "&Day"
+msgstr "&Gün"
+
+msgid "Before today"
+msgstr "Bugünden önce"
+
+msgid "Today"
+msgstr "Bugün"
+
+msgid "Before yesterday"
+msgstr "Dünden önce"
+
+msgid "Yesterday"
+msgstr "Dün"
+
+msgid "Since yesterday"
+msgstr "Dünden beri"
+
+msgid "&Week"
+msgstr "&Hafta"
+
+msgid "Before this week"
+msgstr "Bu haftadan önce"
+
+msgid "This week"
+msgstr "Bu hafta"
+
+msgid "Before last week"
+msgstr "Geçen haftadan önce"
+
+msgid "Last week"
+msgstr "Geçen hafta"
+
+msgid "Since last week"
+msgstr "Geçen haftadan beri"
+
+msgid "&Month"
+msgstr "&Ay"
+
+msgid "Before this month"
+msgstr "Bu aydan önce"
+
+msgid "This month"
+msgstr "Bu ay"
+
+msgid "Before last month"
+msgstr "Bu aydan önce"
+
+msgid "Last month"
+msgstr "Geçen ay"
+
+msgid "Since last month"
+msgstr "Geçen aydan beri"
+
+msgid "&Year"
+msgstr "&Yıl"
+
+msgid "Before this year"
+msgstr "Bu yıldan önce"
+
+msgid "This year"
+msgstr "Bu yıl"
+
+msgid "Before last year"
+msgstr "Geçen yıldan önce"
+
+msgid "Last year"
+msgstr "Geçen yıl"
+
+msgid "Since last year"
+msgstr "Geçen yıldan beri"
+
+msgid "&Custom Range..."
+msgstr "&Özel Aralık..."
+
+msgid "&Attributes"
+msgstr "&Öznitelikler"
+
+msgid "Read-only files"
+msgstr "Salt okunur dosyalar"
+
+msgid "Not read-only files"
+msgstr "Salt okunur dosyalar değil"
+
+msgid "Hidden files"
+msgstr "Gizli dosyalar"
+
+msgid "Not hidden files"
+msgstr "Gizli dosyalar değil"
+
+msgid "System files"
+msgstr "Sistem dosyaları"
+
+msgid "Not system files"
+msgstr "Sistem dosyaları değil"
+
+msgid "File &Content"
+msgstr "Dosya &İçeriği"
+
+msgid "Contains string..."
+msgstr "Dize içerir..."
+
+msgid "Does not contain string..."
+msgstr "Dize içermez..."
+
+msgid "First line contains string..."
+msgstr "İlk satır dize içerir..."
+
+msgid "First line does not contain string..."
+msgstr "İlk satır dize içermez..."
+
+msgid "First 10 lines contain string..."
+msgstr "İlk 10 satır dize içerir..."
+
+msgid "First 10 lines do not contain string..."
+msgstr "İlk 10 satır dize içermez..."
+
+msgid "Last 10 lines contain string..."
+msgstr "Son 10 satır dize içerir..."
+
+msgid "Last 10 lines do not contain string..."
+msgstr "Son 10 satır dize içermez..."
+
+msgid "Last line contains string..."
+msgstr "Son satır dize içerir..."
+
+msgid "Last line does not contain string..."
+msgstr "Son satır dize içermez..."
+
+msgid "&Line Count"
+msgstr "&Satır Sayısı"
+
+msgid "Less than 10"
+msgstr "10'dan az"
+
+msgid "10 or more"
+msgstr "10 veya daha fazla"
+
+msgid "Less than 100"
+msgstr "100'den az"
+
+msgid "100 or more"
+msgstr "100 veya daha fazla"
+
+msgid "Less than 1000"
+msgstr "1.000'den az"
+
+msgid "1000 or more"
+msgstr "1.000 veya daha fazla"
+
+msgid "Less than 10000"
+msgstr "10.000'den az"
+
+msgid "10000 or more"
+msgstr "10.000 veya daha fazla"
+
+msgid "Less than 100000"
+msgstr "100.000'den az"
+
+msgid "100000 or more"
+msgstr "100.000 veya daha fazla"
+
+msgid "Additional &Properties..."
+msgstr "Ek &Özellikler..."
+
+msgid "Add F&older Condition"
+msgstr "Klasör K&oşulu Ekle"
+
+msgid "&Files"
+msgstr "&Dosyalar"
+
+msgid "0 files"
+msgstr "0 dosya"
+
+msgid "1 file or more"
+msgstr "1 dosya veya daha fazla"
+
+msgid "&Items"
+msgstr "&Ögeler"
+
+msgid "0 items"
+msgstr "0 öge"
+
+msgid "1 item or more"
+msgstr "1 öge veya daha fazla"
+
+msgid "&Total Size"
+msgstr "&Toplam Boyut"
+
+msgid "&Recursive"
+msgstr "&Özyinelemeli"
+
+msgid "Target: &Any (Left/Middle/Right)"
+msgstr "Hedef: &Herhangi biri (Sol/Orta/Sağ)"
+
+msgid "Target: &Left"
+msgstr "Hedef: &Sol"
+
+msgid "Target: &Middle"
+msgstr "Hedef: &Orta"
+
+msgid "Target: &Right"
+msgstr "Hedef: &Sağ"
+
+msgid "Add &Difference Condition"
+msgstr "&Fark Koşulu Ekle"
+
+msgid "Equal"
+msgstr "Eşit"
+
+msgid "Not Equal"
+msgstr "Eşit Değil"
+
+msgid "Less Than"
+msgstr "Daha küçük"
+
+msgid "Less Than or Equal to"
+msgstr "Küçük veya eşit"
+
+msgid "Greater Than"
+msgstr "Daha büyük"
+
+msgid "Greater Than or Equal to"
+msgstr "Daha büyük veya eşit"
+
+msgid "Less than 10B"
+msgstr "10 milyardan az"
+
+msgid "10B or more"
+msgstr "10 milyar veya daha fazla"
+
+msgid "Less than 100B"
+msgstr "100 milyardan az"
+
+msgid "100B or more"
+msgstr "100 milyar veya daha fazla"
+
+msgid "Less than 1 second"
+msgstr "1 saniyeden az"
+
+msgid "1 second or more"
+msgstr "1 saniye veya daha fazla"
+
+msgid "Less than 1 minute"
+msgstr "1 dakikadan az"
+
+msgid "1 minute or more"
+msgstr "1 dakika veya daha fazla"
+
+msgid "Less than 1 hour"
+msgstr "1 saatten az"
+
+msgid "1 hour or more"
+msgstr "1 saat veya daha fazla"
+
+msgid "Less than 1 day"
+msgstr "1 günden az"
+
+msgid "1 day or more"
+msgstr "1 gün veya daha fazla"
+
+msgid "Less than 1 week"
+msgstr "1 haftadan az"
+
+msgid "1 week or more"
+msgstr "1 hafta veya daha fazla"
+
+msgid "Target: &Left and Right"
+msgstr "Hedef: &Sol ve Sağ"
+
+msgid "Target: Left and &Middle"
+msgstr "Hedef: Sol ve &Orta"
+
+msgid "Target: Middle and &Right"
+msgstr "Hedef: Orta ve &Sağ"
+
+msgid "Target: &All"
+msgstr "Hedef: &Tümü"
+
+msgid "&Clear conditions"
+msgstr "Koşulları &temizle"
+
+msgid "Compare &Size"
+msgstr "&Boyutu karşılaştır"
+
+msgid "Compare &Date"
+msgstr "Tarihi &karşılaştır"
+
+msgid "Compare &Attributes"
+msgstr "Öznitelikleri k&arşılaştır"
+
+msgid "Compare C&ontents"
+msgstr "&İçerikleri karşılaştır"
+
+msgid "&Clear Keys"
+msgstr "&Tuşları Temizle"
+
+msgid "&Name"
+msgstr "&Ad"
+
+msgid "&Base name (without extension)"
+msgstr "T&emel ad (uzantısız)"
+
+msgid "Normalized &Unicode Name"
+msgstr "Normalleştirilmiş &Unicode Adı"
+
+msgid "&Date"
+msgstr "Tari&h"
+
+msgid "&Hash (MD5)"
+msgstr "&Sağlama Toplamı (MD5)"
+
+msgid "Insert &replace() Function"
+msgstr "&replace() İşlevini Ekle"
+
+msgid "Insert rege&xReplace() Function"
+msgstr "rege&xReplace() İşlevini Ekle"
+
+msgid "Text &Normalization"
+msgstr "Metin &Normalleştirme"
+
+msgid "&Lowercase"
+msgstr "&Küçük Harf"
+
+msgid "&Uppercase"
+msgstr "&Büyük Harf"
+
+msgid "&Half-width"
+msgstr "&Yarım Genişlik"
+
+msgid "&Full-width"
+msgstr "Tam &Genişlik"
+
+msgid "&Chinese Conversion"
+msgstr "&Çince Dönüştürme"
+
+msgid "&Simplified Chinese"
+msgstr "Ba&sitleştirilmiş Çince"
+
+msgid "&Traditional Chinese"
+msgstr "&Geleneksel Çince"
+
+msgid "&Japanese Conversion"
+msgstr "&Japonca Dönüştürme"
+
+msgid "&Hiragana"
+msgstr "&Hiragana"
+
+msgid "&Katakana"
+msgstr "&Katakana"
 
 msgid "About WinMerge"
 msgstr "WinMerge hakkında"
@@ -1292,48 +1761,6 @@ msgstr "Yardım"
 msgid "&Options..."
 msgstr "&Ayarlar..."
 
-msgid "General"
-msgstr "Genel"
-
-msgid "Automatically &scroll to first difference"
-msgstr "Otomatik olarak ilk &farka gidilsin"
-
-msgid "Automatically s&croll to first inline difference"
-msgstr "Otomatik olarak ilk satır arası &farka gidilsin"
-
-msgid "Cl&ose windows with 'Esc':"
-msgstr "'ESC' tuşu pencereleri &kapatsın:"
-
-msgid "&Automatically verify paths in Open dialog"
-msgstr "'&Aç' penceresindeki yollar doğrulansın"
-
-msgid "Single instance mode:"
-msgstr "Tek kopya kipi:"
-
-msgid "As&k when closing multiple windows"
-msgstr "&Birden fazla pencere kapatılıyorsa onay istensin"
-
-msgid "&Preserve file time in file compare"
-msgstr "Karşılaştırmada &dosya zamanı korunsun"
-
-msgid "Show \"Select Files or Folders\" dialog on startup"
-msgstr "\"Dosya ya da klasör seçin\" penceresi açılışta görüntülensin"
-
-msgid "Close \"Select Files or Folders\" dialog on clicking Compare button"
-msgstr "\"Dosya ya da klasör seçin\" penceresi Karşılaştır düğmesi ile kapatılsın"
-
-msgid "Op&en dialog Auto completion:"
-msgstr "Aç &penceresi otomatik olarak doldurulsun:"
-
-msgid "Auto-&reload modified files:"
-msgstr "Değiştirilen dosyalar &otomatik yenilensin:"
-
-msgid "Language:"
-msgstr "Dil:"
-
-msgid "Defaults"
-msgstr "Varsayılanlar"
-
 msgid "Find"
 msgstr "Bul"
 
@@ -1360,9 +1787,6 @@ msgstr "S&onrakini bul"
 
 msgid "Find &Prev"
 msgstr "Ö&ncekini bul"
-
-msgid "&Ok"
-msgstr "&Tamam"
 
 msgid "Replace"
 msgstr "Değiştir"
@@ -1403,6 +1827,9 @@ msgstr "Yeni"
 msgid "&Background color:"
 msgstr "A&rka plan rengi:"
 
+msgid "&Ok"
+msgstr "&Tamam"
+
 msgid "&Apply"
 msgstr "&Uygula"
 
@@ -1424,8 +1851,12 @@ msgstr "Sil"
 msgid "Substitution Filters"
 msgstr "Değişiklik süzgeçleri"
 
-msgid "Changes to the listed pairs below will be ignored or marked as insignificant. Patches are unaffected."
-msgstr "Panolarda görünen, aşağıda çiftler olarak listelenmiş değişiklikler yok sayılacak veya önemsiz olarak işaretlenecek. Yamalar etkilenmez."
+msgid ""
+"Changes to the listed pairs below will be ignored or marked as insignificant. Patches are "
+"unaffected."
+msgstr ""
+"Panolarda görünen, aşağıda çiftler olarak listelenmiş değişiklikler yok sayılacak veya "
+"önemsiz olarak işaretlenecek. Yamalar etkilenmez."
 
 msgid "Enable"
 msgstr "Etkinleştir"
@@ -1436,11 +1867,77 @@ msgstr "Ekle"
 msgid "Clear"
 msgstr "Temizle"
 
+msgid "Options"
+msgstr "Ayarlar"
+
+msgid "Import..."
+msgstr "İçe aktar..."
+
+msgid "Export..."
+msgstr "Dışa aktar..."
+
+msgid "General"
+msgstr "Genel"
+
+msgid "Automatically &scroll to first difference"
+msgstr "Otomatik olarak ilk &farka gidilsin"
+
+msgid "Automatically s&croll to first inline difference"
+msgstr "Otomatik olarak ilk satır arası &farka gidilsin"
+
+msgid "Cl&ose windows with 'Esc':"
+msgstr "'ESC' tuşu pencereleri &kapatsın:"
+
+msgid "&Automatically verify paths in Open dialog"
+msgstr "'&Aç' penceresindeki yollar doğrulansın"
+
+msgid "Single instance mode:"
+msgstr "Tek kopya kipi:"
+
+msgid "As&k when closing multiple windows"
+msgstr "&Birden fazla pencere kapatılıyorsa onay istensin"
+
+msgid "&Preserve file time in file compare"
+msgstr "Karşılaştırmada &dosya zamanı korunsun"
+
+msgid "Show \"Select Files or Folders\" dialog on startup"
+msgstr "\"Dosya veya klasör seç\" penceresini açılışta göster"
+
+msgid "Close \"Select Files or Folders\" dialog on clicking Compare button"
+msgstr "\"Dosya veya klasör seç\" penceresini Karşılaştır düğmesi ile kapat"
+
+msgid "Op&en dialog Auto completion:"
+msgstr "Aç &penceresi otomatik olarak doldurulsun:"
+
+msgid "Auto-&reload modified files:"
+msgstr "Değiştirilen dosyalar &otomatik yenilensin:"
+
+msgid "Language:"
+msgstr "Dil:"
+
+msgid "Defaults"
+msgstr "Varsayılanlar"
+
 msgid "Colors"
 msgstr "Renkler"
 
-msgid "Color Scheme:"
-msgstr "Renk teması:"
+msgid "Color &mode:"
+msgstr "Renk &modu:"
+
+msgid "&Light mode scheme:"
+msgstr "&Aydınlık mod şeması:"
+
+msgid "&Dark mode scheme:"
+msgstr "&Karanlık mod şeması:"
+
+msgid "Your custom schemes"
+msgstr "Özel şemalarınız"
+
+msgid "&Save current scheme..."
+msgstr "Mevcut şemayı &kaydet..."
+
+msgid "Delete &current scheme..."
+msgstr "&Mevcut şemayı sil..."
 
 msgid "Background"
 msgstr "Arka plan"
@@ -1565,6 +2062,9 @@ msgstr "&Silinen dosyalar geri dönüşüm kutusuna atılsın"
 msgid "&External editor:"
 msgstr "Dış düz&enleyici:"
 
+msgid "&Store user data in:"
+msgstr "Kullanıcı verilerini şurada &depola:"
+
 msgid "&Filter folder:"
 msgstr "Süzgeç &klasörü:"
 
@@ -1579,6 +2079,113 @@ msgstr "Ö&zel klasör:"
 
 msgid "Br&owse..."
 msgstr "Göz a&t..."
+
+msgid "Compare"
+msgstr "Karşılaştırma"
+
+msgid "Whitespaces"
+msgstr "Beyaz boşluklar"
+
+msgid "&Compare"
+msgstr "&Karşılaştırılsın"
+
+msgid "&Ignore change"
+msgstr "&Değişiklik yok sayılsın"
+
+msgid "I&gnore all"
+msgstr "Tümü &yok sayılsın"
+
+msgid "Ignore blan&k lines"
+msgstr "Boş satırlar yo&k sayılsın"
+
+msgid "Ignore &case"
+msgstr "BÜYÜK/küçük &harf ayrımı yapılmasın"
+
+msgid "Igno&re EOL differences (Windows/Unix/Mac)"
+msgstr "EOL farklılıklarını göz a&rdı et (Windows/Unix/Mac)"
+
+msgid "Ignore num&bers"
+msgstr "&Sayıları yok say"
+
+msgid "Ignore codepage &differences"
+msgstr "Kod sayfası &farklılıklarını göz ardı et"
+
+msgid "Ignore c&omment differences"
+msgstr "Yo&rum farklılıkları yok sayılsın"
+
+msgid "Ignore &missing trailing EOL"
+msgstr "&Sondaki eksik satır sonu yok sayılsın"
+
+msgid "Ignore line &breaks (treat as spaces)"
+msgstr "Satır &sonlarını yok say (boşluk olarak ele al)"
+
+msgid "E&nable moved block detection"
+msgstr "Taşı&nmış blok algılaması kullanılsın"
+
+msgid "Align &similar lines"
+msgstr "&Benzer satırlar hizalansın"
+
+msgid "Diff &algorithm:"
+msgstr "&Fark algortiması:"
+
+msgid "Enable indent &heuristic"
+msgstr "&Sezgisel girinti kullanılsın"
+
+msgid "Completely unhighlight the ignored differences"
+msgstr "Yok sayılan farkların vurguları tamamen kaldırılsın"
+
+msgid "Editor"
+msgstr "Düzenleyici"
+
+msgid "&Highlight syntax"
+msgstr "Söz dizimi &vurgulansın"
+
+msgid "&Preserve original EOL"
+msgstr "Ö&zgün satır sonu karakterleri korunsun"
+
+msgid "Tabs"
+msgstr "Sekmeler"
+
+msgid "&Tab size:"
+msgstr "&Sekme aralığı:"
+
+msgid "&Insert tabs"
+msgstr "Sekme &olarak"
+
+msgid "Insert &spaces"
+msgstr "&Boşluk olarak"
+
+msgid "&Rendering mode:"
+msgstr "Gö&rüntüleme Kipi:"
+
+msgid "&Automatic rescan"
+msgstr "Otomatik olarak yeniden t&aransın"
+
+msgid "Copy &granularity for selected differences:"
+msgstr "Seçilmiş &farkların kopyalama düzeyi:"
+
+msgid "Line Difference Coloring"
+msgstr "Satır farklılıkları renklendirilsin"
+
+msgid "View line differences"
+msgstr "Satır farklılıkları görüntüleme düzeyi"
+
+msgid "&Character-level"
+msgstr "&Karakter düzeyinde"
+
+msgid "&Word-level:"
+msgstr "&Sözcük düzeyinde:"
+
+msgid "W&ord break characters:"
+msgstr "&Sözcük kesme karakterleri:"
+
+msgid "Some messages can be hidden by the user. Press Reset to make all messages visible again."
+msgstr ""
+"WinMerge sık karşılaşılan iletilerin gizlenmesine izin verir. Tüm iletileri yeniden görünür "
+"yapmak için Sıfırla düğmesine tıklayın."
+
+msgid "Reset"
+msgstr "Sıfırla"
 
 msgid "Patch Generator"
 msgstr "Yama oluşturucu"
@@ -1682,6 +2289,9 @@ msgstr "Toplam öge:"
 msgid "Items compared:"
 msgstr "Karşılaştırılan öge:"
 
+msgid "&Close"
+msgstr "&Kapat"
+
 msgid "Go to"
 msgstr "Git"
 
@@ -1703,110 +2313,14 @@ msgstr "&Farklılık"
 msgid "&Go to"
 msgstr "&Git"
 
-msgid "Compare"
-msgstr "Karşılaştırma"
-
-msgid "Whitespaces"
-msgstr "Beyaz boşluklar"
-
-msgid "&Compare"
-msgstr "&Karşılaştırılsın"
-
-msgid "&Ignore change"
-msgstr "&Değişiklik yok sayılsın"
-
-msgid "I&gnore all"
-msgstr "Tümü &yok sayılsın"
-
-msgid "Ignore blan&k lines"
-msgstr "Boş satırlar yo&k sayılsın"
-
-msgid "Ignore &case"
-msgstr "BÜYÜK/küçük &harf ayrımı yapılmasın"
-
-msgid "Igno&re EOL differences (Windows/Unix/Mac)"
-msgstr ""
-
-msgid "Ignore num&bers"
-msgstr "&Sayıları yok say"
-
-msgid "Ignore codepage &differences"
-msgstr ""
-
-msgid "Ignore c&omment differences"
-msgstr "Yo&rum farklılıkları yok sayılsın"
-
-msgid "Ignore &missing trailing EOL"
-msgstr "&Sondaki eksik satır sonu yok sayılsın"
-
-msgid "E&nable moved block detection"
-msgstr "Taşı&nmış blok algılaması kullanılsın"
-
-msgid "Align &similar lines"
-msgstr "&Benzer satırlar hizalansın"
-
-msgid "Diff &algorithm:"
-msgstr "&Fark algortiması:"
-
-msgid "Enable indent &heuristic"
-msgstr "&Sezgisel girinti kullanılsın"
-
-msgid "Completely unhighlight the ignored differences"
-msgstr "Yok sayılan farkların vurguları tamamen kaldırılsın"
-
-msgid "Editor"
-msgstr "Düzenleyici"
-
-msgid "&Highlight syntax"
-msgstr "Söz dizimi &vurgulansın"
-
-msgid "&Preserve original EOL"
-msgstr "Ö&zgün satır sonu karakterleri korunsun"
-
-msgid "Tabs"
-msgstr "Sekmeler"
-
-msgid "&Tab size:"
-msgstr "&Sekme aralığı:"
-
-msgid "&Insert tabs"
-msgstr "Sekme &olarak"
-
-msgid "Insert &spaces"
-msgstr "&Boşluk olarak"
-
-msgid "&Rendering mode:"
-msgstr "Gö&rüntüleme Kipi:"
-
-msgid "&Automatic rescan"
-msgstr "Otomatik olarak yeniden t&aransın"
-
-msgid "Copy &granularity for selected differences:"
-msgstr "Seçilmiş &farkların kopyalama düzeyi:"
-
-msgid "Line Difference Coloring"
-msgstr "Satır farklılıkları renklendirilsin"
-
-msgid "View line differences"
-msgstr "Satır farklılıkları görüntüleme düzeyi"
-
-msgid "&Character-level"
-msgstr "&Karakter düzeyinde"
-
-msgid "&Word-level:"
-msgstr "&Sözcük düzeyinde:"
-
-msgid "W&ord break characters:"
-msgstr "&Sözcük kesme karakterleri:"
-
-msgid "Some messages can be hidden by the user. Press Reset to make all messages visible again."
-msgstr "WinMerge sık karşılaşılan iletilerin gizlenmesine izin verir. Tüm iletileri yeniden görünür yapmak için Sıfırla düğmesine tıklayın."
-
-msgid "Reset"
-msgstr "Sıfırla"
-
 msgid "File Filters"
 msgstr "Dosya süzgeçleri"
+
+msgid "&Mask / Filter Expression"
+msgstr "&Maske / Filtre İfadesi"
+
+msgid "Preset &Filters"
+msgstr "Ön Ayarlı &Filtreler"
 
 msgid "Test..."
 msgstr "Sına..."
@@ -1822,6 +2336,65 @@ msgstr "Düzenle..."
 
 msgid "Delete..."
 msgstr "Sil..."
+
+msgid "Filter Condition"
+msgstr "Filtre Koşulu"
+
+msgid "&Left-hand side:"
+msgstr "&Sol taraf:"
+
+msgid "&Operator:"
+msgstr "&Operatör:"
+
+msgid "&Right-hand side:"
+msgstr "&Sağ taraf:"
+
+msgid "Expression:"
+msgstr "İfade:"
+
+msgid "Codepage"
+msgstr "Kod sayfası"
+
+msgid "Default Codepage"
+msgstr "Varsayılan kod sayfası"
+
+msgid "Select the default codepage for non-Unicode files:"
+msgstr "Unikod olmayan dosyalar için kullanılacak kod sayfası:"
+
+msgid "System codepage"
+msgstr "Sistem kod sayfası"
+
+msgid "According to WinMerge User Interface"
+msgstr "WinMerge kullanıcı arayüzü kod sayfası"
+
+msgid "Custom codepage:"
+msgstr "Özel kod sayfası:"
+
+msgid ""
+"Detect codepage for: .html, .rc, .xml\n"
+"Restart required."
+msgstr ""
+".html, .rc, .xml dosyalarının kod sayfası bilgisi algılansın \n"
+"Uygulamanın yeniden başlatılması gerekir."
+
+msgid ""
+"Detect codepage for files with mlang.dll\n"
+"Restart required."
+msgstr ""
+"Metin dosyalarının kod sayfası mlang.dll ile algılansın\n"
+"Uygulamanın yeniden başlatılması gerekir."
+
+msgid "Archive Support"
+msgstr "Sıkıştırma desteği"
+
+msgid "&Enable archive file support"
+msgstr "&Sıkıştırılmış dosya desteği kullanılsın"
+
+msgid "&Detect archive type from file signature"
+msgstr "&Arşiv türü dosya imzasından belirlensin"
+
+msgid "Items saved to or restored from the project file:"
+msgstr "Bir proje dosyasındaki ögeler kaydedildi ya da geri yüklendi:"
 
 msgid "Save Modified Files?"
 msgstr "Dosya değişiklikleri kaydedilsin mi?"
@@ -1856,39 +2429,6 @@ msgstr "Değişiklikleri &yok say"
 msgid "Disca&rd All"
 msgstr "&Tümünü yok say"
 
-msgid "Codepage"
-msgstr "Kod sayfası"
-
-msgid "Default Codepage"
-msgstr "Varsayılan kod sayfası"
-
-msgid "Select the default codepage for non-Unicode files:"
-msgstr "Unikod olmayan dosyalar için kullanılacak kod sayfası:"
-
-msgid "System codepage"
-msgstr "Sistem kod sayfası"
-
-msgid "According to WinMerge User Interface"
-msgstr "WinMerge kullanıcı arayüzü kod sayfası"
-
-msgid "Custom codepage:"
-msgstr "Özel kod sayfası:"
-
-msgid "Detect codepage for: .html, .rc, .xml\nRestart required."
-msgstr ".html, .rc, .xml dosyalarının kod sayfası bilgisi algılansın \nUygulamanın yeniden başlatılması gerekir."
-
-msgid "Detect codepage for files with mlang.dll\nRestart required."
-msgstr "Metin dosyalarının kod sayfası mlang.dll ile algılansın\nUygulamanın yeniden başlatılması gerekir."
-
-msgid "Options"
-msgstr "Ayarlar"
-
-msgid "Import..."
-msgstr "İçe aktar..."
-
-msgid "Export..."
-msgstr "Dışa aktar..."
-
 msgid "Folder Compare Report"
 msgstr "Klasör Karşılaştırma Raporu"
 
@@ -1912,18 +2452,6 @@ msgstr "Ortak süzgeç (bilgisayardaki tüm kullanıcılar için)"
 
 msgid "Private Filter (current user only)"
 msgstr "Özel süzgeç (yalnızca geçerli kullanıcı için)"
-
-msgid "Archive Support"
-msgstr "Sıkıştırma desteği"
-
-msgid "&Enable archive file support"
-msgstr "&Sıkıştırılmış dosya desteği kullanılsın"
-
-msgid "&Detect archive type from file signature"
-msgstr "&Arşiv türü dosya imzasından belirlensin"
-
-msgid "Items saved to or restored from the project file:"
-msgstr "Bir proje dosyasındaki ögeler kaydedildi ya da geri yüklendi:"
 
 msgid "Compare Statistics"
 msgstr "Karşılaştırma istatistikleri"
@@ -2008,9 +2536,6 @@ msgstr "Sonuç:"
 
 msgid "&Test"
 msgstr "&Sına"
-
-msgid "&Close"
-msgstr "&Kapat"
 
 msgid "Table"
 msgstr "Tablo"
@@ -2172,6 +2697,18 @@ msgstr "&Hızlı karşılaştırmaya geçilecek eşik değeri (MB):"
 msgid "Switch to &binary compare when size exceeds (MB):"
 msgstr "&Binary karşılaştırmaya geçilecek eşik değeri (MB):"
 
+msgid "Additional comparison condi&tions:"
+msgstr "Ek karşılaştırma k&oşulları:"
+
+msgid "&Rename/move detection:"
+msgstr "&Yeniden Adlandırma/Taşıma Algılama:"
+
+msgid "Rename/move detection &keys:"
+msgstr "Yeniden Adlandırma/Taşıma Algılama &Tuşları:"
+
+msgid "&Merge renamed items into a single item"
+msgstr "Yeniden adlandırılan ögeleri tek &ögede birleştir"
+
 msgid "File patterns:"
 msgstr "Dosya modelleri:"
 
@@ -2257,6 +2794,42 @@ msgstr "&Betik dosya uzantısı:"
 msgid "Script &body:"
 msgstr "Betik &içeriği:"
 
+msgid "Font"
+msgstr "Yazı tipi"
+
+msgid "&Font:"
+msgstr "&Yazı tipi:"
+
+msgid "Font st&yle:"
+msgstr "Yazı tipi st&ili:"
+
+msgid "&Size:"
+msgstr "&Boyut:"
+
+msgid "Effects"
+msgstr "Etkiler"
+
+msgid "Stri&keout"
+msgstr "Üstü &çizili"
+
+msgid "&Underline"
+msgstr "&Altı çizili"
+
+msgid "&Color:"
+msgstr "&Renk:"
+
+msgid "Sample"
+msgstr "Örnek"
+
+msgid "AaBbYyZz"
+msgstr "AaBbYyZz"
+
+msgid "Sc&ript:"
+msgstr "&Betik:"
+
+msgid "<A>Show more fonts</A>"
+msgstr "<A>Daha fazla yazı tipi göster</A>"
+
 msgid "EXT"
 msgstr "EXT"
 
@@ -2275,14 +2848,26 @@ msgstr "OVR"
 msgid "REC"
 msgstr "REC"
 
-msgid "\nNew Documents (Ctrl+N)"
-msgstr "\nYeni belgeler (Ctrl+N)"
+msgid ""
+"\n"
+"New Documents (Ctrl+N)"
+msgstr ""
+"\n"
+"Yeni belgeler (Ctrl+N)"
 
-msgid "\nOpen (Ctrl+O)"
-msgstr "\nAç (Ctrl+O)"
+msgid ""
+"\n"
+"Open (Ctrl+O)"
+msgstr ""
+"\n"
+"Aç (Ctrl+O)"
 
-msgid "\nSave (Ctrl+S)"
-msgstr "\nKaydet (Ctrl+S)"
+msgid ""
+"\n"
+"Save (Ctrl+S)"
+msgstr ""
+"\n"
+"Kaydet (Ctrl+S)"
 
 msgid "Unknown error opening project file."
 msgstr "Proje dosyası açılırken bilinmeyen bir sorun çıktı."
@@ -2296,20 +2881,61 @@ msgstr "Proje dosyası yüklendi."
 msgid "Project file saved."
 msgstr "Proje dosyası kaydedildi."
 
-msgid "\nUndo (Ctrl+Z)"
-msgstr "\nGeri Al (Ctrl+Z)"
+msgid ""
+"\n"
+"Undo (Ctrl+Z)"
+msgstr ""
+"\n"
+"Geri Al (Ctrl+Z)"
 
-msgid "\nRedo (Ctrl+Y)"
-msgstr "\nYinele (Ctrl+Y)"
+msgid ""
+"\n"
+"Redo (Ctrl+Y)"
+msgstr ""
+"\n"
+"Yinele (Ctrl+Y)"
 
-msgid "\nFileCompare\n\n\n\nWinMerge.FileCompare\nWinMerge File Compare"
-msgstr "\nDosyaKarşılaştır\n\n\n\nWinMerge.DosyaKarşılaştır\nWinMerge Dosya Karşılaştır"
+msgid ""
+"\n"
+"FileCompare\n"
+"\n"
+"\n"
+"\n"
+"WinMerge.FileCompare\n"
+"WinMerge File Compare"
+msgstr ""
+"\n"
+"DosyaKarşılaştır\n"
+"\n"
+"\n"
+"\n"
+"WinMerge.DosyaKarşılaştır\n"
+"WinMerge Dosya Karşılaştır"
 
-msgid "\nFolderCompare\n\n\n\nWinMerge.FolderCompare\nWinMerge Folder Compare"
-msgstr "\nKlasörKarşılaştır\n\n\n\nWinMerge.KlasörKarşılaştır\nWinMerge Klasör Karşılaştır"
+msgid ""
+"\n"
+"FolderCompare\n"
+"\n"
+"\n"
+"\n"
+"WinMerge.FolderCompare\n"
+"WinMerge Folder Compare"
+msgstr ""
+"\n"
+"KlasörKarşılaştır\n"
+"\n"
+"\n"
+"\n"
+"WinMerge.KlasörKarşılaştır\n"
+"WinMerge Klasör Karşılaştır"
 
-msgid "WinMerge comes with ABSOLUTELY NO WARRANTY. It is free software and can be redistributed under the conditions of the GNU General Public License - see the Help menu for details."
-msgstr "WinMerge size kesinlikle BİR GARANTİ VERMEZ. Bu uygulama, belirli şartlar altında serbestçe çoğaltıp dağıtabileceğiniz özgür bir yazılımdır. Ayrıntılı bilgi almak için yardım menüsündeki GNU Genel Kamu Lisansı bölümüne bakabilirsiniz."
+msgid ""
+"WinMerge comes with ABSOLUTELY NO WARRANTY. It is free software and can be redistributed "
+"under the conditions of the GNU General Public License - see the Help menu for details."
+msgstr ""
+"WinMerge size kesinlikle BİR GARANTİ VERMEZ. Bu uygulama, belirli şartlar altında serbestçe "
+"çoğaltıp dağıtabileceğiniz özgür bir yazılımdır. Ayrıntılı bilgi almak için yardım "
+"menüsündeki GNU Genel Kamu Lisansı bölümüne bakabilirsiniz."
 
 msgid "&Abort"
 msgstr "&Durdur"
@@ -2348,7 +2974,9 @@ msgid "Don't display this &message again."
 msgstr "Bu ileti &yeniden görüntülenmesin."
 
 msgid "To make this message box visible, press Reset on the Message Boxes page in Options."
-msgstr "Bu ileti kutusunun yeniden görüntülenmesi için Ayarlar bölümünde İleti kutuları grubu altındaki Sıfırla düğmesine tıklayın."
+msgstr ""
+"Bu ileti kutusunun yeniden görüntülenmesi için Ayarlar bölümünde İleti kutuları grubu "
+"altındaki Sıfırla düğmesine tıklayın."
 
 msgid "Compare/Merge"
 msgstr "Karşılaştır/Birleştir"
@@ -2408,7 +3036,10 @@ msgstr "Tüm iletiler yeniden görünür oldu."
 
 #, c-format
 msgid "Tab size value is out of range. Please use 1 - %1."
-msgstr "Sekme genişliği WinMerge tarafından kabul edilen aralıkta değil.\n\nLütfen 1 - %1 arasında bir değer yazın."
+msgstr ""
+"Sekme genişliği WinMerge tarafından kabul edilen aralıkta değil.\n"
+"\n"
+"Lütfen 1 - %1 arasında bir değer yazın."
 
 msgid "Open"
 msgstr "Aç"
@@ -2426,7 +3057,8 @@ msgid "Options files (*.ini)|*.ini|All Files (*.*)|*.*||"
 msgstr "Ayar dosyaları (*.ini)|*.ini|Tüm dosyalar (*.*)|*.*||"
 
 msgid "Text Files (*.csv;*.asc;*.rpt;*.txt)|*.csv;*.asc;*.rpt;*.txt|All Files (*.*)|*.*||"
-msgstr "Metin dosyaları (*.csv;*.asc;*.rpt;*.txt)|*.csv;*.asc;*.rpt;*.txt|Tüm dosyalar (*.*)|*.*||"
+msgstr ""
+"Metin dosyaları (*.csv;*.asc;*.rpt;*.txt)|*.csv;*.asc;*.rpt;*.txt|Tüm dosyalar (*.*)|*.*||"
 
 msgid "HTML Files (*.htm,*.html)|*.htm;*.html|All Files (*.*)|*.*||"
 msgstr "HTML dosyaları (*.htm,*.html)|*.htm;*.html|Tüm dosyalar (*.*)|*.*||"
@@ -2498,25 +3130,61 @@ msgid "File Filters (*.flt)|*.flt|All Files (*.*)|*.*||"
 msgstr "Dosya süzgeçleri (*.flt)|*.flt|Tüm dosyalar (*.*)|*.*||"
 
 #, c-format
-msgid "Cannot find filter template!\n\nCopy %1 to WinMerge/Filters Folder:\n%2."
-msgstr "Dosya süzgeci kalıp dosyası bulunamadı!\n\nLütfen %1 dosyasını, WinMerge/Filters klasörüne kopyalayın:\n%2."
+msgid ""
+"Cannot find filter template!\n"
+"\n"
+"Copy %1 to WinMerge/Filters Folder:\n"
+"%2."
+msgstr ""
+"Dosya süzgeci kalıp dosyası bulunamadı!\n"
+"\n"
+"Lütfen %1 dosyasını, WinMerge/Filters klasörüne kopyalayın:\n"
+"%2."
 
 #, c-format
-msgid "Cannot copy filter template:\n%1\n\nMake sure the folder exists and is writable."
-msgstr "Süzgeç kalıbı dosyası süzgeç klasörüne kopyalanamıyor:\n%1\n\nKlasörün var ve yazılabilir olduğundan emin olun."
+msgid ""
+"Cannot copy filter template:\n"
+"%1\n"
+"\n"
+"Make sure the folder exists and is writable."
+msgstr ""
+"Süzgeç kalıbı dosyası süzgeç klasörüne kopyalanamıyor:\n"
+"%1\n"
+"\n"
+"Klasörün var ve yazılabilir olduğundan emin olun."
 
-msgid "User's filter folder is not defined!\n\nSelect filter folder in Options/System."
-msgstr "Kullanıcı süzgeç dosyası klasörü belirtilmemiş!\n\nLütfen 'Ayarlar/Sistem' bölümünden süzgeç klasörünü belirtin."
+msgid ""
+"User's filter folder is not defined!\n"
+"\n"
+"Select filter folder in Options/System."
+msgstr ""
+"Kullanıcı süzgeç dosyası klasörü belirtilmemiş!\n"
+"\n"
+"Lütfen 'Ayarlar/Sistem' bölümünden süzgeç klasörünü belirtin."
 
 #, c-format
-msgid "Failed to delete filter:\n%1\n\nFile may be read-only."
-msgstr "Süzgeç dosyası silinemedi:\n%1\n\nDosya salt okunur olabilir mi?"
+msgid ""
+"Failed to delete filter:\n"
+"%1\n"
+"\n"
+"File may be read-only."
+msgstr ""
+"Filtre silinemedi:\n"
+"%1\n"
+"\n"
+"Dosya salt okunur olabilir."
 
 msgid "Locate Filter File to Install"
 msgstr "Kurulacak süzgeç dosyasını seçin"
 
-msgid "Installing filter file failed.\n\nCould not copy new filter to folder."
-msgstr "Süzgeç dosyası kurulamadı.\n\nYeni süzgeç dosyası süzgeç klasörüne kopyalanamadı."
+msgid ""
+"Installing filter file failed.\n"
+"\n"
+"Could not copy new filter to folder."
+msgstr ""
+"Süzgeç dosyası kurulamadı.\n"
+"\n"
+"Yeni süzgeç dosyası süzgeç klasörüne kopyalanamadı."
 
 msgid "Filter file exists. Overwrite?"
 msgstr "Bu süzgeç dosyası zaten var. Üzerine yazılsın mı?"
@@ -2524,8 +3192,15 @@ msgstr "Bu süzgeç dosyası zaten var. Üzerine yazılsın mı?"
 msgid "Regular expression"
 msgstr "Kurallı ifade"
 
-msgid "Filters updated. Refresh all open folder compares?\n\nSelect 'No' to refresh later."
-msgstr "Süzgeçler güncellendi. Tüm açık klasör karşılaştırmalarını yenilemek ister misiniz?\n\nŞimdi yenilemek istemezseniz 'Hayır' üzerine tıklayabilir ve karşılaştırmaları daha sonra yenileyebilirsiniz."
+msgid ""
+"Filters updated. Refresh all open folder compares?\n"
+"\n"
+"Select 'No' to refresh later."
+msgstr ""
+"Süzgeçler güncellendi. Tüm açık klasör karşılaştırmalarını yenilemek ister misiniz?\n"
+"\n"
+"Şimdi yenilemek istemezseniz 'Hayır' üzerine tıklayabilir ve karşılaştırmaları daha sonra "
+"yenileyebilirsiniz."
 
 msgid "Folder Comparison Results"
 msgstr "Klasör karşılaştırma sonuçları"
@@ -2586,10 +3261,10 @@ msgstr "1 fark bulundu"
 
 #, c-format
 msgid "%1 Errors Found"
-msgstr ""
+msgstr "%1 Hata Bulundu"
 
 msgid "1 Error Found"
-msgstr ""
+msgstr "1 Hata Bulundu"
 
 #. Abbreviation from "Read Only"
 msgid "RO"
@@ -2661,18 +3336,36 @@ msgid "File not unpacked: %1"
 msgstr "%1 dosyası ayıklanamadı"
 
 #, c-format
-msgid "Cannot open file\n%1\n\n%2"
-msgstr "Dosya açılamadı\n%1\n\n%2"
+msgid ""
+"Cannot open file\n"
+"%1\n"
+"\n"
+"%2"
+msgstr ""
+"Dosya açılamadı\n"
+"%1\n"
+"\n"
+"%2"
 
 msgid "Failed to parse conflict file."
 msgstr "Çelişki dosyası işlenemedi."
 
 #, c-format
-msgid "The file\n%1\nis not a conflict file."
-msgstr "%1\ndosyası\nbir çelişki dosyası değil."
+msgid ""
+"The file\n"
+"%1\n"
+"is not a conflict file."
+msgstr ""
+"%1\n"
+"dosyası\n"
+"bir çelişki dosyası değil."
 
-msgid "Comparing large files requires significant memory.\nShow only comparison results (not file contents)?"
-msgstr "Çok büyük dosyaları karşılaştırmak üzeresiniz.\nBu dosyalarının içeriğinin görüntülenmesi için çok fazla bellek gerekiyor.\nDosyaların içeriği yerine yalnızca karşılaştırma sonuçlarının görüntülenmesini ister misiniz?\n\n"
+msgid ""
+"Comparing large files requires significant memory.\n"
+"Show only comparison results (not file contents)?"
+msgstr ""
+"Büyük dosyaları karşılaştırmak önemli miktarda bellek gerektirir.\n"
+"Yalnızca karşılaştırma sonuçlarını göster (dosya içeriklerini değil)?"
 
 msgid "Save As"
 msgstr "Farklı kaydet"
@@ -2683,42 +3376,111 @@ msgstr "%1 içindeki değişiklikler kaydedilsin mi?"
 
 #, c-format
 msgid "%1 is read-only. Override? Or 'No' to save as new filename?"
-msgstr "%1 salt okunur olarak işaretli. Salt okunur dosyanın üzerine yazılmasını ister misiniz ? (Hayır seçerseniz, yeni bir adla kaydedebilirsiniz.)"
+msgstr ""
+"%1 salt okunur olarak işaretli. Salt okunur dosyanın üzerine yazılmasını ister misiniz ? "
+"(Hayır seçerseniz, yeni bir adla kaydedebilirsiniz.)"
 
 msgid "Error backing up file"
 msgstr "Dosya yedekleme sorunu"
 
 #, c-format
-msgid "Unable to backup original file:\n%1\n\nContinue anyway?"
-msgstr "Özgün dosya yedeklenemedi:\n%1\n\nGene de devam edilsin mi?"
+msgid ""
+"Unable to backup original file:\n"
+"%1\n"
+"\n"
+"Continue anyway?"
+msgstr ""
+"Özgün dosya yedeklenemedi:\n"
+"%1\n"
+"\n"
+"Gene de devam edilsin mi?"
 
 #, c-format
-msgid "Saving file failed.\n%1\n%2\n\t- Use different filename (OK)\n\t- Abort (Cancel)?"
-msgstr "Dosya kaydedilemedi.\n%1\n%2\nNe yapmak istersiniz:\n\t- Farklı bir ad kullanılsın (Tamam üzerine tıklayın)\n\t- Bu işlem iptal edilsin (İptal üzerine tıklayın)"
+msgid ""
+"Saving file failed.\n"
+"%1\n"
+"%2\n"
+"\t- Use different filename (OK)\n"
+"\t- Abort (Cancel)?"
+msgstr ""
+"Dosya kaydedilemedi.\n"
+"%1\n"
+"%2\n"
+"Ne yapmak istersiniz:\n"
+"\t- Farklı bir ad kullanılsın (Tamam üzerine tıklayın)\n"
+"\t- Bu işlem iptal edilsin (İptal üzerine tıklayın)"
 
 #, c-format
-msgid "Plugin '%2' cannot pack changes to left file into '%1'.\n\nOriginal unchanged. Save unpacked version?"
-msgstr "'%2' eklentisi, sol dosyada yapılmış değişiklikleri yeniden '%1' içine sıkıştıramadı.\n\nÖzgün dosya değiştirilmeyecek.\n\nAyıklanmış sürümü başka bir dosyaya kaydetmek ister misiniz?"
+msgid ""
+"Plugin '%2' cannot pack changes to left file into '%1'.\n"
+"\n"
+"Original unchanged. Save unpacked version?"
+msgstr ""
+"'%2' eklentisi, sol dosyada yapılmış değişiklikleri yeniden '%1' içine sıkıştıramadı.\n"
+"\n"
+"Özgün dosya değiştirilmeyecek.\n"
+"\n"
+"Ayıklanmış sürümü başka bir dosyaya kaydetmek ister misiniz?"
 
 #, c-format
-msgid "Plugin '%2' cannot pack changes to middle file into '%1'.\n\nOriginal unchanged. Save unpacked version?"
-msgstr "'%2' eklentisi, orta dosyada yapılmış değişiklikleri yeniden '%1' içine sıkıştıramadı.\n\nÖzgün dosya değiştirilmeyecek.\n\nAyıklanmış sürümü başka bir dosyaya kaydetmek ister misiniz?"
+msgid ""
+"Plugin '%2' cannot pack changes to middle file into '%1'.\n"
+"\n"
+"Original unchanged. Save unpacked version?"
+msgstr ""
+"'%2' eklentisi, orta dosyada yapılmış değişiklikleri yeniden '%1' içine sıkıştıramadı.\n"
+"\n"
+"Özgün dosya değiştirilmeyecek.\n"
+"\n"
+"Ayıklanmış sürümü başka bir dosyaya kaydetmek ister misiniz?"
 
 #, c-format
-msgid "Plugin '%2' cannot pack changes to right file into '%1'.\n\nOriginal unchanged. Save unpacked version?"
-msgstr "'%2' eklentisi, sağ dosyada yapılmış değişiklikleri yeniden '%1' içine sıkıştıramadı.\n\nÖzgün dosya değiştirilmeyecek.\n\nAyıklanmış sürümü başka bir dosyaya kaydetmek ister misiniz?"
+msgid ""
+"Plugin '%2' cannot pack changes to right file into '%1'.\n"
+"\n"
+"Original unchanged. Save unpacked version?"
+msgstr ""
+"'%2' eklentisi, sağ dosyada yapılmış değişiklikleri yeniden '%1' içine sıkıştıramadı.\n"
+"\n"
+"Özgün dosya değiştirilmeyecek.\n"
+"\n"
+"Ayıklanmış sürümü başka bir dosyaya kaydetmek ister misiniz?"
 
 #, c-format
-msgid "Another application updated\n%1\nsince WinMerge loaded it.\n\nOverwrite?"
-msgstr "WinMerge tarafından yüklendikten sonra\n%1\ndosyası başka bir uygulama tarafından değiştirilmiş.\n\nDeğiştirilmiş dosyanın üzerine yazılsın mı?"
+msgid ""
+"Another application updated\n"
+"%1\n"
+"since WinMerge loaded it.\n"
+"\n"
+"Overwrite?"
+msgstr ""
+"WinMerge tarafından yüklendikten sonra\n"
+"%1\n"
+"dosyası başka bir uygulama tarafından değiştirilmiş.\n"
+"\n"
+"Değiştirilmiş dosyanın üzerine yazılsın mı?"
 
 #, c-format
-msgid "%1\nis read-only. Override?"
-msgstr "%1\nsalt okunur olarak işaretli. Üzerine yazılmasını istediğinize emin misiniz?"
+msgid ""
+"%1\n"
+"is read-only. Override?"
+msgstr ""
+"%1\n"
+"salt okunur olarak işaretli. Üzerine yazılmasını istediğinize emin misiniz?"
 
 #, c-format
-msgid "Another application updated\n%1\nsince last scan.\n\nReload?"
-msgstr "WinMerge tarafından tarandıktan sonra\n%1\ndosyası başka bir uygulama tarafından değiştirilmiş.\n\nDosyanın yeniden yüklenmesini ister misiniz?"
+msgid ""
+"Another application updated\n"
+"%1\n"
+"since last scan.\n"
+"\n"
+"Reload?"
+msgstr ""
+"WinMerge tarafından tarandıktan sonra\n"
+"%1\n"
+"dosyası başka bir uygulama tarafından değiştirilmiş.\n"
+"\n"
+"Dosyanın yeniden yüklenmesini ister misiniz?"
 
 msgid "Save Left File As"
 msgstr "Sol dosyayı farklı kaydet"
@@ -2730,11 +3492,23 @@ msgid "Save Right File As"
 msgstr "Sağ dosyayı farklı kaydet"
 
 #, c-format
-msgid "File\n%1\nnot found. Save a copy to continue."
-msgstr "%1\ndosyası\nyok oldu. Devam etmek için dosyanın bir kopyasını kaydedin."
+msgid ""
+"File\n"
+"%1\n"
+"not found. Save a copy to continue."
+msgstr ""
+"%1\n"
+"dosyası\n"
+"yok oldu. Devam etmek için dosyanın bir kopyasını kaydedin."
 
-msgid "Cannot merge unsynched documents.\n\nRefresh before continuing."
-msgstr "Belgeler eşleştirilmeden, farklılıklar birleştirilemez.\n\nDevam etmeden önce belgeleri yenileyin."
+msgid ""
+"Cannot merge unsynched documents.\n"
+"\n"
+"Refresh before continuing."
+msgstr ""
+"Belgeler eşleştirilmeden, farklılıklar birleştirilemez.\n"
+"\n"
+"Devam etmeden önce belgeleri yenileyin."
 
 msgid "Break at whitespace"
 msgstr "Beyaz boşlukta kesilsin"
@@ -2811,8 +3585,12 @@ msgstr "Tümünü... (%1)"
 msgid "Differences to... (%1)"
 msgstr "Farklı olanları... (%1)"
 
-msgid "Some selected items are identical or skipped.\nCopy only items with differences?"
-msgstr "Seçilmiş bazı ögeler aynı ya da atlandı.\nYalnızca farkları olan ögeleri kopyalamak ister misiniz?"
+msgid ""
+"Some selected items are identical or skipped.\n"
+"Copy only items with differences?"
+msgstr ""
+"Seçilmiş bazı ögeler aynı ya da atlandı.\n"
+"Yalnızca farkları olan ögeleri kopyalamak ister misiniz?"
 
 #, c-format
 msgid "Left (%1)"
@@ -2852,8 +3630,14 @@ msgid "(%1 of %2 Files Affected)"
 msgstr "(%1 / %2 dosya etkilendi)"
 
 #, c-format
-msgid "Are you sure you want to delete\n\n%1 ?"
-msgstr "Şunu silmek istediğinize emin misiniz:\n\n%1 ?"
+msgid ""
+"Are you sure you want to delete\n"
+"\n"
+"%1 ?"
+msgstr ""
+"Şunu silmek istediğinize emin misiniz:\n"
+"\n"
+"%1 ?"
 
 msgid "Are you sure you want to copy?"
 msgstr "Kopyalamak istediğinize emin misiniz?"
@@ -2863,8 +3647,22 @@ msgid "Are you sure you want to copy %d items?"
 msgstr "%d ögeyi kopyalamak istediğinize emin misiniz?"
 
 #, c-format
-msgid "Operation aborted!\n\nFolder contents changed, path\n%1\nnot found.\n\nRefresh the compare."
-msgstr "İşlem iptal edildi!\n\nDiskteki klasör içerikleri değişmiş\n%1\nyolu bulunamadı.\n\nLütfen karşılaştırmayı yenileyin."
+msgid ""
+"Operation aborted!\n"
+"\n"
+"Folder contents changed, path\n"
+"%1\n"
+"not found.\n"
+"\n"
+"Refresh the compare."
+msgstr ""
+"İşlem iptal edildi!\n"
+"\n"
+"Diskteki klasör içerikleri değişmiş\n"
+"%1\n"
+"yolu bulunamadı.\n"
+"\n"
+"Lütfen karşılaştırmayı yenileyin."
 
 msgid "Are you sure you want to move?"
 msgstr "Taşımak istediğinize emin misiniz?"
@@ -2877,10 +3675,13 @@ msgid "Confirm Move"
 msgstr "Taşımayı onayla"
 
 msgid "Close the folder comparison window?"
-msgstr "Klasör karşılaştırma penceresini kapatmak üzeresiniz. Bunu yapmak istediğinize emin misiniz?"
+msgstr ""
+"Klasör karşılaştırma penceresini kapatmak üzeresiniz. Bunu yapmak istediğinize emin misiniz?"
 
 msgid "Close the folder comparison window, which took a long time?"
-msgstr "Önemli bir zaman harcanan klasör karşılaştırma penceresini kapatmak üzeresiniz. Bunu yapmak istediğinize emin misiniz?"
+msgstr ""
+"Önemli bir zaman harcanan klasör karşılaştırma penceresini kapatmak üzeresiniz. Bunu yapmak "
+"istediğinize emin misiniz?"
 
 msgid "The file or folder name is invalid."
 msgstr "Dosya ya da klasör adı geçersiz."
@@ -2892,8 +3693,12 @@ msgstr "%1 dış düzenleyicisi çalıştırılamadı"
 msgid "Unknown archive format"
 msgstr "Sıkıştırma biçimi bilinmiyor"
 
-msgid "Failed to extract archive.\nCompare as text file?"
-msgstr "Arşiv dosyaları ayıklanamadı.\nArşiv dosyalarını metin dosyaları olarak karşılaştırmak ister misiniz?"
+msgid ""
+"Failed to extract archive.\n"
+"Compare as text file?"
+msgstr ""
+"Arşiv dosyaları ayıklanamadı.\n"
+"Arşiv dosyalarını metin dosyaları olarak karşılaştırmak ister misiniz?"
 
 msgid "Filename"
 msgstr "Dosya adı"
@@ -3163,8 +3968,39 @@ msgid "Image files are different"
 msgstr "Görsel dosyaları farklı"
 
 #, c-format
+msgid "Files are different (expr: %1)"
+msgstr "Dosyalar farklı (ifade: %1)"
+
+#, c-format
 msgid "Group%d"
 msgstr "Grup%d"
+
+msgctxt "Options dialog|Compare|Folder|Detect renames and moves"
+msgid "Disabled"
+msgstr "Devre dışı"
+
+msgid "Detect renames"
+msgstr "Yeniden adlandırmaları algıla"
+
+msgid "Detect renames and moves"
+msgstr "Yeniden adlandırmaları ve taşımaları algıla"
+
+msgid "Renamed"
+msgstr "Yeniden adlandırıldı"
+
+msgid "Moved"
+msgstr "Taşındı"
+
+msgid "Renamed/Moved"
+msgstr "Yeniden adlandırıldı/Taşındı"
+
+#, c-format
+msgid "(%1 items)"
+msgstr "(%1 öge)"
+
+#, c-format
+msgid "%1 (set %2): "
+msgstr "%1 (%2 kümesi): "
 
 #, c-format
 msgid "Elapsed time: %ld ms"
@@ -3268,7 +4104,9 @@ msgid "Middle side encoding."
 msgstr "Ortadaki dosyanın kodlaması."
 
 msgid "Number of ignored differences in file. Ignored and cannot be merged."
-msgstr "Dosyada yok sayılan farkların sayısı. Bu farklar WinMerge tarafından yok sayılır ve birleştirilemez."
+msgstr ""
+"Dosyada yok sayılan farkların sayısı. Bu farklar WinMerge tarafından yok sayılır ve "
+"birleştirilemez."
 
 msgid "Number of differences in file (excluding ignored)."
 msgstr "Dosyadaki fark sayısı. Bu sayıya yok sayılan farklar katılmamıştır."
@@ -3306,8 +4144,12 @@ msgid "Report file already exists. Overwrite?"
 msgstr "Rapor dosyası zaten var. Üzerine yazılmasını ister misiniz?"
 
 #, c-format
-msgid "Error creating the report:\n%1"
-msgstr "Rapor hazırlanırken sorun çıktı:\n%1"
+msgid ""
+"Error creating the report:\n"
+"%1"
+msgstr ""
+"Rapor hazırlanırken sorun çıktı:\n"
+"%1"
 
 msgid "Report created successfully."
 msgstr "Rapor hazırlandı."
@@ -3321,14 +4163,50 @@ msgstr "İki panoda da de aynı dosya açıldı."
 msgid "Selected files are identical."
 msgstr "Seçilmiş dosyalar aynı."
 
+msgid ""
+"Selected files are identical (with current settings).\r\n"
+"Checking binary identity..."
+msgstr ""
+"Seçilen dosyalar özdeş (mevcut ayarlarla).\r\n"
+"İkili (binary) özdeşlik kontrol ediliyor…"
+
+msgid ""
+"Selected files are identical (with current settings).\r\n"
+"But binary comparison failed."
+msgstr ""
+"Seçilen dosyalar özdeş (mevcut ayarlarla).\r\n"
+"Ancak ikili (binary) karşılaştırma başarısız oldu."
+
+msgid "Selected files are identical (binary match)."
+msgstr "Seçilen dosyalar özdeş (ikili eşleşme)."
+
+msgid ""
+"Selected files are identical (with current settings).\r\n"
+"But differ at the binary level."
+msgstr ""
+"Seçilen dosyalar özdeş (mevcut ayarlarla).\r\n"
+"Ancak ikili (binary) düzeyde farklılar."
+
 msgid "An error occurred while comparing files."
 msgstr "Dosyalar karşılaştırılırken bir sorun çıktı."
 
 msgid "Could not create temporary files. Check your temporary path settings."
 msgstr "Geçici klasör oluşturulamadı. Geçici klasör yolu ayarlarınızı denetleyin."
 
-msgid "Files use different EOL.\n\nTreat all EOL as equivalent?\n\nSet 'Ignore EOL differences (Windows/Unix/Mac)' in Compare section of Options."
-msgstr "Bu dosyalar farklı satır sonu türleri kullanıyor.\n\nBu karşılaştırma için tüm satır sonu türlerinin aynı kabul edilmesini istiyor musunuz?\n\nNot: Genel olarak satır sonu türlerinin aynı kabul edilmesini istiyorsanız, Düzenle/Ayarlar menüsünden Karşılaştırma bölümüne giderek, 'Satır sonu farklılıkları yok sayılsın (Windows/Unix/Mac)' seçeneğini işaretleyin."
+msgid ""
+"Files use different EOL.\n"
+"\n"
+"Treat all EOL as equivalent?\n"
+"\n"
+"Set 'Ignore EOL differences (Windows/Unix/Mac)' in Compare section of Options."
+msgstr ""
+"Bu dosyalar farklı satır sonu türleri kullanıyor.\n"
+"\n"
+"Bu karşılaştırma için tüm satır sonu türlerinin aynı kabul edilmesini istiyor musunuz?\n"
+"\n"
+"Not: Genel olarak satır sonu türlerinin aynı kabul edilmesini istiyorsanız, Düzenle/Ayarlar "
+"menüsünden Karşılaştırma bölümüne giderek, 'Satır sonu farklılıkları yok sayılsın (Windows/"
+"Unix/Mac)' seçeneğini işaretleyin."
 
 msgid "Selected folder is invalid."
 msgstr "Seçilmiş klasör geçersiz."
@@ -3337,8 +4215,16 @@ msgid "Cannot open a binary file in Editor."
 msgstr "Bir binary dosyası düzenleyicide açılamaz."
 
 #, c-format
-msgid "Create matching folder:\n%1\non the other side and open?"
-msgstr "Klasör yalnızca karşı tarafta bulunduğundan açılamaz.\n\nDiğer tarafa aynı klasörü oluşturmak :\n%1\nve bu klasörleri açmak istiyor musunuz?"
+msgid ""
+"Create matching folder:\n"
+"%1\n"
+"on the other side and open?"
+msgstr ""
+"Klasör yalnızca karşı tarafta bulunduğundan açılamaz.\n"
+"\n"
+"Diğer tarafa aynı klasörü oluşturmak :\n"
+"%1\n"
+"ve bu klasörleri açmak istiyor musunuz?"
 
 msgid "Copy all differences to other file?"
 msgstr "Tüm farkları diğer dosyaya kopyalamak istediğinize emin misiniz?"
@@ -3362,8 +4248,16 @@ msgid "Move to last file?"
 msgstr "Son dosyaya geçmek ister misiniz?"
 
 #, c-format
-msgid "Different codepages: left (cp%d), right (cp%d).\nDisplay in codepage (better display) or default Windows codepage (safer merging)?\n(Recommended: default Windows codepage)"
-msgstr "Sol panodaki (cp%d) ve sağ panodaki (cp%d) dosyaların kod sayfaları farklı.\nDosyalar kendi kod sayfalarında daha iyi bir görüntülenir ancak birleştirme/kopyalama işlemleri tehlikeli olur.\nDosyaların varsayılan Windows kod sayfasını kullanıyormuş gibi işlenmesini ister misiniz (önerilir)?"
+msgid ""
+"Different codepages: left (cp%d), right (cp%d).\n"
+"Display in codepage (better display) or default Windows codepage (safer merging)?\n"
+"(Recommended: default Windows codepage)"
+msgstr ""
+"Sol panodaki (cp%d) ve sağ panodaki (cp%d) dosyaların kod sayfaları farklı.\n"
+"Dosyalar kendi kod sayfalarında daha iyi bir görüntülenir ancak birleştirme/kopyalama "
+"işlemleri tehlikeli olur.\n"
+"Dosyaların varsayılan Windows kod sayfasını kullanıyormuş gibi işlenmesini ister misiniz "
+"(önerilir)?"
 
 msgid "Information lost due to encoding errors: both files"
 msgstr "Kodlama sorunları yüzünden iki dosyada da bilgi kaybı oldu"
@@ -3395,8 +4289,12 @@ msgid "Entering Merge Mode. Press F9 to turn off."
 msgstr "Birleştirme kipine geçiyorsunuz. Birleştirme kipinden çıkmak için F9 tuşuna basın."
 
 #, c-format
-msgid "Automatic merges: %1\nUnresolved conflicts: %2"
-msgstr "Otomatik olarak birleştirilen değişiklik sayısı: %1\nÇözümlenmemiş çelişki sayısı: %2"
+msgid ""
+"Automatic merges: %1\n"
+"Unresolved conflicts: %2"
+msgstr ""
+"Otomatik olarak birleştirilen değişiklik sayısı: %1\n"
+"Çözümlenmemiş çelişki sayısı: %2"
 
 msgid "Codepage change merged."
 msgstr "Kod sayfası değişikliği birleştirildi."
@@ -3455,14 +4353,27 @@ msgstr "Bir çıktı dosyası belirtin."
 msgid "Cannot create patch from binary files."
 msgstr "Binary dosyalarından, yama dosyası hazırlanamaz."
 
-msgid "Save all files first.\n\nCreating a patch requires no unsaved changes."
-msgstr "Lütfen önce tüm dosyaları kaydedin.\n\nBir yama hazırlamak için dosyalardaki değişikliklerin kaydedilmiş olması gerekir."
+msgid ""
+"Save all files first.\n"
+"\n"
+"Creating a patch requires no unsaved changes."
+msgstr ""
+"Lütfen önce tüm dosyaları kaydedin.\n"
+"\n"
+"Bir yama hazırlamak için dosyalardaki değişikliklerin kaydedilmiş olması gerekir."
 
 msgid "Folder does not exist."
 msgstr "Klasör bulunamadı."
 
-msgid "Archive support not enabled.\n7-Zip and/or Merge7z*.dll not found.\nSee manual for archive support."
-msgstr "Sıkıştırılmış dosya desteği etkinleştirilmemiş.\nSıkıştırılmış dosya desteği için gereken bileşenler bulunamadı (7-Zip ya da Merge7z*.dll).\nSıkıştırılmış dosya desteği ve nasıl etkinleştirileceği ile ilgili ayrıntılı bilgi almak için kullanım kitabına bakabilirsiniz."
+msgid ""
+"Archive support not enabled.\n"
+"7-Zip and/or Merge7z*.dll not found.\n"
+"See manual for archive support."
+msgstr ""
+"Sıkıştırılmış dosya desteği etkinleştirilmemiş.\n"
+"Sıkıştırılmış dosya desteği için gereken bileşenler bulunamadı (7-Zip ya da Merge7z*.dll).\n"
+"Sıkıştırılmış dosya desteği ve nasıl etkinleştirileceği ile ilgili ayrıntılı bilgi almak için "
+"kullanım kitabına bakabilirsiniz."
 
 msgid "Select file for export"
 msgstr "Dışa aktarılacak dosyayı seçin"
@@ -3482,8 +4393,14 @@ msgstr "Ayarlar dosyadan içe aktarılamadı."
 msgid "Failed to write options to file."
 msgstr "Ayarlar dosyaya dışa aktarılamadı."
 
-msgid "Close multiple compare windows?\n\nContinue?"
-msgstr "Birden fazla karşılaştırma penceresini kapatmak üzeresiniz.\n\nDevam etmek istiyor musunuz?"
+msgid ""
+"Close multiple compare windows?\n"
+"\n"
+"Continue?"
+msgstr ""
+"Birden fazla karşılaştırma penceresini kapatmak üzeresiniz.\n"
+"\n"
+"Devam etmek istiyor musunuz?"
 
 msgid "Mixed"
 msgstr "Karma"
@@ -3508,71 +4425,156 @@ msgstr "Tür"
 msgid "Editor script"
 msgstr "Düzenleyici betiği"
 
-msgid "\nDifference in Current Line (F4)"
-msgstr "\nGeçerli satırdaki fark (F4)"
+msgid ""
+"\n"
+"Difference in Current Line (F4)"
+msgstr ""
+"\n"
+"Geçerli satırdaki fark (F4)"
 
-msgid "\nOptions"
-msgstr "\nAyarlar"
+msgid ""
+"\n"
+"Options"
+msgstr ""
+"\n"
+"Ayarlar"
 
-msgid "\nRefresh (F5)"
-msgstr "\nYenile (F5)"
+msgid ""
+"\n"
+"Refresh (F5)"
+msgstr ""
+"\n"
+"Yenile (F5)"
 
-msgid "\nPrevious Difference (Alt+Up)"
-msgstr "\nÖnceki fark (Alt+Yukarı)"
+msgid ""
+"\n"
+"Previous Difference (Alt+Up)"
+msgstr ""
+"\n"
+"Önceki fark (Alt+Yukarı)"
 
-msgid "\nNext Difference (Alt+Down)"
-msgstr "\nSonraki fark (Alt+Aşağı)"
+msgid ""
+"\n"
+"Next Difference (Alt+Down)"
+msgstr ""
+"\n"
+"Sonraki fark (Alt+Aşağı)"
 
-msgid "\nPrevious Conflict (Alt+Shift+Up)"
-msgstr "\nÖnceki çelişki (Alt+Shift+Yukarı)"
+msgid ""
+"\n"
+"Previous Conflict (Alt+Shift+Up)"
+msgstr ""
+"\n"
+"Önceki çelişki (Alt+Shift+Yukarı)"
 
-msgid "\nNext Conflict (Alt+Shift+Down)"
-msgstr "\nSonraki çelişki (Alt+Shift+Aşağı)"
+msgid ""
+"\n"
+"Next Conflict (Alt+Shift+Down)"
+msgstr ""
+"\n"
+"Sonraki çelişki (Alt+Shift+Aşağı)"
 
-msgid "\nFirst Difference (Alt+Home)"
-msgstr "\nİlk fark (Alt+Home)"
+msgid ""
+"\n"
+"First Difference (Alt+Home)"
+msgstr ""
+"\n"
+"İlk fark (Alt+Home)"
 
-msgid "\nCurrent Difference (Alt+Enter)"
-msgstr "\nİmleçteki fark (Alt+Enter)"
+msgid ""
+"\n"
+"Current Difference (Alt+Enter)"
+msgstr ""
+"\n"
+"İmleçteki fark (Alt+Enter)"
 
-msgid "\nLast Difference (Alt+End)"
-msgstr "\nSon fark (Alt+End)"
+msgid ""
+"\n"
+"Last Difference (Alt+End)"
+msgstr ""
+"\n"
+"Son fark (Alt+End)"
 
-msgid "\nCopy to Right (Alt+Right)"
-msgstr "\nSağa kopyala (Alt+Sağa)"
+msgid ""
+"\n"
+"Copy to Right (Alt+Right)"
+msgstr ""
+"\n"
+"Sağa kopyala (Alt+Sağa)"
 
-msgid "\nCopy to Left (Alt+Left)"
-msgstr "\nSola kopyala (Alt+Sola)"
+msgid ""
+"\n"
+"Copy to Left (Alt+Left)"
+msgstr ""
+"\n"
+"Sola kopyala (Alt+Sola)"
 
-msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)"
-msgstr "\nSağa kopyala ve ilerle (Ctrl+Alt+Sağa)"
+msgid ""
+"\n"
+"Copy to Right and Advance (Ctrl+Alt+Right)"
+msgstr ""
+"\n"
+"Sağa kopyala ve ilerle (Ctrl+Alt+Sağa)"
 
-msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)"
-msgstr "\nSola kopyala ve ilerle (Ctrl+Alt+Sola)"
+msgid ""
+"\n"
+"Copy to Left and Advance (Ctrl+Alt+Left)"
+msgstr ""
+"\n"
+"Sola kopyala ve ilerle (Ctrl+Alt+Sola)"
 
-msgid "\nCopy All to Right"
-msgstr "\nTü&münü sağa kopyala"
+msgid ""
+"\n"
+"Copy All to Right"
+msgstr ""
+"\n"
+"Tü&münü sağa kopyala"
 
-msgid "\nCopy All to Left"
-msgstr "\n&Tümünü sola kopyala"
+msgid ""
+"\n"
+"Copy All to Left"
+msgstr ""
+"\n"
+"&Tümünü sola kopyala"
 
-msgid "\nAuto Merge (Ctrl+Alt+M)"
-msgstr "\nOtomatik karşılaştır (Ctrl+Alt+M)"
+msgid ""
+"\n"
+"Auto Merge (Ctrl+Alt+M)"
+msgstr ""
+"\n"
+"Otomatik karşılaştır (Ctrl+Alt+M)"
 
-msgid "\nFirst File"
-msgstr "\nİlk dosya"
+msgid ""
+"\n"
+"First File"
+msgstr ""
+"\n"
+"İlk dosya"
 
-msgid "\nNext File (Ctrl+F8)"
-msgstr "\nSonraki dosya (Ctrl+F8)"
+msgid ""
+"\n"
+"Next File (Ctrl+F8)"
+msgstr ""
+"\n"
+"Sonraki dosya (Ctrl+F8)"
 
-msgid "\nLast File"
-msgstr "\nSon dosya"
+msgid ""
+"\n"
+"Last File"
+msgstr ""
+"\n"
+"Son dosya"
 
-msgid "\nPrevious File (Ctrl+F7)"
-msgstr "\nÖnceki dosya (Ctrl+F7)"
+msgid ""
+"\n"
+"Previous File (Ctrl+F7)"
+msgstr ""
+"\n"
+"Önceki dosya (Ctrl+F7)"
 
 msgid "Adapted unpacker applied to both files (one needs extension)."
-msgstr "Uyarlanan ayıklayıcı iki dosyaya da uygulandı (yalnızca bir dosya bu eklentiye gerek duyuyor)."
+msgstr ""
+"Uyarlanan ayıklayıcı iki dosyaya da uygulandı (yalnızca bir dosya bu eklentiye gerek duyuyor)."
 
 msgid "No Prediffer (Normal)"
 msgstr "Ön farklılaştırıcı yok (normal)"
@@ -3591,8 +4593,15 @@ msgid "Your software is up to date."
 msgstr "Uygulamanız güncel."
 
 #, c-format
-msgid "WinMerge update available.\n%1 available (you have %2). Download now?"
-msgstr "Yeni bir WinMerge sürümü yayınlanmış.\n%1 sürümünü indirmek ister misiniz (%2 sürümünü kullanıyorsunuz)?"
+msgid ""
+"WinMerge update available.\n"
+"%1 available (you have %2). Download now?"
+msgstr ""
+"Yeni bir WinMerge sürümü yayınlanmış.\n"
+"%1 sürümünü indirmek ister misiniz (%2 sürümünü kullanıyorsunuz)?"
+
+msgid " - All rights reserved."
+msgstr " - Her hakkı saklıdır."
 
 msgid "Failed to download latest version information"
 msgstr "Son sürüm bilgisi alınamadı"
@@ -3610,8 +4619,9 @@ msgstr "%1. &satıra git"
 msgid "Go to Moved Line\tCtrl+Shift+G"
 msgstr "Taşınmış satıra git\tCtrl+Shift+G"
 
+msgctxt "Options dialog|General|Open dialog Auto completion"
 msgid "Disabled"
-msgstr "Etkisizleştirildi"
+msgstr "Engelli"
 
 msgid "From file system"
 msgstr "Dosya sisteminden"
@@ -3652,6 +4662,7 @@ msgstr "İnternet &sayfası"
 msgid "W&rap Text"
 msgstr "&Metin kaydırılsın"
 
+#, c-format
 msgid "%1 is not installed."
 msgstr "%1 kurulmamış."
 
@@ -3662,23 +4673,29 @@ msgstr "%1 bulunamadı. Oluşturmak ister misiniz?"
 msgid "Failed to create folder."
 msgstr "Klasör oluşturulamadı."
 
-msgid "Parameters:\n$file: Current file path\n$linenum: Current cursor line number"
-msgstr "Yolda şu parametreler kullanılabilir:\n$file: Geçerli dosyasının yol adı\n$linenum: Geçerli imleç konumunun satır numarası"
+msgid ""
+"Parameters:\n"
+"$file: Current file path\n"
+"$linenum: Current cursor line number"
+msgstr ""
+"Yolda şu parametreler kullanılabilir:\n"
+"$file: Geçerli dosyasının yol adı\n"
+"$linenum: Geçerli imleç konumunun satır numarası"
 
 msgid "default"
-msgstr "Varsayılan"
+msgstr "varsayılan"
 
 msgid "minimal"
-msgstr "En az"
+msgstr "en az"
 
 msgid "patience"
-msgstr "Sabırlı"
+msgstr "tahammül"
 
 msgid "histogram"
-msgstr "Histogram"
+msgstr "çubuk grafik"
 
 msgid "none"
-msgstr "Yok"
+msgstr "yok"
 
 msgid "GDI"
 msgstr "GDI"
@@ -3700,6 +4717,10 @@ msgstr "DirectWrite doğal"
 
 msgid "DirectWrite Natural Symmetric"
 msgstr "DirectWrite doğal simetrik"
+
+msgctxt "Options dialog|General|Close windows with Esc"
+msgid "Disabled"
+msgstr "Engelli"
 
 msgid "MDI child window or main window"
 msgstr "MDI alt penceresini ya da ana pencereyi"
@@ -3833,17 +4854,28 @@ msgstr "Satır satır konum ve metin"
 msgid "Word-by-word position and text"
 msgstr "Sözcük sözcük konum ve metin"
 
-msgid "AppData folder"
-msgstr "AppData klasörü"
+msgid "AppData (Roaming) folder"
+msgstr "AppData (Roaming) klasörü"
 
 msgid "Install folder"
 msgstr "Kurulum klasörü"
+
+msgid "Documents folder"
+msgstr "Belgeler klasörü"
+
+msgctxt "Options dialog|General|Single instance mode"
+msgid "Disabled"
+msgstr "Engelli"
 
 msgid "Allow only one instance to run"
 msgstr "Yalnızca bir kopya çalışsın"
 
 msgid "Allow only one instance; wait for termination"
 msgstr "Yalnızca bir kopyanın çalışsın ve kopyanın sonlandırılması beklensin"
+
+msgctxt "Options dialog|General|Auto-reload modified files"
+msgid "Disabled"
+msgstr "Engelli"
 
 msgid "Only on window activated"
 msgstr "Yalnızca pencere etkinleştirildiğinde"
@@ -3886,7 +4918,9 @@ msgstr "'%1' bir ön farklılaştırıcı eklentisi değil"
 
 #, c-format
 msgid "Error prediffing '%1' with '%2'. Prediffing disabled."
-msgstr "'%1' dosyasında '%2' eklentisi ile ön farklılaştırma yapılırken bir sorun çıktı. Artık ön farklılaştırma uygulanamıyor."
+msgstr ""
+"'%1' dosyasında '%2' eklentisi ile ön farklılaştırma yapılırken bir sorun çıktı. Artık ön "
+"farklılaştırma uygulanamıyor."
 
 #, c-format
 msgid "Circular reference in plugin pipeline: %1"
@@ -3942,11 +4976,20 @@ msgid "Filter applied"
 msgstr "Süzgeç uygulandı"
 
 #, c-format
+msgid "Compare %1"
+msgstr "%1’i karşılaştır"
+
+#, c-format
 msgid "Clipboard at %s"
 msgstr "%s zamanındaki pano"
 
-msgid "Clipboard history disabled.\r\nEnable: Windows logo key + V, then Turn on."
-msgstr "Pano geçmişi devre dışı bırakılmış.\r\nPano geçmişini etkinleştirmek için, Windows + V tuşlarına basıp açılan pencerede Aç üzerine tıklayın."
+msgid ""
+"Clipboard history disabled.\r\n"
+"Enable: Windows logo key + V, then Turn on."
+msgstr ""
+"Pano geçmişi devre dışı bırakılmış.\r\n"
+"Pano geçmişini etkinleştirmek için, Windows + V tuşlarına basıp açılan pencerede Aç üzerine "
+"tıklayın."
 
 msgid "This system does not support clipboard history."
 msgstr "Bu sistemde pano geçmişi özelliği yok."
@@ -4011,65 +5054,211 @@ msgstr "Satır"
 msgid "Character"
 msgstr "Karakter"
 
-msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
-msgstr "\nÖnceki fark (Alt+Yukarı)\n(Sağ Tuş+Tekerlek Yukarı)\n(Alt+Tekerlek Yukarı)"
+msgid ""
+"\n"
+"Previous Difference (Alt+Up)\n"
+"(Right Button+Wheel Up)\n"
+"(Alt+Wheel Up)"
+msgstr ""
+"\n"
+"Önceki fark (Alt+Yukarı)\n"
+"(Sağ Tuş+Tekerlek Yukarı)\n"
+"(Alt+Tekerlek Yukarı)"
 
-msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
-msgstr "\nSonraki fark (Alt+Aşağı)\n(Sağ Tuş+Tekerlek Aşağı)\n(Alt+Tekerlek Aşağı)"
+msgid ""
+"\n"
+"Next Difference (Alt+Down)\n"
+"(Right Button+Wheel Down)\n"
+"(Alt+Wheel Down)"
+msgstr ""
+"\n"
+"Sonraki fark (Alt+Aşağı)\n"
+"(Sağ Tuş+Tekerlek Aşağı)\n"
+"(Alt+Tekerlek Aşağı)"
 
-msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
-msgstr "\nSağa kopyala (Alt+Sağ)\n(Sağ Tuş+Tekerlek Sağa)\n(Alt+Tekerlek Sağa)\n(Alt+Shift+Tekerlek Aşağı)"
+msgid ""
+"\n"
+"Copy to Right (Alt+Right)\n"
+"(Right Button+Wheel Right)\n"
+"(Alt+Wheel Right)\n"
+"(Alt+Shift+Wheel Down)"
+msgstr ""
+"\n"
+"Sağa kopyala (Alt+Sağ)\n"
+"(Sağ Tuş+Tekerlek Sağa)\n"
+"(Alt+Tekerlek Sağa)\n"
+"(Alt+Shift+Tekerlek Aşağı)"
 
-msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
-msgstr "\nSola kopyala (Alt+Sol)\n(Sağ Tuş+Tekerlek Sola)\n(Alt+Tekerlek Sola)\n(Alt+Shift+Tekerlek Yukarı)"
+msgid ""
+"\n"
+"Copy to Left (Alt+Left)\n"
+"(Right Button+Wheel Left)\n"
+"(Alt+Wheel Left)\n"
+"(Alt+Shift+Wheel Up)"
+msgstr ""
+"\n"
+"Sola kopyala (Alt+Sol)\n"
+"(Sağ Tuş+Tekerlek Sola)\n"
+"(Alt+Tekerlek Sola)\n"
+"(Alt+Shift+Tekerlek Yukarı)"
 
-msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
-msgstr "\nSağa kopyala ve ilerle (Ctrl+Alt+Sağ)\n(Ctrl+Alt+Tekerlek Sağa)\n(Ctrl+Alt+Shift+Tekerlek Aşağı)"
+msgid ""
+"\n"
+"Copy to Right and Advance (Ctrl+Alt+Right)\n"
+"(Ctrl+Alt+Wheel Right)\n"
+"(Ctrl+Alt+Shift+Wheel Down)"
+msgstr ""
+"\n"
+"Sağa kopyala ve ilerle (Ctrl+Alt+Sağ)\n"
+"(Ctrl+Alt+Tekerlek Sağa)\n"
+"(Ctrl+Alt+Shift+Tekerlek Aşağı)"
 
-msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
-msgstr "\nSola kopyala ve ilerle (Ctrl+Alt+Sol)\n(Ctrl+Alt+Tekerlek Sola)\n(Ctrl+Alt+Shift+Tekerlek Yukarı)"
+msgid ""
+"\n"
+"Copy to Left and Advance (Ctrl+Alt+Left)\n"
+"(Ctrl+Alt+Wheel Left)\n"
+"(Ctrl+Alt+Shift+Wheel Up)"
+msgstr ""
+"\n"
+"Sola kopyala ve ilerle (Ctrl+Alt+Sol)\n"
+"(Ctrl+Alt+Tekerlek Sola)\n"
+"(Ctrl+Alt+Shift+Tekerlek Yukarı)"
 
 #, c-format
 msgid "Comparing %1 with %2"
-msgstr ""
+msgstr "%1 ile %2 karşılaştırılıyor"
 
 #, c-format
 msgid "Comparing %1 with %2 and %3"
-msgstr ""
+msgstr "%1 ile %2 ve %3 ile karşılaştırılıyor"
 
 msgid "Comparison completed"
-msgstr ""
+msgstr "Karşılaştırma tamamlandı"
 
 #, c-format
 msgid "Failed to compare %1 with %2: "
-msgstr ""
+msgstr "%1 ile %2 karşılaştırılamadı: "
 
 #, c-format
 msgid "Failed to compare %1 with %2 and %3: "
-msgstr ""
+msgstr "%1 ile %2 ve %3 karşılaştırılamadı: "
 
 msgid "File saved"
-msgstr ""
+msgstr "Dosya kaydedildi"
 
 msgid "Copying files..."
-msgstr ""
+msgstr "Dosyalar kopyalanıyor..."
 
 msgid "Moving files..."
-msgstr ""
+msgstr "Dosyalar taşınıyor..."
 
 msgid "Deleting files..."
-msgstr ""
+msgstr "Dosyalar siliniyor..."
 
 msgid "Recycle Bin"
-msgstr ""
+msgstr "Geri Dönüşüm Kutusu"
 
 msgid "Permanently deleted"
-msgstr ""
+msgstr "Kalıcı olarak silindi"
 
 msgid "File operation completed successfully"
-msgstr ""
+msgstr "Dosya işlemi başarıyla tamamlandı"
 
 msgid "File operation canceled"
+msgstr "Dosya işlemi iptal edildi"
+
+msgid "No error"
+msgstr "Hata yok"
+
+msgid "Filter expression is empty"
+msgstr "Filtre ifadesi boş"
+
+msgid "Unknown character in filter expression"
+msgstr "Filtre ifadesinde bilinmeyen karakter"
+
+msgid "Unterminated string literal"
+msgstr "Sonlandırılmamış dize sabiti"
+
+msgid "Syntax error in filter expression"
+msgstr "Filtre ifadesinde söz dizimi hatası"
+
+msgid "Failed to parse filter expression"
+msgstr "Filtre ifadesi ayrıştırılamadı"
+
+msgid "Invalid literal value"
+msgstr "Geçersiz sabit değer"
+
+msgid "Invalid regular expression"
+msgstr "Geçersiz düzenli ifade"
+
+msgid "Undefined identifier"
+msgstr "Tanımsız tanımlayıcı"
+
+msgid "Invalid number of arguments"
+msgstr "Geçersiz argüman sayısı"
+
+msgid "Filter name not found"
+msgstr "Filtre adı bulunamadı"
+
+msgid "Division by zero in filter expression"
+msgstr "Filtre ifadesinde sıfıra bölme işlemi"
+
+msgid "Unknown error"
+msgstr "Bilinmeyen hata"
+
+msgid "Invalid property name"
+msgstr "Geçersiz özellik adı"
+
+msgid "Equals"
+msgstr "Eşittir"
+
+msgid "Does not equal"
+msgstr "Eşit değil"
+
+msgid "Less than"
+msgstr "Daha az"
+
+msgid "Less than or equal to"
+msgstr "Küçük veya eşit"
+
+msgid "Greater than or equal to"
+msgstr "Büyük veya eşit"
+
+msgid "Greater than"
+msgstr "Daha büyük"
+
+msgid "Between"
+msgstr "Arasında"
+
+msgid "Not Between"
+msgstr "Arasında değil"
+
+msgid "Contains"
+msgstr "İçerir"
+
+msgid "Not Contains"
+msgstr "İçermez"
+
+msgid "Contains (regex)"
+msgstr "İçerir (regex)"
+
+msgid "Not Contains (regex)"
+msgstr "İçermez (regex)"
+
+msgid "Light"
+msgstr "Aydınlık"
+
+msgid "Dark"
+msgstr "Karanlık"
+
+msgid "Follow system"
+msgstr "Sistem ayarını seç"
+
+#, c-format
+msgid "e.g. %1"
+msgstr "örn. %1"
+
+msgid "WinMerge detected a previous crash. Please report this if possible."
 msgstr ""
 
 msgid "Prettification"
@@ -4240,72 +5429,198 @@ msgstr "Sütunları tersine çevir"
 msgid "Reverse lines"
 msgstr "Satırları tersine çevir"
 
-msgid "Replace text.\r\nUsage: Replace [-i] [-e] FIND REPLACE\r\n or: Replace -s\r\n FIND - text to find\r\n REPLACE - text to replace\r\n -i - ignore case (only for -e)\r\n -e - regex\r\n -s - use Substitution Filters"
-msgstr "Metni başka bir metin ile değiştirir.\r\nKullanımı: Replace [-i] [-e] FIND REPLACE\r\n  or: Replace -s\r\n  FIND    - Aranacak metin\r\n  REPLACE - Değiştirilecek metin\r\n  -i - Büyük/küçük harf yok sayılır (yalnızca -e için)\r\ns  -e - Belirtilen metin kurallı ifade olarak işlenir\r\n -s - use Substitution Filters"
+msgid ""
+"Replace text.\r\n"
+"Usage: Replace [-i] [-e] FIND REPLACE\r\n"
+" or: Replace -s\r\n"
+" FIND - text to find\r\n"
+" REPLACE - text to replace\r\n"
+" -i - ignore case (only for -e)\r\n"
+" -e - regex\r\n"
+" -s - use Substitution Filters"
+msgstr ""
+"Metni başka bir metin ile değiştirir.\r\n"
+"Kullanımı: Replace [-i] [-e] FIND REPLACE\r\n"
+"  or: Replace -s\r\n"
+"  FIND    - Aranacak metin\r\n"
+"  REPLACE - Değiştirilecek metin\r\n"
+"  -i - Büyük/küçük harf yok sayılır (yalnızca -e için)\r\n"
+"s  -e - Belirtilen metin kurallı ifade olarak işlenir\r\n"
+" -s - use Substitution Filters"
 
 #, c-format
-msgid "Apply filter. \r\nUsage: ExecFilterCommand COMMAND\r\n COMMAND - command to execute. %1 = filename."
-msgstr "Süzgeç komutunu uygular. \r\nKullanımı: ExecFilterCommand KOMUT\r\n  KOMUT - Yürütülecek komut. Komut içindeki %1 dosya adı ile değiştirilir."
+msgid ""
+"Apply filter. \r\n"
+"Usage: ExecFilterCommand COMMAND\r\n"
+" COMMAND - command to execute. %1 = filename."
+msgstr ""
+"Süzgeç komutunu uygular. \r\n"
+"Kullanımı: ExecFilterCommand KOMUT\r\n"
+"  KOMUT - Yürütülecek komut. Komut içindeki %1 dosya adı ile değiştirilir."
 
-msgid "Tokenize. \r\nUsage: Tokenize PATTERNS\r\n PATTERNS - regex (e.g. [^\\w]+)"
-msgstr "Seçimi koda dönüştürür. \r\nKullanımı: Tokenize MODELLER\r\n  MODELLER - Koda dönüştürmek için kullanılacak kurallı ifade. ([^\\w]+ gibi)"
+msgid ""
+"Tokenize. \r\n"
+"Usage: Tokenize PATTERNS\r\n"
+" PATTERNS - regex (e.g. [^\\w]+)"
+msgstr ""
+"Seçimi koda dönüştürür. \r\n"
+"Kullanımı: Tokenize MODELLER\r\n"
+"  MODELLER - Koda dönüştürmek için kullanılacak kurallı ifade. ([^\\w]+ gibi)"
 
 msgid "Trim spaces"
 msgstr "Başta ve sondaki boşlukları sil"
 
-msgid "Select columns.\r\nUsage: SelectColumns RANGES\r\n or: SelectColumns [-v] [-i] [-g] -e PATTERNS\r\n RANGES - column ranges (-3,5-10,30-)\r\n PATTERNS - regex\r\n -v - select non-matching\r\n -i - ignore case\r\n -g - enable global flag\r\n -e - use PATTERNS"
-msgstr "Bazı sütunları seçer.\r\nKullanımı: SelectColumns ARALIKLAR\r\n   ya da: SelectColumns [-v] [-i] [-g] -e MODELLER\r\n  ARALIKLAR   - Seçilecek sütun aralıklarının listesi. (-3,5-10,30- gibi)\r\n  MODELLER - Kurallı ifade\r\n  -v - Eşleşmeyen sütunları seçer\r\n  -i - Büyük/küçük harfi yok sayar\r\n  -g - Genel işareti etkinleştirir\r\n  -e - Eşleştirmek için MODELLERİ kullanır"
+msgid ""
+"Select columns.\r\n"
+"Usage: SelectColumns RANGES\r\n"
+" or: SelectColumns [-v] [-i] [-g] -e PATTERNS\r\n"
+" RANGES - column ranges (-3,5-10,30-)\r\n"
+" PATTERNS - regex\r\n"
+" -v - select non-matching\r\n"
+" -i - ignore case\r\n"
+" -g - enable global flag\r\n"
+" -e - use PATTERNS"
+msgstr ""
+"Bazı sütunları seçer.\r\n"
+"Kullanımı: SelectColumns ARALIKLAR\r\n"
+"   ya da: SelectColumns [-v] [-i] [-g] -e MODELLER\r\n"
+"  ARALIKLAR   - Seçilecek sütun aralıklarının listesi. (-3,5-10,30- gibi)\r\n"
+"  MODELLER - Kurallı ifade\r\n"
+"  -v - Eşleşmeyen sütunları seçer\r\n"
+"  -i - Büyük/küçük harfi yok sayar\r\n"
+"  -g - Genel işareti etkinleştirir\r\n"
+"  -e - Eşleştirmek için MODELLERİ kullanır"
 
-msgid "Select lines.\r\nUsage: SelectLines RANGES\r\n or: SelectLines [-v] [-i] -e PATTERNS\r\n RANGES - line ranges (-3,5-10,30-)\r\n PATTERNS - regex\r\n -v - select non-matching\r\n -i - ignore case\r\n -e - use PATTERNS"
-msgstr "Bazı satırları seçer.\r\nKullanımı: SelectLines ARALIKLAR\r\n   ya da: SelectLines [-v] [-i] -e MODELLER\r\n  ARALIKLAR   - Seçilecek satır aralıklarının listesi. (-3,5-10,30- gibi)\r\n  MODELLER - Kurallı ifade\r\n  -v - Eşleşmeyen sütunları seçer\r\n  -i - Büyük/küçük harfi yok sayar\r\n  -e - Eşleştirmek için MODELLERİ kullanır"
+msgid ""
+"Select lines.\r\n"
+"Usage: SelectLines RANGES\r\n"
+" or: SelectLines [-v] [-i] -e PATTERNS\r\n"
+" RANGES - line ranges (-3,5-10,30-)\r\n"
+" PATTERNS - regex\r\n"
+" -v - select non-matching\r\n"
+" -i - ignore case\r\n"
+" -e - use PATTERNS"
+msgstr ""
+"Bazı satırları seçer.\r\n"
+"Kullanımı: SelectLines ARALIKLAR\r\n"
+"   ya da: SelectLines [-v] [-i] -e MODELLER\r\n"
+"  ARALIKLAR   - Seçilecek satır aralıklarının listesi. (-3,5-10,30- gibi)\r\n"
+"  MODELLER - Kurallı ifade\r\n"
+"  -v - Eşleşmeyen sütunları seçer\r\n"
+"  -i - Büyük/küçük harfi yok sayar\r\n"
+"  -e - Eşleştirmek için MODELLERİ kullanır"
 
-msgid "HTML Prettier (tidy-html5).\r\nArguments: tidy command line options."
-msgstr "HTML iyileştirici: tidy-html5. \r\nParametreler: Tidy komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"HTML Prettier (tidy-html5).\r\n"
+"Arguments: tidy command line options."
+msgstr ""
+"HTML iyileştirici: tidy-html5. \r\n"
+"Parametreler: Tidy komutuna aktarılacak komut satırı parametreleri."
 
-msgid "JSON Prettier (jq).\r\nArguments: jq filter/command line options."
-msgstr "JSON iyileştirici: jq komutu. \r\nParametreler: jq komutuna aktarılacak süzgeç ya da komut satırı parametreleri."
+msgid ""
+"JSON Prettier (jq).\r\n"
+"Arguments: jq filter/command line options."
+msgstr ""
+"JSON iyileştirici: jq komutu. \r\n"
+"Parametreler: jq komutuna aktarılacak süzgeç ya da komut satırı parametreleri."
 
-msgid "XML Prettier (tidy-html5).\r\nArguments: tidy command line options."
-msgstr "XML iyileştirici: tidy-html5. \r\nParametreler: Tidy komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"XML Prettier (tidy-html5).\r\n"
+"Arguments: tidy command line options."
+msgstr ""
+"XML iyileştirici: tidy-html5. \r\n"
+"Parametreler: Tidy komutuna aktarılacak komut satırı parametreleri."
 
-msgid "YAML Prettier (yq).\r\nArguments: yq filter/command line options."
-msgstr "YAML iyileştirici: yq komutu. \r\nParametreler: yq komutuna aktarılacak süzgeç ya da komut satırı parametreleri."
+msgid ""
+"YAML Prettier (yq).\r\n"
+"Arguments: yq filter/command line options."
+msgstr ""
+"YAML iyileştirici: yq komutu. \r\n"
+"Parametreler: yq komutuna aktarılacak süzgeç ya da komut satırı parametreleri."
 
-msgid "Graphviz Previewer.\r\nArguments: dot command line options."
-msgstr "Graphviz ön izleyici. \r\nParametreler: Dot komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"Graphviz Previewer.\r\n"
+"Arguments: dot command line options."
+msgstr ""
+"Graphviz ön izleyici. \r\n"
+"Parametreler: Dot komutuna aktarılacak komut satırı parametreleri."
 
-msgid "Markdown Previewer.\r\nArguments: md2html command line options."
-msgstr "Markdown ön izleyici. \r\nParametreler: Dot komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"Markdown Previewer.\r\n"
+"Arguments: md2html command line options."
+msgstr ""
+"Markdown ön izleyici. \r\n"
+"Parametreler: Dot komutuna aktarılacak komut satırı parametreleri."
 
-msgid "PlantUML Previewer.\r\nArguments: plantuml.jar command line options."
-msgstr "PlantUML ön izleyici. \r\nParametreler: Plantuml.jar komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"PlantUML Previewer.\r\n"
+"Arguments: plantuml.jar command line options."
+msgstr ""
+"PlantUML ön izleyici. \r\n"
+"Parametreler: Plantuml.jar komutuna aktarılacak komut satırı parametreleri."
 
-msgid "CSV Querier (q).\r\nArguments: SQL statement/q comannd line options."
-msgstr "CSV sorgulayıcı: q komutu. \r\nParametreler: q komutuna aktarılacak SQL ifadesi ya da komut satırı parametreleri."
+msgid ""
+"CSV Querier (q).\r\n"
+"Arguments: SQL statement/q comannd line options."
+msgstr ""
+"CSV sorgulayıcı: q komutu. \r\n"
+"Parametreler: q komutuna aktarılacak SQL ifadesi ya da komut satırı parametreleri."
 
-msgid "TSV Querier (q).\r\nArguments: SQL statement/q comannd line options."
-msgstr "TSV sorgulayıcı: q komutu. \r\nParametreler: q komutuna aktarılacak SQL ifadesi ya da komut satırı parametreleri."
+msgid ""
+"TSV Querier (q).\r\n"
+"Arguments: SQL statement/q comannd line options."
+msgstr ""
+"TSV sorgulayıcı: q komutu. \r\n"
+"Parametreler: q komutuna aktarılacak SQL ifadesi ya da komut satırı parametreleri."
 
-msgid "JSON Querier (jq).\r\nArguments: jq filter/command line options."
-msgstr "JSON sorgulayıcı: jq komutu. \r\nParametreler: jq komutuna aktarılacak süzgeç ya da komut satırı parametreleri."
+msgid ""
+"JSON Querier (jq).\r\n"
+"Arguments: jq filter/command line options."
+msgstr ""
+"JSON sorgulayıcı: jq komutu. \r\n"
+"Parametreler: jq komutuna aktarılacak süzgeç ya da komut satırı parametreleri."
 
-msgid "YAML Querier (yq).\r\nArguments: yq filter/command line options."
-msgstr "YAML sorgulayıcı: yq komutu. \r\nParametreler: yq komutuna aktarılacak süzgeç ya da komut satırı parametreleri."
+msgid ""
+"YAML Querier (yq).\r\n"
+"Arguments: yq filter/command line options."
+msgstr ""
+"YAML sorgulayıcı: yq komutu. \r\n"
+"Parametreler: yq komutuna aktarılacak süzgeç ya da komut satırı parametreleri."
 
-msgid "HTML Validator (tidy-html5).\r\nArguments: tidy command line options."
-msgstr "HTML doğrulayıcı: tidy-html5. \r\nParametreler: Tidy komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"HTML Validator (tidy-html5).\r\n"
+"Arguments: tidy command line options."
+msgstr ""
+"HTML doğrulayıcı: tidy-html5. \r\n"
+"Parametreler: Tidy komutuna aktarılacak komut satırı parametreleri."
 
-msgid "JVM bytecode disassembler (javap).\r\nArguments: javap command line options."
-msgstr "JVM bayt kodu çözücüsü: javap. \r\nParametreler: javap komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"JVM bytecode disassembler (javap).\r\n"
+"Arguments: javap command line options."
+msgstr ""
+"JVM bayt kodu çözücüsü: javap. \r\n"
+"Parametreler: javap komutuna aktarılacak komut satırı parametreleri."
 
-msgid "IL disassembler (ildasm).\r\nArguments: ildasm command line options."
-msgstr "IL kod çözücüsü: ildasm. \r\nParametreler: ildasm komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"IL disassembler (ildasm).\r\n"
+"Arguments: ildasm command line options."
+msgstr ""
+"IL kod çözücüsü: ildasm. \r\n"
+"Parametreler: ildasm komutuna aktarılacak komut satırı parametreleri."
 
-msgid "Native code disassembler (dumpbin).\r\nArguments: dumpbin command line options."
-msgstr "Doğal kod çözücüsü: dumpbin. \r\nParametreler: dumpbin komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"Native code disassembler (dumpbin).\r\n"
+"Arguments: dumpbin command line options."
+msgstr ""
+"Doğal kod çözücüsü: dumpbin. \r\n"
+"Parametreler: dumpbin komutuna aktarılacak komut satırı parametreleri."
 
-msgid "Content extractor (Apache Tika).\r\nArguments: tika-app.jar command line options."
-msgstr "Genel içerik ayıklayıcı: Apache Tika. \r\nParametreler: javap komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"Content extractor (Apache Tika).\r\n"
+"Arguments: tika-app.jar command line options."
+msgstr ""
+"Genel içerik ayıklayıcı: Apache Tika. \r\n"
+"Parametreler: javap komutuna aktarılacak komut satırı parametreleri."
 
 msgid "Apply patch (GNU patch)"
 msgstr "Yamayı GNU Patch ile uygula"
@@ -4323,16 +5638,22 @@ msgid "Display MS Word text content"
 msgstr "MS Word dosyalarının içeriği görüntülensin"
 
 msgid "Ignore columns - list from plugin name/argument"
-msgstr "Bazı sütunlar yok sayılsın. Eklenti adı ya da eklenti parametresi ile yok sayılan sütun listesi"
+msgstr ""
+"Bazı sütunlar yok sayılsın. Eklenti adı ya da eklenti parametresi ile yok sayılan sütun "
+"listesi"
 
 msgid "Ignore C, C++, PHP, and JavaScript comments (//... and /* ... */)."
-msgstr "Eklenti C, C++, PHP ve JavaScript dosyalarındaki komutları yok sayar (//... ve /* ... */)."
+msgstr ""
+"Eklenti C, C++, PHP ve JavaScript dosyalarındaki komutları yok sayar (//... ve /* ... */)."
 
 msgid "Ignore fields - list from plugin name/argument"
-msgstr "Bazı alanlar yok sayılsın. Eklenti adı ya da eklenti parametresi ile yok sayılan alan listesi"
+msgstr ""
+"Bazı alanlar yok sayılsın. Eklenti adı ya da eklenti parametresi ile yok sayılan alan listesi"
 
 msgid "Ignore leading line numbers (e.g., NC, BASIC)."
-msgstr "Bu eklenti metin dosyalarında baştaki satır numaralarını yok sayar (NC ve BASIC dosyaları gibi)."
+msgstr ""
+"Bu eklenti metin dosyalarında baştaki satır numaralarını yok sayar (NC ve BASIC dosyaları "
+"gibi)."
 
 msgid "Prediff Line Filter"
 msgstr "Ön farklılaştırıcı satır süzgeci"
@@ -4340,11 +5661,19 @@ msgstr "Ön farklılaştırıcı satır süzgeci"
 msgid "Date and time insertion"
 msgstr "Tarih ve saat ekleme işlevi"
 
-msgid "HTTP URL Scheme Handler (curl).\r\nArguments: curl command line options."
-msgstr "cURL ile HTTP URL şema işleyici.\r\nParametreler: curl komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"HTTP URL Scheme Handler (curl).\r\n"
+"Arguments: curl command line options."
+msgstr ""
+"cURL ile HTTP URL şema işleyici.\r\n"
+"Parametreler: curl komutuna aktarılacak komut satırı parametreleri."
 
-msgid "Windows Registry URL Scheme Handler.\r\nArguments: reg.exe command line options."
-msgstr "Windows kayıt defteri adresi şema işleyici. \r\nParametreler: reg.exe komutuna aktarılacak komut satırı parametreleri."
+msgid ""
+"Windows Registry URL Scheme Handler.\r\n"
+"Arguments: reg.exe command line options."
+msgstr ""
+"Windows kayıt defteri adresi şema işleyici. \r\n"
+"Parametreler: reg.exe komutuna aktarılacak komut satırı parametreleri."
 
 msgid "Basic text functions"
 msgstr "Temel metin işlevleri"
@@ -4352,8 +5681,12 @@ msgstr "Temel metin işlevleri"
 msgid "AI-assisted text conversion"
 msgstr "Yapay zeka destekli metin dönüştürme işlevleri"
 
-msgid "Text converter (OpenAI API).\r\nUsage: AIConvertText PROMPT"
-msgstr "OpenAI API kullanan metin dönüştürücü.\r\nKullanım: AIConvertText KOMUT"
+msgid ""
+"Text converter (OpenAI API).\r\n"
+"Usage: AIConvertText PROMPT"
+msgstr ""
+"OpenAI API kullanan metin dönüştürücü.\r\n"
+"Kullanım: AIConvertText KOMUT"
 
 msgid "Unescape and display escaped Java properties files."
 msgstr "Kaçınılan Java özellikleri dosyalarından kaçınma ve görüntüle."
@@ -4394,8 +5727,15 @@ msgstr "Şekillerdeki metinler karşılaştırılsın"
 msgid "Compare headers and footers"
 msgstr "Üst ve alt bilgiler karşılaştırılsın"
 
-msgid "Cannot get Macros.\r\nEnable 'Trust access to Visual Basic Project' in MS Office Macro Security."
-msgstr "Makrolar alınamadı.\r\n  WinMerge ile makroları karşılaştırmak için, geçerli uygulama için Makro Güvenliği ayarlarını değiştirmek üzere MS Office kullanın.\r\n  WinMerge üzerinde bu özelliği kullanmak için Visual Basic Project özelliğine Güven erişimi açılmış olmalıdır.\n"
+msgid ""
+"Cannot get Macros.\r\n"
+"Enable 'Trust access to Visual Basic Project' in MS Office Macro Security."
+msgstr ""
+"Makrolar alınamıyor.\r\n"
+"MS Office Makro Güvenliği'nde 'Visual Basic Projesine erişime güven' seçeneğini etkinleştirin."
+
+msgid "Replace line breaks in formulas with spaces"
+msgstr "Formüllerdeki satır sonlarını boşluklarla değiştirin"
 
 msgid "Compare VBA macros"
 msgstr "VBA makroları karşılaştırılsın"
@@ -4460,8 +5800,12 @@ msgstr "Şununla değiştir"
 msgid "Settings"
 msgstr "Ayarlar"
 
-msgid "Column Ranges to Ignore:\ne.g.) 3,10-20,32-33\n"
-msgstr "Yok sayılacak sütun aralığı:\nörneğin) 3,10-20,32-33\n"
+msgid ""
+"Column Ranges to Ignore:\n"
+"e.g.) 3,10-20,32-33\n"
+msgstr ""
+"Yok sayılacak sütun aralığı:\n"
+"örneğin) 3,10-20,32-33\n"
 
 #, c-format
 msgid "Enter filename for patch '%1'"
@@ -4492,8 +5836,14 @@ msgid "Enter prompt"
 msgstr "Komut istemini girin"
 
 #, c-format
-msgid "Enter OpenAI API key.\r\n- Requires OpenAI registration (fees may apply).\r\n- Key stored in env var %1."
-msgstr "OpenAI API anahtarınızı girin.\r\n - Bu eklentiyi kullanmak için OpenAI'ya kaydolmanız ve ücret ödemeniz gerekmektedir.\r\n - API anahtarı ortam değişkeni %1'e kaydedilir."
+msgid ""
+"Enter OpenAI API key.\r\n"
+"- Requires OpenAI registration (fees may apply).\r\n"
+"- Key stored in env var %1."
+msgstr ""
+"OpenAI API anahtarınızı girin.\r\n"
+" - Bu eklentiyi kullanmak için OpenAI'ya kaydolmanız ve ücret ödemeniz gerekmektedir.\r\n"
+" - API anahtarı ortam değişkeni %1'e kaydedilir."
 
 msgid "Environment variable name for OpenAI API key"
 msgstr "OpenAI API anahtarı için ortam değişkeni adı"
@@ -4511,4 +5861,5 @@ msgid "Model"
 msgstr "Model"
 
 msgid "OpenAI API key changed. Restart to apply."
-msgstr "OpenAI API anahtarı değişti. Değişiklikleri uygulamak için lütfen WinMerge'i yeniden başlatın."
+msgstr ""
+"OpenAI API anahtarı değişti. Değişiklikleri uygulamak için lütfen WinMerge'i yeniden başlatın."

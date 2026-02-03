@@ -33,6 +33,7 @@
 #include "Constants.h"
 #include "DropHandler.h"
 #include "Environment.h"
+#include "MyColorDialog.h"
 #include <cmath>
 
 #ifdef _DEBUG
@@ -53,7 +54,8 @@ BEGIN_MESSAGE_MAP(CImgMergeFrame, CMergeFrameCommon)
 	ON_WM_DESTROY()
 	ON_WM_MDIACTIVATE()
 	ON_WM_SIZE()
-	ON_WM_SETFOCUS ()	
+	ON_WM_SETFOCUS()
+	ON_WM_SETTINGCHANGE()
 	ON_MESSAGE_VOID(WM_IDLEUPDATECMDUI, OnIdleUpdateCmdUI)
 	ON_MESSAGE(MSG_STORE_PANESIZES, OnStorePaneSizes)
 	// [File] menu
@@ -428,7 +430,7 @@ void CImgMergeFrame::OnChildPaneEvent(const IImgMergeWindow::Event& evt)
 	{
 		BCMenu menuPopup;
 		menuPopup.LoadMenu(MAKEINTRESOURCE(IDR_POPUP_IMG_CTXT));
-		theApp.TranslateMenu(menuPopup.m_hMenu);
+		I18n::TranslateMenu(menuPopup.m_hMenu);
 		BCMenu* pPopup = (BCMenu *)menuPopup.GetSubMenu(0);
 		pPopup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 			evt.x, evt.y, AfxGetMainWnd());
@@ -473,6 +475,7 @@ BOOL CImgMergeFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
 	}
 
 	m_pImgMergeWindow->AddEventListener(OnChildPaneEvent, this);
+	m_pImgMergeWindow->SetDarkBackgroundEnabled(DarkMode::isEnabled());
 	LoadOptions();
 
 	bool bResult;
@@ -486,18 +489,23 @@ BOOL CImgMergeFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
 		bResult = OpenImages();
 	}
 
+	if (!bResult)
+		return FALSE;
+
 	for (int pane = 0; pane < m_filePaths.GetSize(); ++pane)
 	{
 		m_fileInfo[pane].Update(m_filePaths[pane]);
 
 		RegisterDragDrop(m_pImgMergeWindow->GetPaneHWND(pane),
 			new DropHandler(std::bind(&CImgMergeFrame::OnDropFiles, this, pane, std::placeholders::_1)));
+
+		DarkMode::setDarkScrollBar(m_pImgMergeWindow->GetPaneHWND(pane));
 	}
 
 	// Merge frame has also a dockable bar at the very left
 	// This is not the client area, but we create it now because we want
 	// to use the CCreateContext
-	String sCaption = theApp.LoadString(IDS_LOCBAR_CAPTION);
+	String sCaption = I18n::LoadString(IDS_LOCBAR_CAPTION);
 	if (!m_wndLocationBar.Create(this, sCaption.c_str(), WS_CHILD | WS_VISIBLE, ID_VIEW_LOCATION_BAR))
 	{
 		TRACE0("Failed to create LocationBar\n");
@@ -515,13 +523,19 @@ BOOL CImgMergeFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
 	m_pImgToolWindow->Translate(TranslateLocationPane);
 
 	m_wndLocationBar.SetFrameHwnd(GetSafeHwnd());
-
+	HWND hPane = m_pImgToolWindow->GetHWND();
+	if (hPane != nullptr)
+	{
+		DarkMode::setWindowCtlColorSubclass(hPane);
+		DarkMode::setWindowNotifyCustomDrawSubclass(hPane);
+		DarkMode::setChildCtrlsSubclassAndThemeEx(hPane, true, true);
+	}
 	return TRUE;
 }
 
 void CImgMergeFrame::TranslateLocationPane(int id, const wchar_t *org, size_t dstbufsize, wchar_t *dst)
 {
-	swprintf_s(dst, dstbufsize, L"%s", tr("ImgMergeFrame|LocationPane", ucr::toUTF8(org)).c_str());
+	swprintf_s(dst, dstbufsize, L"%s", I18n::tr("ImgMergeFrame|LocationPane", ucr::toUTF8(org)).c_str());
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -556,9 +570,11 @@ int CImgMergeFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 				m_nBufferType[pane] = BUFFERTYPE::NORMAL_NAMED;
 			UpdateHeaderPath(pane);
 		}
+		m_pImgMergeWindow->SetActivePane(pane);
 	});
 	m_wndFilePathBar.SetOnFileSelectedCallback([&](int pane, const String& sFilepath) {
 		ChangeFile(pane, sFilepath);
+		m_pImgMergeWindow->SetActivePane(pane);
 	});
 
 	// Merge frame also has a dockable bar at the very left
@@ -1061,7 +1077,8 @@ void CImgMergeFrame::UpdateHeaderPath(int pane)
 	if (m_pImgMergeWindow->IsModified(pane))
 		sText.insert(0, _T("* "));
 
-	m_wndFilePathBar.SetText(pane, sText.c_str());
+	m_wndFilePathBar.SetCaption(pane, sText);
+	m_wndFilePathBar.SetPath(pane, m_filePaths.GetPath(pane));
 
 	SetTitle(nullptr);
 }
@@ -1162,6 +1179,13 @@ bool CImgMergeFrame::OpenImages()
 		bResult = m_pImgMergeWindow->OpenImages(ucr::toUTF16(strTempFileName[0]).c_str(), ucr::toUTF16(strTempFileName[1]).c_str());
 	else
 		bResult = m_pImgMergeWindow->OpenImages(ucr::toUTF16(strTempFileName[0]).c_str(), ucr::toUTF16(strTempFileName[1]).c_str(), ucr::toUTF16(strTempFileName[2]).c_str());
+	if (!bResult)
+	{
+		std::error_code ec(m_pImgMergeWindow->GetLastErrorCode(), std::generic_category());
+		String sSysError = ucr::toTString(ec.message());
+		String sError = strutils::format_string2(_("Cannot open file(s)\n%1\n\n%2"), filteredFilenames, sSysError);
+		AfxMessageBox(sError.c_str(), MB_OK | MB_ICONSTOP | MB_MODELESS);
+	}
 
 	return bResult;
 }
@@ -1406,11 +1430,11 @@ void CImgMergeFrame::OnIdleUpdateCmdUI()
 		for (int pane = 0; pane < m_filePaths.GetSize(); ++pane)
 		{
 			// Update mod indicators
-			String ind = m_wndFilePathBar.GetText(pane);
+			String ind = m_wndFilePathBar.GetCaption(pane);
 			if (m_pImgMergeWindow->IsModified(pane) ? ind[0] != _T('*') : ind[0] == _T('*'))
 				UpdateHeaderPath(pane);
 
-			m_wndFilePathBar.SetActive(pane, pane == nActivePane);
+			m_wndFilePathBar.SetActive(pane, pane == m_nActivePane);
 			POINT ptReal;
 			String text;
 			if (m_pImgMergeWindow->ConvertToRealPos(pane, pt, ptReal))
@@ -2126,7 +2150,7 @@ void CImgMergeFrame::OnImgUseBackColor()
 	if (bUseBackColor)
 	{
 		RGBQUAD backColor = m_pImgMergeWindow->GetBackColor();
-		CColorDialog dialog(RGB(backColor.rgbRed, backColor.rgbGreen, backColor.rgbBlue));
+		CMyColorDialog dialog(RGB(backColor.rgbRed, backColor.rgbGreen, backColor.rgbBlue));
 		static DWORD dwCustColors[16];
 		Options::CustomColors::Load(GetOptionsMgr(), dwCustColors);
 		dialog.m_cc.lpCustColors = dwCustColors;
@@ -2335,16 +2359,15 @@ void CImgMergeFrame::OnToolsGenerateReport()
 
 	CWaitCursor waitstatus;
 	if (GenerateReport(s, allPages))
-		LangMessageBox(IDS_REPORT_SUCCESS, MB_OK | MB_ICONINFORMATION);
+		I18n::MessageBox(IDS_REPORT_SUCCESS, MB_OK | MB_ICONINFORMATION);
 }
 
 void CImgMergeFrame::OnRefresh()
 {
 	if (UpdateLastCompareResult() == 0)
-	{
 		CMergeFrameCommon::ShowIdenticalMessage(m_filePaths, true,
-			[](const tchar_t* msg, UINT flags, UINT id) -> int { return AfxMessageBox(msg, flags, id); });
-	}
+			std::none_of(m_filePaths.begin(), m_filePaths.end(), [](const String& s) { return s.empty(); })
+			&& !IsModified());
 }
 
 void CImgMergeFrame::OnDropFiles(int pane, const std::vector<String>& files)
@@ -2370,5 +2393,28 @@ void CImgMergeFrame::OnSetFocus(CWnd* pNewWnd)
  */
 void CImgMergeFrame::OnHelp()
 {
-	theApp.ShowHelp(ImgMergeFrameHelpLocation);
+	CMergeApp::ShowHelp(ImgMergeFrameHelpLocation);
 }
+
+/**
+ * @brief Called when the system settings change.
+ */
+void CImgMergeFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
+{
+	if (m_pImgToolWindow && WinMergeDarkMode::IsImmersiveColorSet(lpszSection))
+	{
+		HWND hPane = m_pImgToolWindow->GetHWND();
+		if (hPane != nullptr)
+		{
+			DarkMode::setWindowCtlColorSubclass(hPane);
+			DarkMode::setWindowNotifyCustomDrawSubclass(hPane);
+			DarkMode::setChildCtrlsSubclassAndThemeEx(hPane, true, true);
+			::InvalidateRect(hPane, nullptr, TRUE);
+		}
+		for (int pane = 0; pane < m_pImgMergeWindow->GetPaneCount(); ++pane)
+			DarkMode::setDarkScrollBar(m_pImgMergeWindow->GetPaneHWND(pane));
+		m_pImgMergeWindow->SetDarkBackgroundEnabled(DarkMode::isEnabled());
+	}
+	__super::OnSettingChange(uFlags, lpszSection);
+}
+

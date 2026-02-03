@@ -135,6 +135,8 @@ private:
 	void DoOpenWith(SIDE_TYPE stype);
 	void DoOpenWithEditor(SIDE_TYPE stype);
 	void DoOpenParentFolder(SIDE_TYPE stype);
+	bool AreItemsComparable(SELECTIONTYPE selectionType, bool openableForDir = true);
+	bool AreItemsComparableIndivisually(UINT nID, bool openableForDir);
 	void DoUpdateOpen(SELECTIONTYPE selectionType, CCmdUI* pCmdUI, bool openableForDir = true);
 	void RemoveDuplicatedActions(FileActionScript & actions);
 	void ConfirmAndPerformActions(FileActionScript & actions);
@@ -231,6 +233,7 @@ protected:
 	//{{AFX_MSG(CDirView)
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnDirCopy(UINT id);
+	afx_msg std::optional<bool> PromptCopyOnlyDiffItems();
 	template<SIDE_TYPE srctype, SIDE_TYPE dsttype>
 	afx_msg void OnCtxtDirCopy();
 	afx_msg void OnUpdateDirCopy(CCmdUI* pCmdUI);
@@ -289,6 +292,7 @@ protected:
 	afx_msg void OnRefresh();
 	afx_msg void OnUpdateRefresh(CCmdUI* pCmdUI);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+    afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
 	afx_msg void OnEditColumns();
 	template<SIDE_TYPE stype>
 	afx_msg void OnReadOnly();
@@ -380,6 +384,7 @@ protected:
 	afx_msg void OnUpdateOptionsShowMissingMiddleOnly(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateOptionsShowMissingRightOnly(CCmdUI* pCmdUI);
 	afx_msg void OnMergeCompare(UINT nID);
+	afx_msg void OnMergeCompareWithRenamedMoved();
 	template<SELECTIONTYPE seltype>
 	afx_msg void OnMergeCompare2() { OpenSelection(seltype); }
 	afx_msg void OnMergeCompareNonHorizontally();
@@ -401,9 +406,10 @@ protected:
 	afx_msg void OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnODFindItem(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnSearch();
 	afx_msg void OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnStatusBarClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnViewDisplayFilterBarApply();
+	afx_msg void OnViewDisplayFilterBar();
 
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
@@ -415,8 +421,10 @@ protected:
 private:
 	void Open(CDirDoc *pDoc, const PathContext& paths, fileopenflags_t dwFlags[3], FileTextEncoding encoding[3], PackingInfo * infoUnpacker = nullptr);
 	void OpenSelection(CDirDoc *pDoc, SELECTIONTYPE selectionType = SELECTIONTYPE_NORMAL, PackingInfo * infoUnpacker = nullptr, bool openableForDir = true);
+	void OpenSelection(int sel1, int sel2, int sel3, CDirDoc* pDoc, SELECTIONTYPE selectionType = SELECTIONTYPE_NORMAL, PackingInfo* infoUnpacker = nullptr, bool openableForDir = true);
 	void OpenSelection(SELECTIONTYPE selectionType = SELECTIONTYPE_NORMAL, PackingInfo * infoUnpacker = nullptr, bool openableForDir = true);
 	void OpenSelectionAs(UINT id);
+	void OpenSelectionAs(int sel1, int sel2, int sel3, UINT id);
 	bool GetSelectedItems(int * sel1, int * sel2, int * sel3);
 	void OpenParentDirectory(CDirDoc *pDocOpen);
 	template<SIDE_TYPE srctype, SIDE_TYPE dsttype>

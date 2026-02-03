@@ -14,7 +14,9 @@
 #include "MainFrm.h"
 #include <vector>
 #include <afxinet.h>
+#if !defined(__cppcheck__)
 #include <boost/range/mfc.hpp>
+#endif
 #include "Constants.h"
 #include "Merge.h"
 #include "FileFilterHelper.h"
@@ -42,6 +44,7 @@
 #include "ConflictFileParser.h"
 #include "LineFiltersDlg.h"
 #include "SubstitutionFiltersDlg.h"
+#include "MyFontDialog.h"
 #include "paths.h"
 #include "Environment.h"
 #include "PatchTool.h"
@@ -49,6 +52,7 @@
 #include "ConfigLog.h"
 #include "7zCommon.h"
 #include "Merge7zFormatMergePluginImpl.h"
+#include "FiltersPropertySheet.h"
 #include "FileFiltersDlg.h"
 #include "OptionsMgr.h"
 #include "OptionsDef.h"
@@ -69,12 +73,14 @@
 #include "UniFile.h"
 #include "TFile.h"
 #include "Shell.h"
-#include "WindowsManagerDialog.h"
 #include "ClipboardHistory.h"
 #include "locality.h"
 #include "DirWatcher.h"
 #include "Win_VersionHelper.h"
 #include "FrameWndHelper.h"
+#include "ColorSchemes.h"
+#include "OptionsSyntaxColors.h"
+#include "SysColorHook.h"
 #include <Poco/Logger.h>
 #include <Poco/AsyncChannel.h>
 #include <Poco/SimpleFileChannel.h>
@@ -236,6 +242,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_WM_NCCALCSIZE()
 	ON_WM_SIZE()
 	ON_WM_SYSCOMMAND()
+	ON_WM_SETTINGCHANGE()
 	ON_UPDATE_COMMAND_UI_RANGE(CMenuBar::FIRST_MENUID, CMenuBar::FIRST_MENUID + 10, OnUpdateMenuBarMenuItem)
 	// [File] menu
 	ON_COMMAND(ID_FILE_NEW, (OnFileNew<2, ID_MERGE_COMPARE_TEXT>))
@@ -293,6 +300,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	// [Window] menu
 	ON_COMMAND(ID_WINDOW_CLOSEALL, OnWindowCloseAll)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSEALL, OnUpdateWindowCloseAll)
+	ON_COMMAND(ID_WINDOW_NEXT, MDINext)
+	ON_COMMAND(ID_WINDOW_PREV, MDIPrev)
 	// [Help] menu
 	ON_COMMAND(ID_HELP_CONTENTS, OnHelpContents)
 	ON_COMMAND(ID_HELP_GNULICENSE, OnHelpGnulicense)
@@ -329,18 +338,15 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_DIFF_OPTIONS_IGNORE_COMMENTS, OnUpdateDiffIgnoreComments)
 	ON_COMMAND(ID_DIFF_OPTIONS_IGNORE_MISSING_TRAILING_EOL, OnDiffIgnoreMissingTrailingEol)
 	ON_UPDATE_COMMAND_UI(ID_DIFF_OPTIONS_IGNORE_MISSING_TRAILING_EOL, OnUpdateDiffIgnoreMissingTrailingEol)
+	ON_COMMAND(ID_DIFF_OPTIONS_IGNORE_LINE_BREAKS, OnDiffIgnoreLineBreaks)
+	ON_UPDATE_COMMAND_UI(ID_DIFF_OPTIONS_IGNORE_LINE_BREAKS, OnUpdateDiffIgnoreLineBreaks)
 	ON_COMMAND(ID_DIFF_OPTIONS_INCLUDE_SUBFOLDERS, OnIncludeSubfolders)
 	ON_UPDATE_COMMAND_UI(ID_DIFF_OPTIONS_INCLUDE_SUBFOLDERS, OnUpdateIncludeSubfolders)
-	ON_COMMAND_RANGE(ID_DIFF_OPTIONS_COMPMETHOD_FULL_CONTENTS, ID_DIFF_OPTIONS_COMPMETHOD_SIZE, OnCompareMethod)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_DIFF_OPTIONS_COMPMETHOD_FULL_CONTENTS, ID_DIFF_OPTIONS_COMPMETHOD_SIZE, OnUpdateCompareMethod)
+	ON_COMMAND_RANGE(ID_DIFF_OPTIONS_COMPMETHOD_FULL_CONTENTS, ID_DIFF_OPTIONS_COMPMETHOD_EXISTENCE, OnCompareMethod)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_DIFF_OPTIONS_COMPMETHOD_FULL_CONTENTS, ID_DIFF_OPTIONS_COMPMETHOD_EXISTENCE, OnUpdateCompareMethod)
 	// Status bar
 	ON_UPDATE_COMMAND_UI(ID_STATUS_PLUGIN, OnUpdatePluginName)
 	ON_UPDATE_COMMAND_UI(ID_STATUS_DIFFNUM, OnUpdateStatusNum)
-	// Window manager
-	ON_MESSAGE(WMU_CHILDFRAMEADDED, &CMainFrame::OnChildFrameAdded)
-	ON_MESSAGE(WMU_CHILDFRAMEREMOVED, &CMainFrame::OnChildFrameRemoved)
-	ON_MESSAGE(WMU_CHILDFRAMEACTIVATE, &CMainFrame::OnChildFrameActivate)
-	ON_MESSAGE(WMU_CHILDFRAMEACTIVATED, &CMainFrame::OnChildFrameActivated)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -394,8 +400,6 @@ CMainFrame::~CMainFrame()
 {
 	GetOptionsMgr()->SaveOption(OPT_TABBAR_AUTO_MAXWIDTH, m_wndTabBar.GetAutoMaxWidth());
 	strdiff::Close();
-
-	m_arrChild.RemoveAll();
 }
 
 const tchar_t CMainFrame::szClassName[] = _T("WinMergeWindowClassW");
@@ -434,7 +438,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndMDIClient.SubclassWindow(m_hWndMDIClient);
 
 	if (IsWin10_OrGreater())
+	{
 		m_bTabsOnTitleBar = GetOptionsMgr()->GetBool(OPT_TABBAR_ON_TITLEBAR);
+		if (HWND hSelf = GetSafeHwnd())
+			DarkMode::setDarkWndNotifySafeEx(hSelf, false, true);
+	}
 
 	m_wndTabBar.Update(m_bTabsOnTitleBar.value_or(false), false);
 
@@ -449,7 +457,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create toolbar\n");
 		return -1;      // fail to create
 	}
-	
+
 	if (!m_bTabsOnTitleBar.value_or(false) && !m_wndTabBar.Create(this))
 	{
 		TRACE0("Failed to create tab bar\n");
@@ -466,7 +474,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create status bar\n");
 		return -1;      // fail to create
 	}
-	theApp.SetIndicators(m_wndStatusBar, StatusbarIndicators,
+	I18n::SetIndicators(m_wndStatusBar, StatusbarIndicators,
 			static_cast<int>(std::size(StatusbarIndicators)));
 
 	const int lpx = CClientDC(this).GetDeviceCaps(LOGPIXELSX);
@@ -574,14 +582,14 @@ HMENU CMainFrame::NewMenu(int view, int ID)
 	{
 		m_pImageMenu.reset(new BCMenu);
 		m_pImageMenu->LoadMenu(MAKEINTRESOURCE(IDR_POPUP_IMGMERGEVIEW));
-		m_pMenus[view]->InsertMenu(4, MF_BYPOSITION | MF_POPUP, (UINT_PTR)m_pImageMenu->GetSubMenu(0)->m_hMenu, const_cast<tchar_t *>(LoadResString(IDS_IMAGE_MENU).c_str())); 
+		m_pMenus[view]->InsertMenu(4, MF_BYPOSITION | MF_POPUP, (UINT_PTR)m_pImageMenu->GetSubMenu(0)->m_hMenu, const_cast<tchar_t *>(I18n::LoadString(IDS_IMAGE_MENU).c_str())); 
 	}
 
 	if (view == MENU_WEBPAGEDIFFVIEW)
 	{
 		m_pWebPageMenu.reset(new BCMenu);
 		m_pWebPageMenu->LoadMenu(MAKEINTRESOURCE(IDR_POPUP_WEBPAGEDIFFVIEW));
-		m_pMenus[view]->InsertMenu(4, MF_BYPOSITION | MF_POPUP, (UINT_PTR)m_pWebPageMenu->GetSubMenu(0)->m_hMenu, const_cast<tchar_t *>(LoadResString(IDS_WEBPAGE_MENU).c_str())); 
+		m_pMenus[view]->InsertMenu(4, MF_BYPOSITION | MF_POPUP, (UINT_PTR)m_pWebPageMenu->GetSubMenu(0)->m_hMenu, const_cast<tchar_t *>(I18n::LoadString(IDS_WEBPAGE_MENU).c_str())); 
 	}
 
 	// Load bitmaps to menuitems
@@ -593,7 +601,7 @@ HMENU CMainFrame::NewMenu(int view, int ID)
 
 	m_pMenus[view]->LoadToolbar(IDR_MAINFRAME, &m_wndToolBar);
 
-	theApp.TranslateMenu(m_pMenus[view]->m_hMenu);
+	I18n::TranslateMenu(m_pMenus[view]->m_hMenu);
 
 	return (m_pMenus[view]->Detach());
 
@@ -812,11 +820,9 @@ bool CMainFrame::ShowAutoMergeDoc(UINT nID, IDirDoc * pDirDoc,
 	}
 	FileFilterHelper filterImg, filterBin;
 	const String& imgPatterns = GetOptionsMgr()->GetString(OPT_CMP_IMG_FILEPATTERNS);
-	filterImg.UseMask(true);
-	filterImg.SetMask(imgPatterns);
+	filterImg.SetMaskOrExpression(imgPatterns);
 	const String& binPatterns = GetOptionsMgr()->GetString(OPT_CMP_BIN_FILEPATTERNS);
-	filterBin.UseMask(true);
-	filterBin.SetMask(binPatterns);
+	filterBin.SetMaskOrExpression(binPatterns);
 	for (int pane = 0; pane < nFiles; ++pane)
 	{
 		if (CWebPageDiffFrame::MatchURLPattern(ifileloc[pane].filepath))
@@ -1176,6 +1182,8 @@ void CMainFrame::OnHelpGnulicense()
  */
 void CMainFrame::OnOptions() 
 {
+	const DarkMode::DarkModeType dmType =
+		WinMergeDarkMode::GetDarkModeType(GetOptionsMgr()->GetInt(OPT_COLOR_MODE));
 	const bool sysColorHookEnabled = GetOptionsMgr()->GetBool(OPT_SYSCOLOR_HOOK_ENABLED);
 	const String sysColorsSerialized = GetOptionsMgr()->GetString(OPT_SYSCOLOR_HOOK_COLORS);
 	// Using singleton shared syntax colors
@@ -1190,7 +1198,7 @@ void CMainFrame::OnOptions()
 			theApp.m_pLangDlg->SetLanguage(lang, true);
 	
 			// Update status bar inicator texts
-			theApp.SetIndicators(m_wndStatusBar, 0, 0);
+			I18n::SetIndicators(m_wndStatusBar, 0, 0);
 	
 			// Update the current menu
 			ReloadMenu();
@@ -1205,8 +1213,7 @@ void CMainFrame::OnOptions()
 		theApp.SetupTempPath();
 
 		// Set new filterpath
-		const String& filterPath = GetOptionsMgr()->GetString(OPT_FILTER_USERPATH);
-		theApp.GetGlobalFileFilter()->SetUserFilterPath(filterPath);
+		theApp.GetGlobalFileFilter()->SetUserFilterPath(GetOptionsMgr()->GetString(OPT_FILTER_USERPATH));
 
 		CCrystalTextView::RENDERING_MODE nRenderingMode = static_cast<CCrystalTextView::RENDERING_MODE>(GetOptionsMgr()->GetInt(OPT_RENDERING_MODE));
 		CCrystalTextView::SetRenderingModeDefault(nRenderingMode);
@@ -1226,11 +1233,19 @@ void CMainFrame::OnOptions()
 		for (auto pImgMergeFrame : GetAllImgMergeFrames())
 			pImgMergeFrame->RefreshOptions();
 
+		const DarkMode::DarkModeType dmTypeNew =
+			WinMergeDarkMode::GetDarkModeType(GetOptionsMgr()->GetInt(OPT_COLOR_MODE));
+		const bool colorModeChanged = dmType != dmTypeNew;
 		if (sysColorHookEnabled != GetOptionsMgr()->GetBool(OPT_SYSCOLOR_HOOK_ENABLED) ||
-		    sysColorsSerialized != GetOptionsMgr()->GetString(OPT_SYSCOLOR_HOOK_COLORS))
+		    sysColorsSerialized != GetOptionsMgr()->GetString(OPT_SYSCOLOR_HOOK_COLORS) ||
+			colorModeChanged)
 		{
-			theApp.ReloadCustomSysColors();
+			DarkMode::setDarkModeConfigEx(static_cast<UINT>(dmTypeNew));
+			DarkMode::setDefaultColors(true);
+			DarkMode::setDarkTitleBarEx(m_hWnd, true);
+			CMergeApp::ReloadCustomSysColors();
 			AfxGetMainWnd()->SendMessage(WM_SYSCOLORCHANGE);
+			AfxGetMainWnd()->SendMessage(WM_SETTINGCHANGE, 0, reinterpret_cast<LPARAM>(_T("ImmersiveColorSet")));
 			RedrawWindow(nullptr, nullptr, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_ALLCHILDREN);
 		}
 	}
@@ -1269,7 +1284,11 @@ static bool AddToRecentDocs(const PathContext& paths,
 	if (recurse.has_value())
 		params += *recurse ? _T("/r ") : _T("/r- ");
 	if (!filter.empty())
-		params += _T("/f \"") + filter + _T("\" ");
+	{
+		String filter2 = filter;
+		strutils::replace(filter2, _T("\""), _T("\"\""));
+		params += _T("/f \"") + filter2 + _T("\" ");
+	}
 	switch (nID)
 	{
 	case ID_MERGE_COMPARE_TEXT:  params += _T("/t text "); break;
@@ -1428,7 +1447,7 @@ bool CMainFrame::DoFileOrFolderOpen(const PathContext * pFiles /*= nullptr*/,
 		DecompressResult res = DecompressArchive(m_hWnd, tFiles);
 		if (FAILED(res.hr))
 		{
-			int ans = AfxMessageBox(IDS_FAILED_EXTRACT_ARCHIVE_FILES, MB_YESNO | MB_DONT_ASK_AGAIN | MB_ICONWARNING, IDS_FAILED_EXTRACT_ARCHIVE_FILES);
+			int ans = AfxMessageBox(I18n::LoadString(IDS_FAILED_EXTRACT_ARCHIVE_FILES).c_str(), MB_YESNO | MB_DONT_ASK_AGAIN | MB_ICONWARNING, IDS_FAILED_EXTRACT_ARCHIVE_FILES);
 			if (ans == IDYES)
 			{
 				pathsType = paths::IS_EXISTING_FILE;
@@ -1493,7 +1512,7 @@ bool CMainFrame::DoFileOrFolderOpen(const PathContext * pFiles /*= nullptr*/,
 	if (pFiles != nullptr && (!dwFlags || !(dwFlags[0] & FFILEOPEN_NOMRU)))
 	{
 		String filter = (allowFolderCompare && pathsType == paths::IS_EXISTING_DIR) ?
-			theApp.GetGlobalFileFilter()->GetFilterNameOrMask() : _T("");
+			theApp.GetGlobalFileFilter()->GetMaskOrExpression() : _T("");
 		AddToRecentDocs(*pFiles, (unsigned *)dwFlags, strDesc, bRecurse, filter, infoUnpacker, infoPrediffer, nID, pOpenParams);
 	}
 
@@ -1562,23 +1581,11 @@ void CMainFrame::UpdateFont(FRAMETYPE frame)
 void CMainFrame::OnViewSelectfont() 
 {
 	FRAMETYPE frame = GetFrameType(GetActiveFrame());
-	CHOOSEFONT cf = { sizeof CHOOSEFONT };
-	LOGFONT *lf = nullptr;
-	cf.Flags = CF_INITTOLOGFONTSTRUCT|CF_FORCEFONTEXIST|CF_SCREENFONTS;
-	if (frame == FRAME_FILE)
-		cf.Flags |= CF_FIXEDPITCHONLY; // Only fixed-width fonts for merge view
-
-	// CF_FIXEDPITCHONLY = 0x00004000L
-	// in case you are a developer and want to disable it to test with, eg, a Chinese capable font
-	if (frame == FRAME_FOLDER)
-		lf = &theApp.m_lfDir;
-	else
-		lf = &theApp.m_lfDiff;
-
-	cf.lpLogFont = lf;
-	cf.hwndOwner = m_hWnd;
-
-	if (ChooseFont(&cf))
+	LOGFONT* lf = (frame == FRAME_FOLDER) ? &theApp.m_lfDir : &theApp.m_lfDiff;
+	const DWORD dwFlags = CF_INITTOLOGFONTSTRUCT | CF_FORCEFONTEXIST | CF_SCREENFONTS |
+		((frame == FRAME_FILE) ? CF_FIXEDPITCHONLY : 0);
+	CMyFontDialog dlg(lf, dwFlags, nullptr, this);
+	if (dlg.DoModal() == IDOK)
 	{
 		Options::Font::Save(GetOptionsMgr(), frame == FRAME_FOLDER ? OPT_FONT_DIRCMP : OPT_FONT_FILECMP, lf, true);
 		UpdateFont(frame);
@@ -1627,7 +1634,7 @@ void CMainFrame::UpdateTitleBarAndTabBar()
  */
 void CMainFrame::UpdateResources()
 {
-	m_wndStatusBar.SetPaneText(0, theApp.LoadString(AFX_IDS_IDLEMESSAGE).c_str());
+	m_wndStatusBar.SetPaneText(0, I18n::LoadString(AFX_IDS_IDLEMESSAGE).c_str());
 
 	for (auto pDoc : GetAllDirDocs())
 		pDoc->UpdateResources();
@@ -1648,7 +1655,7 @@ void CMainFrame::UpdateResources()
  */
 void CMainFrame::OnHelpContents()
 {
-	theApp.ShowHelp();
+	CMergeApp::ShowHelp();
 }
 
 /**
@@ -1657,7 +1664,7 @@ void CMainFrame::OnHelpContents()
 void CMainFrame::GetMessageString(UINT nID, CString& rMessage) const
 {
 	// load appropriate string
-	const String s = theApp.LoadString(nID);
+	const String s = I18n::LoadString(nID);
 	if (s.length() > 0)
 		AfxExtractSubString(rMessage, s.c_str(), 0);
 }
@@ -1893,7 +1900,7 @@ void CMainFrame::OnDropFiles(const std::vector<String>& dropped_files)
 	fileopenflags_t dwFlags[3] = {FFILEOPEN_NONE, FFILEOPEN_NONE, FFILEOPEN_NONE};
 	if (fileCount == 1)
 	{
-		if (theApp.IsProjectFile(tFiles[0]))
+		if (CMergeApp::IsProjectFile(tFiles[0]))
 		{
 			theApp.LoadAndOpenProjectFile(tFiles[0]);
 			return;
@@ -2092,15 +2099,14 @@ bool CMainFrame::DoFileNew(UINT nID, int nPanes,
 void CMainFrame::OnToolsFilters()
 {
 	String title = _("Filters");
-	CPropertySheet sht(title.c_str());
+	CFiltersPropertySheet sht(title.c_str());
 	LineFiltersDlg lineFiltersDlg;
 	SubstitutionFiltersDlg substitutionFiltersDlg;
 	FileFiltersDlg fileFiltersDlg;
 	auto lineFilters = std::make_unique<LineFiltersList>(LineFiltersList());
 	auto SubstitutionFilters = std::make_unique<SubstitutionFiltersList>(SubstitutionFiltersList());
-	String selectedFilter;
 	auto* pGlobalFileFilter = theApp.GetGlobalFileFilter();
-	const String origFilter = pGlobalFileFilter->GetFilterNameOrMask();
+	const String origFilter = pGlobalFileFilter->GetMaskOrExpression();
 	sht.AddPage(&fileFiltersDlg);
 	sht.AddPage(&lineFiltersDlg);
 	sht.AddPage(&substitutionFiltersDlg);
@@ -2109,8 +2115,7 @@ void CMainFrame::OnToolsFilters()
 	// Make sure all filters are up-to-date
 	pGlobalFileFilter->ReloadUpdatedFilters();
 
-	fileFiltersDlg.SetFilterArray(pGlobalFileFilter->GetFileFilters(selectedFilter));
-	fileFiltersDlg.SetSelected(selectedFilter);
+	fileFiltersDlg.SetFileFilterHelper(pGlobalFileFilter);
 	const bool lineFiltersEnabledOrig = GetOptionsMgr()->GetBool(OPT_LINEFILTER_ENABLED);
 	lineFiltersDlg.m_bIgnoreRegExp = lineFiltersEnabledOrig;
 
@@ -2124,28 +2129,8 @@ void CMainFrame::OnToolsFilters()
 
 	if (sht.DoModal() == IDOK)
 	{
-		String strNone = _("<None>");
-		String path = fileFiltersDlg.GetSelected();
-		if (!path.empty())
-		{
-			if (path.find(strNone) != String::npos)
-			{
-				// Don't overwrite mask we already have
-				if (!pGlobalFileFilter->IsUsingMask())
-				{
-					String sFilter(_T("*.*"));
-					pGlobalFileFilter->SetFilter(sFilter);
-					GetOptionsMgr()->SaveOption(OPT_FILEFILTER_CURRENT, sFilter);
-				}
-			}
-			else
-			{
-				pGlobalFileFilter->SetFileFilterPath(path);
-				pGlobalFileFilter->UseMask(false);
-				String sFilter = pGlobalFileFilter->GetFilterNameOrMask();
-				GetOptionsMgr()->SaveOption(OPT_FILEFILTER_CURRENT, sFilter);
-			}
-		}
+		String sFilter = pGlobalFileFilter->GetMaskOrExpression();
+		GetOptionsMgr()->SaveOption(OPT_FILEFILTER_CURRENT, sFilter);
 		bool linefiltersEnabled = lineFiltersDlg.m_bIgnoreRegExp;
 		GetOptionsMgr()->SaveOption(OPT_LINEFILTER_ENABLED, linefiltersEnabled);
 
@@ -2168,11 +2153,11 @@ void CMainFrame::OnToolsFilters()
 		}
 		else if (frame == FRAME_FOLDER)
 		{
-			const String newFilter = pGlobalFileFilter->GetFilterNameOrMask();
+			const String newFilter = pGlobalFileFilter->GetMaskOrExpression();
 			if (lineFiltersEnabledOrig != linefiltersEnabled || 
 					!theApp.m_pLineFilters->Compare(lineFilters.get()) || origFilter != newFilter)
 			{
-				int res = LangMessageBox(IDS_FILTERCHANGED, MB_ICONWARNING | MB_YESNO);
+				int res = I18n::MessageBox(IDS_FILTERCHANGED, MB_ICONWARNING | MB_YESNO);
 				if (res == IDYES)
 					bFolderCompareRescan = true;
 			}
@@ -2234,11 +2219,9 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 		}
 	}
 
-	if (WM_KEYDOWN == pMsg->message && VK_TAB == pMsg->wParam && GetAsyncKeyState(VK_CONTROL) < 0 && m_arrChild.GetSize() > 1)
+	if (WM_KEYDOWN == pMsg->message && VK_TAB == pMsg->wParam && GetAsyncKeyState(VK_CONTROL) < 0 && m_wndManager.GetChildCount() > 1)
 	{
-		CWindowsManagerDialog* pDlg = new CWindowsManagerDialog;
-		pDlg->Create(CWindowsManagerDialog::IDD, this);
-		pDlg->ShowWindow(SW_SHOW);
+		m_wndManager.ShowDialog(this);
 		return TRUE;
 	}
 
@@ -2397,13 +2380,18 @@ void CMainFrame::OnFileOpenProject()
  */
 LRESULT CMainFrame::OnCopyData(WPARAM wParam, LPARAM lParam)
 {
-	COPYDATASTRUCT *pCopyData = (COPYDATASTRUCT*)lParam;
+	COPYDATASTRUCT* pCopyData = (COPYDATASTRUCT*)lParam;
 	const tchar_t* pchData = (const tchar_t*)pCopyData->lpData;
 	// Bail out if data isn't zero-terminated
 	DWORD cchData = pCopyData->cbData / sizeof(tchar_t);
 	if (cchData == 0 || pchData[cchData - 1] != _T('\0'))
 		return FALSE;
 	ReplyMessage(TRUE);
+	if (lstrlen(pchData) + 1 < cchData)
+	{
+		// pchData + lstrlen(pchData) + 1 points to the current directory
+		SetCurrentDirectory(pchData + lstrlen(pchData) + 1);
+	}
 	MergeCmdLineInfo cmdInfo(pchData);
 	theApp.ApplyCommandLineConfigOptions(cmdInfo);
 	theApp.ParseArgsAndDoOpen(cmdInfo, this);
@@ -2548,7 +2536,7 @@ void CMainFrame::OnSaveProject()
 			}
 			pOpenDoc->m_files = paths;
 			pOpenDoc->m_bRecurse = GetOptionsMgr()->GetBool(OPT_CMP_INCLUDE_SUBDIRS);
-			pOpenDoc->m_strExt = theApp.GetGlobalFileFilter()->GetFilterNameOrMask();
+			pOpenDoc->m_strExt = theApp.GetGlobalFileFilter()->GetMaskOrExpression();
 			pOpenDoc->m_strUnpackerPipeline = pMergeDoc->GetUnpacker() ? pMergeDoc->GetUnpacker()->GetPluginPipeline() : _T("");
 			pOpenDoc->m_strPredifferPipeline = pMergeDoc->GetPrediffer() ? pMergeDoc->GetPrediffer()->GetPluginPipeline() : _T("");
 			switch (frame)
@@ -2596,7 +2584,7 @@ void CMainFrame::OnSaveProject()
 				pOpenDoc->m_strDesc[pane] = pDoc->GetDescription(pane);
 			}
 			pOpenDoc->m_bRecurse = ctxt.m_bRecursive;
-			pOpenDoc->m_strExt = static_cast<FileFilterHelper*>(ctxt.m_piFilterGlobal)->GetFilterNameOrMask();
+			pOpenDoc->m_strExt = static_cast<FileFilterHelper*>(ctxt.m_piFilterGlobal)->GetMaskOrExpression();
 			pOpenDoc->m_hiddenItems = ctxt.m_vCurrentlyHiddenItems;
 		}
 	}
@@ -2659,7 +2647,8 @@ BOOL CMainFrame::CreateToolbar()
 		return FALSE;
 	}
 
-	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT | TBSTYLE_TRANSPARENT) ||
+	// Remove TBSTYLE_TOOLTIPS if you don't want tooltips
+	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT | TBSTYLE_TRANSPARENT | TBSTYLE_TOOLTIPS) ||
 		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
 	{
 		return FALSE;
@@ -2671,9 +2660,9 @@ BOOL CMainFrame::CreateToolbar()
 		return FALSE;
 	}
 
-	// Remove this if you don't want tool tips or a resizable toolbar
+	// Remove this if you don't want a resizable toolbar
 	m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |
-		CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
+		CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
 	m_wndToolBar.GetToolBarCtrl().SetExtendedStyle(TBSTYLE_EX_DRAWDDARROWS);
 
 	m_wndReBar.AddBar(&m_wndMenuBar);
@@ -2703,7 +2692,8 @@ BOOL CMainFrame::CreateToolbar()
 	}
 
 	m_wndReBar.LoadStateFromString(GetOptionsMgr()->GetString(OPT_REBAR_STATE).c_str());
-
+	if (HWND hTip = m_wndToolBar.GetToolBarCtrl().GetToolTips()->GetSafeHwnd())
+		DarkMode::setDarkTooltips(hTip, static_cast<int>(DarkMode::ToolTipsType::tooltip));
 	return TRUE;
 }
 
@@ -2851,7 +2841,7 @@ BOOL CMainFrame::OnToolTipText(UINT, NMHDR* pNMHDR, LRESULT* pResult)
 			}
 		}
 
-		strFullText = theApp.LoadString(static_cast<UINT>(nID));
+		strFullText = I18n::LoadString(static_cast<UINT>(nID));
 		// don't handle the message if no string resource found
 		if (strFullText.empty())
 			return FALSE;
@@ -2907,7 +2897,7 @@ bool CMainFrame::AskCloseConfirmation()
 			if (!pDoc->HasDiffs())
 				return true;
 		}
-		ret = LangMessageBox(IDS_CLOSEALL_WINDOWS, MB_YESNO | MB_ICONWARNING);
+		ret = I18n::MessageBox(IDS_CLOSEALL_WINDOWS, MB_YESNO | MB_ICONWARNING);
 	}
 	return (ret == IDYES);
 }
@@ -2918,7 +2908,7 @@ bool CMainFrame::AskCloseConfirmation()
  */
 void CMainFrame::OnHelpReleasenotes()
 {
-	String sPath = paths::ConcatPath(env::GetProgPath(),strutils::format(RelNotes, theApp.GetLangName()));
+	String sPath = paths::ConcatPath(env::GetProgPath(),strutils::format(RelNotes, I18n::GetLangName()));
 	if (paths::DoesPathExist(sPath) != paths::IS_EXISTING_FILE)
 		sPath = paths::ConcatPath(env::GetProgPath(), strutils::format(RelNotes, _T("")));
 	shell::Open(sPath.c_str());
@@ -3067,7 +3057,7 @@ bool CMainFrame::DoOpenConflict(const String& conflictFile, const String strDesc
 	}
 	else
 	{
-		LangMessageBox(IDS_ERROR_CONF_RESOLVE, MB_ICONSTOP);
+		I18n::MessageBox(IDS_ERROR_CONF_RESOLVE, MB_ICONSTOP);
 	}
 	return conflictCompared;
 }
@@ -3178,7 +3168,7 @@ void CMainFrame::OnToolbarButtonDropDown(NMHDR* pNMHDR, LRESULT* pResult)
 		break;
 	}
 	VERIFY(menu.LoadMenu(id));
-	theApp.TranslateMenu(menu.m_hMenu);
+	I18n::TranslateMenu(menu.m_hMenu);
 	CMenu* pPopup = menu.GetSubMenu(0);
 	if (pPopup != nullptr)
 	{
@@ -3284,6 +3274,18 @@ void CMainFrame::OnUpdateDiffIgnoreMissingTrailingEol(CCmdUI* pCmdUI)
 	pCmdUI->Enable();
 }
 
+void CMainFrame::OnDiffIgnoreLineBreaks()
+{
+	GetOptionsMgr()->SaveOption(OPT_CMP_IGNORE_LINE_BREAKS, !GetOptionsMgr()->GetBool(OPT_CMP_IGNORE_LINE_BREAKS));
+	ApplyDiffOptions();
+}
+
+void CMainFrame::OnUpdateDiffIgnoreLineBreaks(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(GetOptionsMgr()->GetBool(OPT_CMP_IGNORE_LINE_BREAKS));
+	pCmdUI->Enable();
+}
+
 void CMainFrame::OnIncludeSubfolders()
 {
 	GetOptionsMgr()->SaveOption(OPT_CMP_INCLUDE_SUBDIRS, !GetOptionsMgr()->GetBool(OPT_CMP_INCLUDE_SUBDIRS));
@@ -3342,7 +3344,7 @@ void CMainFrame::OnUpdateNoMRUs(CCmdUI* pCmdUI)
 	if (mrus.size() == 0)
 	{
 		// no script : create a <empty> entry
-		::AppendMenu(hMenu, MF_STRING, ID_NO_MRU, theApp.LoadString(IDS_NO_EDIT_SCRIPTS).c_str());
+		::AppendMenu(hMenu, MF_STRING, ID_NO_MRU, I18n::LoadString(IDS_NO_EDIT_SCRIPTS).c_str());
 	}
 	else
 	{
@@ -3773,68 +3775,6 @@ void CMainFrame::OnAccelQuit()
 	SendMessage(WM_CLOSE);
 }
 
-LRESULT CMainFrame::OnChildFrameAdded(WPARAM wParam, LPARAM lParam)
-{
-	for (int i = 0; i < m_arrChild.GetSize(); ++i)
-	{
-		if (reinterpret_cast<CMDIChildWnd*>(lParam) == m_arrChild.GetAt(i))
-		{
-			return 0;
-		}
-	}
-
-	m_arrChild.InsertAt(0, reinterpret_cast<CMDIChildWnd*>(lParam));
-
-	return 1;
-}
-
-LRESULT CMainFrame::OnChildFrameRemoved(WPARAM wParam, LPARAM lParam)
-{
-	for (int i = 0; i < m_arrChild.GetSize(); ++i)
-	{
-		if (reinterpret_cast<CMDIChildWnd*>(lParam) == m_arrChild.GetAt(i))
-		{
-			m_arrChild.RemoveAt(i);
-			break;
-		}
-	}
-
-	return 1;
-}
-
-LRESULT CMainFrame::OnChildFrameActivate(WPARAM wParam, LPARAM lParam)
-{
-	for (int i = 0; i < m_arrChild.GetSize(); ++i)
-	{
-		if (reinterpret_cast<CMDIChildWnd*>(lParam) == m_arrChild.GetAt(i))
-		{
-			CMDIChildWnd* pMDIChild = m_arrChild.GetAt(i);
-			if (pMDIChild->IsIconic())
-				pMDIChild->ShowWindow(SW_RESTORE);
-			MDIActivate(pMDIChild);
-			break;
-		}
-	}
-
-	return 1;
-}
-// put lParam as index 0 in m_arrChild
-LRESULT CMainFrame::OnChildFrameActivated(WPARAM wParam, LPARAM lParam)
-{
-	for (int i = 0; i < m_arrChild.GetSize(); ++i)
-	{
-		if (reinterpret_cast<CMDIChildWnd*>(lParam) == m_arrChild.GetAt(i))
-		{
-			m_arrChild.RemoveAt(i);
-			break;
-		}
-	}
-
-	m_arrChild.InsertAt(0, reinterpret_cast<CMDIChildWnd*>(lParam));
-
-	return 1;
-}
-
 void CMainFrame::UpdateSystemMenu()
 {
 	CMenu* pSysMenu = GetSystemMenu(FALSE);
@@ -3862,7 +3802,7 @@ void CMainFrame::ShowOutputPane(bool bShow)
 
 		FrameWndHelper::RemoveBarBorder(this);
 
-		String sCaption = theApp.LoadString(IDS_OUTPUTBAR_CAPTION);
+		String sCaption = I18n::LoadString(IDS_OUTPUTBAR_CAPTION);
 		if (!m_wndOutputBar.Create(this, sCaption.c_str(), WS_CHILD | WS_VISIBLE, ID_VIEW_OUTPUT_BAR))
 		{
 			TRACE0("Failed to create tab bar\n");
@@ -3926,4 +3866,51 @@ void CMainFrame::OnSysCommand(UINT nID, LPARAM lParam)
 		return;
 	}
 	__super::OnSysCommand(nID, lParam);
+}
+
+/**
+ * @brief Called when the system settings change.
+ */
+void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
+{
+	if (WinMergeDarkMode::IsImmersiveColorSet(lpszSection))
+	{
+		const DarkMode::DarkModeType dmTypeNew =
+			WinMergeDarkMode::GetDarkModeType(GetOptionsMgr()->GetInt(OPT_COLOR_MODE));
+		const DarkMode::DarkModeType dmTypeOld =
+			WinMergeDarkMode::GetDarkModeType(GetOptionsMgr()->GetInt(OPT_COLOR_MODE_EFFECTIVE));
+		if (dmTypeNew != dmTypeOld)
+		{
+			const String path = ColorSchemes::GetColorSchemePath(dmTypeNew == DarkMode::DarkModeType::dark ?
+				GetOptionsMgr()->GetString(OPT_COLOR_SCHEME_DARK) : GetOptionsMgr()->GetString(OPT_COLOR_SCHEME));
+			SysColorHook::Unhook(AfxGetInstanceHandle());
+			GetOptionsMgr()->ImportOptions(path);
+			GetOptionsMgr()->SaveOption(OPT_COLOR_MODE_EFFECTIVE, dmTypeNew == DarkMode::DarkModeType::dark ? 1 : 0);
+
+			Options::SyntaxColors::Load(GetOptionsMgr(), theApp.GetMainSyntaxColors());
+
+			DarkMode::setDarkModeConfigEx(static_cast<UINT>(dmTypeNew));
+			DarkMode::setDefaultColors(true);
+			DarkMode::setDarkTitleBarEx(m_hWnd, true);
+			CMergeApp::ReloadCustomSysColors();
+
+			// Update all dirdoc settings
+			for (auto pMergeDoc : GetAllMergeDocs())
+				pMergeDoc->RefreshOptions();
+			for (auto pDirDoc : GetAllDirDocs())
+				pDirDoc->RefreshOptions();
+			for (auto pHexMergeDoc : GetAllHexMergeDocs())
+				pHexMergeDoc->RefreshOptions();
+			for (auto pImgMergeFrame : GetAllImgMergeFrames())
+				pImgMergeFrame->RefreshOptions();
+			for (auto pWebPageDiffFrame : GetAllWebPageDiffFrames())
+				pWebPageDiffFrame->RefreshOptions();
+			for (auto pOpenDoc : GetAllOpenDocs())
+				pOpenDoc->RefreshOptions();
+
+			AfxGetMainWnd()->SendMessage(WM_SYSCOLORCHANGE);
+			RedrawWindow(nullptr, nullptr, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_ALLCHILDREN);
+		}
+	}
+	__super::OnSettingChange(uFlags, lpszSection);
 }

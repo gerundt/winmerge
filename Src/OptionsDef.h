@@ -74,6 +74,7 @@ inline const String OPT_ADDITIONAL_PROPERTIES {_T("Settings/AdditionalProperties
 // Window/Pane
 inline const String OPT_ACTIVE_FRAME_MAX {_T("Settings/ActiveFrameMax"s)};
 inline const String OPT_ACTIVE_PANE {_T("Settings/ActivePane"s)};
+inline const String OPT_LOCBAR_MOVECURSOR_ONCLICK {_T("Settings/LocBarMoveCursorOnClick"s)};
 
 // Folder Compare Report
 inline const String OPT_REPORTFILES_REPORTTYPE {_T("ReportFiles/ReportType"s)};
@@ -206,7 +207,10 @@ inline const String OPT_DIRCLR_MARGIN {_T("Settings/DirMarginColor"s)};
 // Use dir compare coloring?
 inline const String OPT_DIRCLR_USE_COLORS {_T("Settings/UseDirCompareColors"s)};
 
+inline const String OPT_COLOR_MODE {_T("Settings/ColorMode"s)};
+inline const String OPT_COLOR_MODE_EFFECTIVE {_T("Settings/ColorModeEffective"s)};
 inline const String OPT_COLOR_SCHEME {_T("Settings/ColorScheme"s)};
+inline const String OPT_COLOR_SCHEME_DARK {_T("Settings/ColorSchemeDark"s)};
 
 // Compare options
 inline const String OPT_CMP_IGNORE_WHITESPACE {_T("Settings/IgnoreSpace"s)};
@@ -217,6 +221,7 @@ inline const String OPT_CMP_IGNORE_NUMBERS {_T("Settings/IgnoreNumbers"s)};
 inline const String OPT_CMP_IGNORE_EOL {_T("Settings/IgnoreEol"s)};
 inline const String OPT_CMP_IGNORE_CODEPAGE {_T("Settings/IgnoreCodepage"s)};
 inline const String OPT_CMP_IGNORE_MISSING_TRAILING_EOL {_T("Settings/IgnoreMissingTrailingEol"s)};
+inline const String OPT_CMP_IGNORE_LINE_BREAKS {_T("Settings/IgnoreLineBreaks"s)};
 inline const String OPT_CMP_METHOD {_T("Settings/CompMethod2"s)};
 inline const String OPT_CMP_MOVED_BLOCKS {_T("Settings/MovedBlocks"s)};
 inline const String OPT_CMP_ALIGN_SIMILAR_LINES {_T("Settings/MatchSimilarLines"s)};
@@ -230,6 +235,12 @@ inline const String OPT_CMP_INCLUDE_SUBDIRS {_T("Settings/Recurse"s)};
 inline const String OPT_CMP_DIFF_ALGORITHM {_T("Settings/DiffAlgorithm"s)};
 inline const String OPT_CMP_INDENT_HEURISTIC {_T("Settings/IndentHeuristic"s)};
 inline const String OPT_CMP_COMPLETELY_BLANK_OUT_IGNORED_CHANGES {_T("Settings/CompletelyBlankOutIgnoredChanges"s)};
+inline const String OPT_CMP_ADDITIONAL_CONDITION {_T("Settings/AdditionalCompareCondition"s)};
+
+// Renamed/moved detection options
+inline const String OPT_CMP_RENAME_MOVE_DETECTION {_T("Settings/RenameMoveDetection"s)};
+inline const String OPT_CMP_RENAME_MOVE_KEY {_T("Settings/RenameMoveKey"s)};
+inline const String OPT_CMP_MERGE_RENAMED_ITEMS {_T("Settings/MergeRenamedItems"s)};
 
 // Image Compare options
 inline const String OPT_CMP_IMG_FILEPATTERNS {_T("Settings/ImageFilePatterns"s)};
@@ -283,6 +294,7 @@ inline const String OPT_LINEFILTER_ENABLED {_T("Settings/IgnoreRegExp"s)};
 inline const String OPT_FILEFILTER_CURRENT {_T("Settings/FileFilterCurrent"s)};
 inline const String OPT_FILTER_USERPATH {_T("Settings/UserFilterPath"s)};
 inline const String OPT_FILEFILTER_SHARED {_T("Settings/Filters/Shared"s)};
+inline const String OPT_USERDATA_LOCATION {_T("Settings/UserDataLocation"s)};
 
 /// Substitution Filters
 inline const String OPT_SUBSTITUTION_FILTERS_ENABLED {_T("Settings/SubstitutionFiltersEnabled"s)};

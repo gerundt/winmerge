@@ -9,6 +9,7 @@
 #include "IMDITab.h"
 #include "cecolor.h"
 #include "RoundedRectWithShadow.h"
+#include "DarkModeLib.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,6 +36,7 @@ BEGIN_MESSAGE_MAP(CMyTabCtrl, CTabCtrl)
 	ON_WM_MOUSELEAVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -69,6 +71,12 @@ BOOL CMyTabCtrl::Create(CMDIFrameWnd* pMainFrame, CWnd* pParent)
 	m_pMainFrame = pMainFrame;
 	m_tooltips.Create(m_pMainFrame, TTS_NOPREFIX);
 	m_tooltips.AddTool(this, _T(""));
+	if (HWND hSelf = GetSafeHwnd())
+		DarkMode::setTabCtrlUpDownSubclass(hSelf);
+
+	if (HWND hTip = m_tooltips.GetSafeHwnd())
+		DarkMode::setDarkTooltips(hTip, static_cast<int>(DarkMode::ToolTipsType::tooltip));
+
 	return TRUE;
 }
 
@@ -92,6 +100,25 @@ void CMyTabCtrl::SetActive(bool bActive)
 	m_bActive = bActive;
 }
 
+/**
+ * @brief Activate the specific tab by index.
+ * @param nTabIndex [in] Tab index to activate
+ */
+void CMyTabCtrl::ActivateTab(int nTabIndex)
+{
+	if (nTabIndex < 0 || nTabIndex >= GetItemCount())
+		return;
+
+	SetCurSel(nTabIndex);
+
+	// Notify tab selection changed
+	NMHDR nmhdr = {0};
+	nmhdr.hwndFrom = GetSafeHwnd();
+	nmhdr.idFrom = GetDlgCtrlID();
+	nmhdr.code = TCN_SELCHANGE;
+	GetParent()->SendMessage(WM_NOTIFY, nmhdr.idFrom, reinterpret_cast<LPARAM>(&nmhdr));
+}
+
 static inline COLORREF getTextColor()
 {
 	return GetSysColor(COLOR_WINDOWTEXT);
@@ -99,14 +126,12 @@ static inline COLORREF getTextColor()
 
 COLORREF CMyTabCtrl::GetBackColor() const
 {
-	const COLORREF clr = GetSysColor(COLOR_3DFACE);
 	if (!m_bOnTitleBar)
-		return clr;
+		return GetSysColor(COLOR_3DFACE);
 	return CTitleBarHelper::GetBackColor(m_bActive);
 }
 
 static inline bool IsHighContrastEnabled()
-
 {
 	HIGHCONTRAST hc = { sizeof(HIGHCONTRAST) };
 	SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(hc), &hc, 0);
@@ -507,6 +532,66 @@ void CMyTabCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 	CWnd::OnLButtonUp(nFlags, point);
 }
 
+BOOL CMyTabCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint point)
+{
+	// Rotating the mouse wheel while dragging: No action performed
+	if (m_nDraggingTabItemIndex >= 0)
+		return TRUE;
+
+	// "Scroll forward" is wheel rotation towards the user
+	const bool bIsScrollForward = zDelta < 0;
+
+	const int nLastTabIndex = GetItemCount() - 1;
+
+	// SHIFT + MOUSEWHEEL (UP/DOWN): Switches to the previous/next tab WITHOUT wraparound
+	if (nFlags & MK_SHIFT)
+	{
+		int nSwitchToTabIndex = GetCurSel() + (bIsScrollForward ? 1 : -1);
+		if (nSwitchToTabIndex < 0 || nSwitchToTabIndex > nLastTabIndex)
+			return TRUE;
+
+		ActivateTab(nSwitchToTabIndex);
+	}
+
+	// Otherwise, scroll the tab bar
+	else
+	{
+		CRect rectTabCtrl, rectLastTab;
+		GetClientRect(&rectTabCtrl);
+		GetItemRect(nLastTabIndex, &rectLastTab);
+
+		// Get index of the first visible tab
+		CPoint pt(rectTabCtrl.left + 10, rectTabCtrl.Height() / 2);
+		int nFirstVisibleTabIndex = GetItemIndexFromPoint(pt);
+
+		if (nFirstVisibleTabIndex < 1 && rectLastTab.right < rectTabCtrl.right)  // No overflow
+			return TRUE;
+
+		// Get the width of the up/down control
+		// This area may hide parts of the last tab and needs to be excluded
+		CWnd* pUpDownCtrl = FindWindowEx(GetSafeHwnd(), nullptr, L"msctls_updown32", nullptr);
+		if (!pUpDownCtrl)	// No up/down control also means no overflow
+			return TRUE;
+
+		CRect rectUpDownCtrl;
+		pUpDownCtrl->GetWindowRect(&rectUpDownCtrl);
+
+		// Scroll forward as long as the last tab is hidden; scroll backward till the first tab
+		int nScrollTabIndex = nFirstVisibleTabIndex;
+		if ((rectTabCtrl.right - rectLastTab.right) < rectUpDownCtrl.Width() || !bIsScrollForward)
+		{
+			nScrollTabIndex += (bIsScrollForward ? 1 : -1);
+			if (nScrollTabIndex < 0 || nScrollTabIndex > nLastTabIndex)
+				return TRUE;
+
+			// Scroll tabs
+			SendMessage(WM_HSCROLL, MAKEWPARAM(SB_THUMBPOSITION, nScrollTabIndex), 0);
+		}
+	}
+
+	return TRUE;
+}
+
 CRect CMyTabCtrl::GetCloseButtonRect(int nItem)
 {
 	CClientDC dc(this);
@@ -675,6 +760,62 @@ BOOL CMDITabBar::Create(CMDIFrameWnd* pMainFrame)
 	return TRUE;
 }
 
+/**
+ * @brief Get tab item index from point
+ */
+int CMDITabBar::GetItemIndexFromPoint(CPoint point, bool bRelatively) const
+{
+	if (bRelatively)
+	{
+		CRect rcTabCtrl;
+		m_tabCtrl.GetClientRect(&rcTabCtrl);
+
+		m_tabCtrl.ScreenToClient(&point);
+		point.y = rcTabCtrl.Height() / 2;
+	}
+
+	TCHITTESTINFO hit;
+	hit.pt = point;
+	return m_tabCtrl.HitTest(&hit);
+}
+
+/**
+ * @brief Forward mouse events to the tab control if needed.
+ */
+bool CMDITabBar::ForwardMouseEventToTabCtrlIfNeeded(CPoint& point, UINT message)
+{
+	if (!(m_bOnTitleBar && m_titleBar.GetMaximized()))
+		return false;
+
+	int nItemHitTest = GetItemIndexFromPoint(point, true);
+	if (nItemHitTest == -1)
+		return false;
+
+	CRect rcHitItem;
+	m_tabCtrl.GetItemRect(nItemHitTest, &rcHitItem);
+	m_tabCtrl.ScreenToClient(&point);
+
+	if (point.y <= rcHitItem.top)
+		point.y = rcHitItem.top + 1;
+	else if (point.y >= rcHitItem.bottom)
+		point.y = rcHitItem.bottom - 1;
+
+	switch (message)
+	{
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONUP:
+		m_tabCtrl.SendMessage(message, MK_LBUTTON, MAKELPARAM(point.x, point.y));
+		break;
+	case WM_CONTEXTMENU:
+		m_tabCtrl.SendMessage(WM_CONTEXTMENU, (WPARAM)m_tabCtrl.m_hWnd, MAKELPARAM(point.x, point.y));
+		break;
+	default:
+		break;
+	}
+
+	return true;
+}
+
 /** 
  * @brief This method calculates the horizontal size of a control bar.
  */
@@ -722,11 +863,15 @@ void CMDITabBar::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 
 void CMDITabBar::OnNcLButtonDown(UINT nHitTest, CPoint point)
 {
+	if (ForwardMouseEventToTabCtrlIfNeeded(point, WM_LBUTTONDOWN))
+		return;
 	m_titleBar.OnNcLButtonDown(nHitTest, point);
 }
 
 void CMDITabBar::OnNcLButtonUp(UINT nHitTest, CPoint point)
 {
+	if (ForwardMouseEventToTabCtrlIfNeeded(point, WM_LBUTTONUP))
+		return;
 	m_titleBar.OnNcLButtonUp(nHitTest, point);
 }
 
@@ -737,6 +882,8 @@ void CMDITabBar::OnNcRButtonDown(UINT nHitTest, CPoint point)
 
 void CMDITabBar::OnNcRButtonUp(UINT nHitTest, CPoint point)
 {
+	if (ForwardMouseEventToTabCtrlIfNeeded(point, WM_CONTEXTMENU))
+		return;
 	m_titleBar.OnNcRButtonUp(nHitTest, point);
 }
 

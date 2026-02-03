@@ -199,10 +199,6 @@ msgid "&Zoom"
 msgstr "විශාල කරන්න"
 
 #, c-format
-msgid "25%"
-msgstr ""
-
-#, c-format
 msgid "Zoom &In\tCtrl++"
 msgstr "විශාලනය වැඩි කරන්න  \tCtrl++"
 
@@ -655,6 +651,9 @@ msgstr ""
 msgid "Swap 1st | &3rd"
 msgstr ""
 
+msgid "Displa&y Filter Bar\tCtrl+Shift+L"
+msgstr ""
+
 #, c-format
 msgid "Com&pare Statistics..."
 msgstr "සංඛ්‍යාන විස්තර සසඳන්න..."
@@ -1073,6 +1072,9 @@ msgstr ""
 msgid "Comp&are"
 msgstr "සසඳන්න"
 
+msgid "Compar&e with Renamed/Moved Items"
+msgstr ""
+
 msgid "Compare in New &Window"
 msgstr ""
 
@@ -1252,7 +1254,10 @@ msgstr "&Copy Full Path"
 msgid "Copy &Filename"
 msgstr "ගොනුවෙ නම  පිටපත් කිරීම"
 
-msgid "&Edit Caption"
+msgid "&Edit Caption\tF2"
+msgstr ""
+
+msgid "Edit &Path\tCtrl+L"
 msgstr ""
 
 msgid "&Open..."
@@ -1279,6 +1284,9 @@ msgstr "Prediffer Settings"
 
 msgid "G&o to Diff"
 msgstr "G&oto Diff"
+
+msgid "Move Cursor on &Click"
+msgstr ""
 
 #, fuzzy, c-format
 msgid "&No Moved Blocks"
@@ -1329,6 +1337,9 @@ msgstr ""
 msgid "Ignore &Missing Trailing EOL"
 msgstr ""
 
+msgid "Ignore Line &Breaks (Treat as Spaces)"
+msgstr ""
+
 #, c-format
 msgid "&Include Subfolders"
 msgstr ""
@@ -1360,6 +1371,9 @@ msgstr "වෙනස්කල දිනය සහ ප්‍රමාණය"
 #, c-format
 msgid "Size"
 msgstr "ප්‍රමාණය"
+
+msgid "Existence"
+msgstr ""
 
 #, c-format
 msgid "&Load Project..."
@@ -1441,6 +1455,459 @@ msgid "&Duplicate Plugin..."
 msgstr ""
 
 msgid "Clear &All"
+msgstr ""
+
+msgid "&Clear All"
+msgstr ""
+
+msgid "Remove Last Filter &Group"
+msgstr ""
+
+msgid "R&eset to Default (*.*)"
+msgstr ""
+
+msgid "Add E&xclude File"
+msgstr ""
+
+msgid "&System Files"
+msgstr ""
+
+msgid "&Editor Backup Files"
+msgstr ""
+
+msgid "&Compiled Binary Files"
+msgstr ""
+
+msgid "&Log Files"
+msgstr ""
+
+msgid "&Temporary or Cache Files"
+msgstr ""
+
+msgid "Add Excl&ude Folder"
+msgstr ""
+
+msgid "&Version Control"
+msgstr ""
+
+msgid "&Build Artifacts"
+msgstr ""
+
+msgid "&IDE"
+msgstr ""
+
+msgid "Add &File Condition"
+msgstr ""
+
+msgid "File &Size"
+msgstr ""
+
+msgid "Less than 1KB"
+msgstr ""
+
+msgid "1KB or more"
+msgstr ""
+
+msgid "Less than 10KB"
+msgstr ""
+
+msgid "10KB or more"
+msgstr ""
+
+msgid "Less than 100KB"
+msgstr ""
+
+msgid "100KB or more"
+msgstr ""
+
+msgid "Less than 1MB"
+msgstr ""
+
+msgid "1MB or more"
+msgstr ""
+
+msgid "Less than 10MB"
+msgstr ""
+
+msgid "10MB or more"
+msgstr ""
+
+msgid "Less than 100MB"
+msgstr ""
+
+msgid "100MB or more"
+msgstr ""
+
+msgid "Less than 1GB"
+msgstr ""
+
+msgid "1GB or more"
+msgstr ""
+
+msgid "Custom Range..."
+msgstr ""
+
+msgid "&Last Modified"
+msgstr ""
+
+msgid "&Hour"
+msgstr ""
+
+msgid "More than 1 hour ago"
+msgstr ""
+
+msgid "Within 1 hour"
+msgstr ""
+
+msgid "&Day"
+msgstr ""
+
+msgid "Before today"
+msgstr ""
+
+msgid "Today"
+msgstr ""
+
+msgid "Before yesterday"
+msgstr ""
+
+msgid "Yesterday"
+msgstr ""
+
+msgid "Since yesterday"
+msgstr ""
+
+msgid "&Week"
+msgstr ""
+
+msgid "Before this week"
+msgstr ""
+
+msgid "This week"
+msgstr ""
+
+msgid "Before last week"
+msgstr ""
+
+msgid "Last week"
+msgstr ""
+
+msgid "Since last week"
+msgstr ""
+
+msgid "&Month"
+msgstr ""
+
+msgid "Before this month"
+msgstr ""
+
+msgid "This month"
+msgstr ""
+
+msgid "Before last month"
+msgstr ""
+
+msgid "Last month"
+msgstr ""
+
+msgid "Since last month"
+msgstr ""
+
+msgid "&Year"
+msgstr ""
+
+msgid "Before this year"
+msgstr ""
+
+msgid "This year"
+msgstr ""
+
+msgid "Before last year"
+msgstr ""
+
+msgid "Last year"
+msgstr ""
+
+msgid "Since last year"
+msgstr ""
+
+msgid "&Custom Range..."
+msgstr ""
+
+msgid "&Attributes"
+msgstr ""
+
+msgid "Read-only files"
+msgstr ""
+
+msgid "Not read-only files"
+msgstr ""
+
+msgid "Hidden files"
+msgstr ""
+
+msgid "Not hidden files"
+msgstr ""
+
+msgid "System files"
+msgstr ""
+
+msgid "Not system files"
+msgstr ""
+
+msgid "File &Content"
+msgstr ""
+
+msgid "Contains string..."
+msgstr ""
+
+msgid "Does not contain string..."
+msgstr ""
+
+msgid "First line contains string..."
+msgstr ""
+
+msgid "First line does not contain string..."
+msgstr ""
+
+msgid "First 10 lines contain string..."
+msgstr ""
+
+msgid "First 10 lines do not contain string..."
+msgstr ""
+
+msgid "Last 10 lines contain string..."
+msgstr ""
+
+msgid "Last 10 lines do not contain string..."
+msgstr ""
+
+msgid "Last line contains string..."
+msgstr ""
+
+msgid "Last line does not contain string..."
+msgstr ""
+
+msgid "&Line Count"
+msgstr ""
+
+msgid "Less than 10"
+msgstr ""
+
+msgid "10 or more"
+msgstr ""
+
+msgid "Less than 100"
+msgstr ""
+
+msgid "100 or more"
+msgstr ""
+
+msgid "Less than 1000"
+msgstr ""
+
+msgid "1000 or more"
+msgstr ""
+
+msgid "Less than 10000"
+msgstr ""
+
+msgid "10000 or more"
+msgstr ""
+
+msgid "Less than 100000"
+msgstr ""
+
+msgid "100000 or more"
+msgstr ""
+
+msgid "Additional &Properties..."
+msgstr ""
+
+msgid "Add F&older Condition"
+msgstr ""
+
+msgid "&Files"
+msgstr ""
+
+msgid "0 files"
+msgstr ""
+
+msgid "1 file or more"
+msgstr ""
+
+msgid "&Items"
+msgstr ""
+
+msgid "0 items"
+msgstr ""
+
+msgid "1 item or more"
+msgstr ""
+
+msgid "&Total Size"
+msgstr ""
+
+msgid "&Recursive"
+msgstr ""
+
+msgid "Target: &Any (Left/Middle/Right)"
+msgstr ""
+
+msgid "Target: &Left"
+msgstr ""
+
+msgid "Target: &Middle"
+msgstr ""
+
+msgid "Target: &Right"
+msgstr ""
+
+msgid "Add &Difference Condition"
+msgstr ""
+
+msgid "Equal"
+msgstr ""
+
+msgid "Not Equal"
+msgstr ""
+
+msgid "Less Than"
+msgstr ""
+
+msgid "Less Than or Equal to"
+msgstr ""
+
+msgid "Greater Than"
+msgstr ""
+
+msgid "Greater Than or Equal to"
+msgstr ""
+
+msgid "Less than 10B"
+msgstr ""
+
+msgid "10B or more"
+msgstr ""
+
+msgid "Less than 100B"
+msgstr ""
+
+msgid "100B or more"
+msgstr ""
+
+msgid "Less than 1 second"
+msgstr ""
+
+msgid "1 second or more"
+msgstr ""
+
+msgid "Less than 1 minute"
+msgstr ""
+
+msgid "1 minute or more"
+msgstr ""
+
+msgid "Less than 1 hour"
+msgstr ""
+
+msgid "1 hour or more"
+msgstr ""
+
+msgid "Less than 1 day"
+msgstr ""
+
+msgid "1 day or more"
+msgstr ""
+
+msgid "Less than 1 week"
+msgstr ""
+
+msgid "1 week or more"
+msgstr ""
+
+msgid "Target: &Left and Right"
+msgstr ""
+
+msgid "Target: Left and &Middle"
+msgstr ""
+
+msgid "Target: Middle and &Right"
+msgstr ""
+
+msgid "Target: &All"
+msgstr ""
+
+msgid "&Clear conditions"
+msgstr ""
+
+msgid "Compare &Size"
+msgstr ""
+
+msgid "Compare &Date"
+msgstr ""
+
+msgid "Compare &Attributes"
+msgstr ""
+
+msgid "Compare C&ontents"
+msgstr ""
+
+msgid "&Clear Keys"
+msgstr ""
+
+msgid "&Name"
+msgstr ""
+
+msgid "&Base name (without extension)"
+msgstr ""
+
+msgid "Normalized &Unicode Name"
+msgstr ""
+
+msgid "&Date"
+msgstr ""
+
+msgid "&Hash (MD5)"
+msgstr ""
+
+msgid "Insert &replace() Function"
+msgstr ""
+
+msgid "Insert rege&xReplace() Function"
+msgstr ""
+
+msgid "Text &Normalization"
+msgstr ""
+
+msgid "&Lowercase"
+msgstr ""
+
+msgid "&Uppercase"
+msgstr ""
+
+msgid "&Half-width"
+msgstr ""
+
+msgid "&Full-width"
+msgstr ""
+
+msgid "&Chinese Conversion"
+msgstr ""
+
+msgid "&Simplified Chinese"
+msgstr ""
+
+msgid "&Traditional Chinese"
+msgstr ""
+
+msgid "&Japanese Conversion"
+msgstr ""
+
+msgid "&Hiragana"
+msgstr ""
+
+msgid "&Katakana"
 msgstr ""
 
 #, c-format
@@ -1544,57 +2011,6 @@ msgid "&Options..."
 msgstr "&විකල්පයන්..."
 
 #, c-format
-msgid "General"
-msgstr "සාමාන්‍ය "
-
-#, c-format
-msgid "Automatically &scroll to first difference"
-msgstr "ස්වයංක්‍රීයව පළමුවන වෙනස්කම සඳහා අනුචලනය"
-
-msgid "Automatically s&croll to first inline difference"
-msgstr ""
-
-msgid "Cl&ose windows with 'Esc':"
-msgstr "කවුළු වැසීම 'Esc':"
-
-#, c-format
-msgid "&Automatically verify paths in Open dialog"
-msgstr "&Automatically verify paths in Open dialog"
-
-msgid "Single instance mode:"
-msgstr ""
-
-#, c-format
-msgid "As&k when closing multiple windows"
-msgstr "කවුළු කිපයක් වැසීමේදී අසන්න"
-
-#, fuzzy, c-format
-msgid "&Preserve file time in file compare"
-msgstr "&Preserve file time in file compare"
-
-#, c-format
-msgid "Show \"Select Files or Folders\" dialog on startup"
-msgstr "Afficher la boîte de dialogue d'ouverture au démarrage"
-
-msgid "Close \"Select Files or Folders\" dialog on clicking Compare button"
-msgstr ""
-
-#, c-format
-msgid "Op&en dialog Auto completion:"
-msgstr "Op&en dialog Auto completion:"
-
-msgid "Auto-&reload modified files:"
-msgstr ""
-
-#, c-format
-msgid "Language:"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Defaults"
-msgstr "Defaults"
-
-#, c-format
 msgid "Find"
 msgstr "සොයන්න"
 
@@ -1629,10 +2045,6 @@ msgstr "සෙවීම එ ළඟ"
 #, c-format
 msgid "Find &Prev"
 msgstr ""
-
-#, c-format
-msgid "&Ok"
-msgstr "&හරි"
 
 #, c-format
 msgid "Replace"
@@ -1686,6 +2098,10 @@ msgid "&Background color:"
 msgstr ""
 
 #, c-format
+msgid "&Ok"
+msgstr "&හරි"
+
+#, c-format
 msgid "&Apply"
 msgstr "&යොමු කරන්න"
 
@@ -1724,10 +2140,88 @@ msgid "Clear"
 msgstr ""
 
 #, c-format
+msgid "Options"
+msgstr "විකල්ප"
+
+#, c-format
+msgid "Import..."
+msgstr "ආනයනය..."
+
+#, c-format
+msgid "Export..."
+msgstr "අපනයනය..."
+
+#, c-format
+msgid "General"
+msgstr "සාමාන්‍ය "
+
+#, c-format
+msgid "Automatically &scroll to first difference"
+msgstr "ස්වයංක්‍රීයව පළමුවන වෙනස්කම සඳහා අනුචලනය"
+
+msgid "Automatically s&croll to first inline difference"
+msgstr ""
+
+msgid "Cl&ose windows with 'Esc':"
+msgstr "කවුළු වැසීම 'Esc':"
+
+#, c-format
+msgid "&Automatically verify paths in Open dialog"
+msgstr "&Automatically verify paths in Open dialog"
+
+msgid "Single instance mode:"
+msgstr ""
+
+#, c-format
+msgid "As&k when closing multiple windows"
+msgstr "කවුළු කිපයක් වැසීමේදී අසන්න"
+
+#, fuzzy, c-format
+msgid "&Preserve file time in file compare"
+msgstr "&Preserve file time in file compare"
+
+#, c-format
+msgid "Show \"Select Files or Folders\" dialog on startup"
+msgstr "Afficher la boîte de dialogue d'ouverture au démarrage"
+
+msgid "Close \"Select Files or Folders\" dialog on clicking Compare button"
+msgstr ""
+
+#, c-format
+msgid "Op&en dialog Auto completion:"
+msgstr "Op&en dialog Auto completion:"
+
+msgid "Auto-&reload modified files:"
+msgstr ""
+
+#, c-format
+msgid "Language:"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Defaults"
+msgstr "Defaults"
+
+#, c-format
 msgid "Colors"
 msgstr "වර්ණ"
 
-msgid "Color Scheme:"
+msgid "Color &mode:"
+msgstr ""
+
+msgid "&Light mode scheme:"
+msgstr ""
+
+msgid "&Dark mode scheme:"
+msgstr ""
+
+msgid "Your custom schemes"
+msgstr ""
+
+msgid "&Save current scheme..."
+msgstr ""
+
+msgid "Delete &current scheme..."
 msgstr ""
 
 #, c-format
@@ -1888,6 +2382,9 @@ msgstr "&Use Recycle Bin"
 msgid "&External editor:"
 msgstr " බාහිර සංස්කාරකය:"
 
+msgid "&Store user data in:"
+msgstr ""
+
 #, c-format
 msgid "&Filter folder:"
 msgstr "ෆෝල්ඩරය පෙරහන් කරන්න:"
@@ -1907,6 +2404,131 @@ msgstr "C&ustom folder:"
 #, c-format
 msgid "Br&owse..."
 msgstr "සැරි සරන්න..."
+
+#, c-format
+msgid "Compare"
+msgstr "සසඳන්න"
+
+#, c-format
+msgid "Whitespaces"
+msgstr "හිස්තැන"
+
+#, c-format
+msgid "&Compare"
+msgstr "සසඳන්න"
+
+#, c-format
+msgid "&Ignore change"
+msgstr "වෙනස නොසලකා හරින්න "
+
+#, c-format
+msgid "I&gnore all"
+msgstr "සියල්ල නොසලකා හරින්න"
+
+msgid "Ignore blan&k lines"
+msgstr "හිස් පේළි නොසලකා හරින්න"
+
+msgid "Ignore &case"
+msgstr ""
+
+msgid "Igno&re EOL differences (Windows/Unix/Mac)"
+msgstr ""
+
+msgid "Ignore num&bers"
+msgstr ""
+
+msgid "Ignore codepage &differences"
+msgstr ""
+
+msgid "Ignore c&omment differences"
+msgstr ""
+
+msgid "Ignore &missing trailing EOL"
+msgstr ""
+
+msgid "Ignore line &breaks (treat as spaces)"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "E&nable moved block detection"
+msgstr "E&nable moved block detection"
+
+msgid "Align &similar lines"
+msgstr ""
+
+msgid "Diff &algorithm:"
+msgstr ""
+
+msgid "Enable indent &heuristic"
+msgstr ""
+
+msgid "Completely unhighlight the ignored differences"
+msgstr ""
+
+#, c-format
+msgid "Editor"
+msgstr "සම්පාදක"
+
+#, c-format
+msgid "&Highlight syntax"
+msgstr "&වාක්‍ය වින්‍යාසය විශේෂිතව දක්වන්න"
+
+#, fuzzy, c-format
+msgid "&Preserve original EOL"
+msgstr "&Preserve original EOL"
+
+#, fuzzy, c-format
+msgid "Tabs"
+msgstr "Tabs"
+
+#, fuzzy, c-format
+msgid "&Tab size:"
+msgstr "&Tab size:"
+
+#, fuzzy, c-format
+msgid "&Insert tabs"
+msgstr "&Insert tabs"
+
+#, c-format
+msgid "Insert &spaces"
+msgstr "ඇතුලත් කිරීම සහ හිස්තැන්"
+
+msgid "&Rendering mode:"
+msgstr ""
+
+#, c-format
+msgid "&Automatic rescan"
+msgstr "&ස්වයංක්‍රීය නැවත පිරික්සුම"
+
+msgid "Copy &granularity for selected differences:"
+msgstr ""
+
+#, c-format
+msgid "Line Difference Coloring"
+msgstr "පේළි අතර වෙනස වර්ණ ගැන්වුම"
+
+#, c-format
+msgid "View line differences"
+msgstr "පේළි අතර වෙනස පෙන්වන්න"
+
+#, c-format
+msgid "&Character-level"
+msgstr "& සංකේතයේ පිහිටුම"
+
+#, c-format
+msgid "&Word-level:"
+msgstr "& වචනයෙහි පිහිටුම"
+
+#, c-format
+msgid "W&ord break characters:"
+msgstr ""
+
+msgid "Some messages can be hidden by the user. Press Reset to make all messages visible again."
+msgstr ""
+
+#, c-format
+msgid "Reset"
+msgstr "යලි පිහිටුවීමට"
 
 #, fuzzy, c-format
 msgid "Patch Generator"
@@ -2033,6 +2655,10 @@ msgstr "අයිතම එකතුව:"
 msgid "Items compared:"
 msgstr "සැසඳූ අයිතම:"
 
+#, c-format
+msgid "&Close"
+msgstr "වසන්න"
+
 msgid "Go to"
 msgstr "වෙත යන්න"
 
@@ -2057,129 +2683,13 @@ msgstr "වෙනස"
 msgid "&Go to"
 msgstr "වෙත යන්න"
 
-#, c-format
-msgid "Compare"
-msgstr "සසඳන්න"
-
-#, c-format
-msgid "Whitespaces"
-msgstr "හිස්තැන"
-
-#, c-format
-msgid "&Compare"
-msgstr "සසඳන්න"
-
-#, c-format
-msgid "&Ignore change"
-msgstr "වෙනස නොසලකා හරින්න "
-
-#, c-format
-msgid "I&gnore all"
-msgstr "සියල්ල නොසලකා හරින්න"
-
-msgid "Ignore blan&k lines"
-msgstr "හිස් පේළි නොසලකා හරින්න"
-
-msgid "Ignore &case"
-msgstr ""
-
-msgid "Igno&re EOL differences (Windows/Unix/Mac)"
-msgstr ""
-
-msgid "Ignore num&bers"
-msgstr ""
-
-msgid "Ignore codepage &differences"
-msgstr ""
-
-msgid "Ignore c&omment differences"
-msgstr ""
-
-msgid "Ignore &missing trailing EOL"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "E&nable moved block detection"
-msgstr "E&nable moved block detection"
-
-msgid "Align &similar lines"
-msgstr ""
-
-msgid "Diff &algorithm:"
-msgstr ""
-
-msgid "Enable indent &heuristic"
-msgstr ""
-
-msgid "Completely unhighlight the ignored differences"
-msgstr ""
-
-#, c-format
-msgid "Editor"
-msgstr "සම්පාදක"
-
-#, c-format
-msgid "&Highlight syntax"
-msgstr "&වාක්‍ය වින්‍යාසය විශේෂිතව දක්වන්න"
-
-#, fuzzy, c-format
-msgid "&Preserve original EOL"
-msgstr "&Preserve original EOL"
-
-#, fuzzy, c-format
-msgid "Tabs"
-msgstr "Tabs"
-
-#, fuzzy, c-format
-msgid "&Tab size:"
-msgstr "&Tab size:"
-
-#, fuzzy, c-format
-msgid "&Insert tabs"
-msgstr "&Insert tabs"
-
-#, c-format
-msgid "Insert &spaces"
-msgstr "ඇතුලත් කිරීම සහ හිස්තැන්"
-
-msgid "&Rendering mode:"
-msgstr ""
-
-#, c-format
-msgid "&Automatic rescan"
-msgstr "&ස්වයංක්‍රීය නැවත පිරික්සුම"
-
-msgid "Copy &granularity for selected differences:"
-msgstr ""
-
-#, c-format
-msgid "Line Difference Coloring"
-msgstr "පේළි අතර වෙනස වර්ණ ගැන්වුම"
-
-#, c-format
-msgid "View line differences"
-msgstr "පේළි අතර වෙනස පෙන්වන්න"
-
-#, c-format
-msgid "&Character-level"
-msgstr "& සංකේතයේ පිහිටුම"
-
-#, c-format
-msgid "&Word-level:"
-msgstr "& වචනයෙහි පිහිටුම"
-
-#, c-format
-msgid "W&ord break characters:"
-msgstr ""
-
-msgid "Some messages can be hidden by the user. Press Reset to make all messages visible again."
-msgstr ""
-
-#, c-format
-msgid "Reset"
-msgstr "යලි පිහිටුවීමට"
-
 msgid "File Filters"
+msgstr ""
+
+msgid "&Mask / Filter Expression"
+msgstr ""
+
+msgid "Preset &Filters"
 msgstr ""
 
 msgid "Test..."
@@ -2200,6 +2710,66 @@ msgstr "සංස්කරණය කරන්න..."
 #, c-format
 msgid "Delete..."
 msgstr "මකා දමන්න..."
+
+msgid "Filter Condition"
+msgstr ""
+
+msgid "&Left-hand side:"
+msgstr ""
+
+msgid "&Operator:"
+msgstr ""
+
+msgid "&Right-hand side:"
+msgstr ""
+
+msgid "Expression:"
+msgstr ""
+
+#, c-format
+msgid "Codepage"
+msgstr "ගුප්ත සංඥා "
+
+#, fuzzy, c-format
+msgid "Default Codepage"
+msgstr "Default Codepage"
+
+#, fuzzy, c-format
+msgid "Select the default codepage for non-Unicode files:"
+msgstr "Select the default codepage for non-Unicode files:"
+
+#, c-format
+msgid "System codepage"
+msgstr "පද්ධති ගුප්ත සංඥා "
+
+#, c-format
+msgid "According to WinMerge User Interface"
+msgstr "WinMerge හි පරිශීලික අතුරුමුහුණතට අනුව"
+
+#, fuzzy, c-format
+msgid "Custom codepage:"
+msgstr "Custom codepage:"
+
+msgid "Detect codepage for: .html, .rc, .xml\nRestart required."
+msgstr "මෙම ගොනු සඳහා ගුප්ත සංඥා  විස්තර  අණාවරනය කරන්න: .html, .rc, .xml\n"
+
+msgid "Detect codepage for files with mlang.dll\nRestart required."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Archive Support"
+msgstr "Archive Support"
+
+#, fuzzy, c-format
+msgid "&Enable archive file support"
+msgstr "&Enable archive file support"
+
+#, c-format
+msgid "&Detect archive type from file signature"
+msgstr "ගොනුවේ ලාංජනය අනුව ලේබණයේ වර්ගය හදුනාගන්න"
+
+msgid "Items saved to or restored from the project file:"
+msgstr ""
 
 #, c-format
 msgid "Save Modified Files?"
@@ -2246,48 +2816,6 @@ msgid "Disca&rd All"
 msgstr ""
 
 #, c-format
-msgid "Codepage"
-msgstr "ගුප්ත සංඥා "
-
-#, fuzzy, c-format
-msgid "Default Codepage"
-msgstr "Default Codepage"
-
-#, fuzzy, c-format
-msgid "Select the default codepage for non-Unicode files:"
-msgstr "Select the default codepage for non-Unicode files:"
-
-#, c-format
-msgid "System codepage"
-msgstr "පද්ධති ගුප්ත සංඥා "
-
-#, c-format
-msgid "According to WinMerge User Interface"
-msgstr "WinMerge හි පරිශීලික අතුරුමුහුණතට අනුව"
-
-#, fuzzy, c-format
-msgid "Custom codepage:"
-msgstr "Custom codepage:"
-
-msgid "Detect codepage for: .html, .rc, .xml\nRestart required."
-msgstr "මෙම ගොනු සඳහා ගුප්ත සංඥා  විස්තර  අණාවරනය කරන්න: .html, .rc, .xml\n"
-
-msgid "Detect codepage for files with mlang.dll\nRestart required."
-msgstr ""
-
-#, c-format
-msgid "Options"
-msgstr "විකල්ප"
-
-#, c-format
-msgid "Import..."
-msgstr "ආනයනය..."
-
-#, c-format
-msgid "Export..."
-msgstr "අපනයනය..."
-
-#, c-format
 msgid "Folder Compare Report"
 msgstr "පත්‍රිකා සැසඳීමේ වාර්තාව"
 
@@ -2318,21 +2846,6 @@ msgstr "Shared Filter (for all users)"
 #, fuzzy, c-format
 msgid "Private Filter (current user only)"
 msgstr "Private Filter (current user only)"
-
-#, fuzzy, c-format
-msgid "Archive Support"
-msgstr "Archive Support"
-
-#, fuzzy, c-format
-msgid "&Enable archive file support"
-msgstr "&Enable archive file support"
-
-#, c-format
-msgid "&Detect archive type from file signature"
-msgstr "ගොනුවේ ලාංජනය අනුව ලේබණයේ වර්ගය හදුනාගන්න"
-
-msgid "Items saved to or restored from the project file:"
-msgstr ""
 
 #, c-format
 msgid "Compare Statistics"
@@ -2444,10 +2957,6 @@ msgstr "ප්‍රතිඵලය:"
 #, c-format
 msgid "&Test"
 msgstr "&අත්හදා බලන්න"
-
-#, c-format
-msgid "&Close"
-msgstr "වසන්න"
 
 msgid "Table"
 msgstr ""
@@ -2637,6 +3146,18 @@ msgstr ""
 msgid "Switch to &binary compare when size exceeds (MB):"
 msgstr ""
 
+msgid "Additional comparison condi&tions:"
+msgstr ""
+
+msgid "&Rename/move detection:"
+msgstr ""
+
+msgid "Rename/move detection &keys:"
+msgstr ""
+
+msgid "&Merge renamed items into a single item"
+msgstr ""
+
 msgid "File patterns:"
 msgstr ""
 
@@ -2727,6 +3248,42 @@ msgid "&Script file extension:"
 msgstr ""
 
 msgid "Script &body:"
+msgstr ""
+
+msgid "Font"
+msgstr ""
+
+msgid "&Font:"
+msgstr ""
+
+msgid "Font st&yle:"
+msgstr ""
+
+msgid "&Size:"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Stri&keout"
+msgstr ""
+
+msgid "&Underline"
+msgstr ""
+
+msgid "&Color:"
+msgstr ""
+
+msgid "Sample"
+msgstr ""
+
+msgid "AaBbYyZz"
+msgstr ""
+
+msgid "Sc&ript:"
+msgstr ""
+
+msgid "<A>Show more fonts</A>"
 msgstr ""
 
 #, c-format
@@ -3921,7 +4478,38 @@ msgid "Image files are different"
 msgstr ""
 
 #, c-format
+msgid "Files are different (expr: %1)"
+msgstr ""
+
+#, c-format
 msgid "Group%d"
+msgstr ""
+
+msgctxt "Options dialog|Compare|Folder|Detect renames and moves"
+msgid "Disabled"
+msgstr ""
+
+msgid "Detect renames"
+msgstr ""
+
+msgid "Detect renames and moves"
+msgstr ""
+
+msgid "Renamed"
+msgstr ""
+
+msgid "Moved"
+msgstr ""
+
+msgid "Renamed/Moved"
+msgstr ""
+
+#, c-format
+msgid "(%1 items)"
+msgstr ""
+
+#, c-format
+msgid "%1 (set %2): "
 msgstr ""
 
 #, c-format
@@ -4118,6 +4706,18 @@ msgstr "Same file is opened in both panes."
 #, c-format
 msgid "Selected files are identical."
 msgstr "Selected files are identical."
+
+msgid "Selected files are identical (with current settings).\r\nChecking binary identity..."
+msgstr ""
+
+msgid "Selected files are identical (with current settings).\r\nBut binary comparison failed."
+msgstr ""
+
+msgid "Selected files are identical (binary match)."
+msgstr ""
+
+msgid "Selected files are identical (with current settings).\r\nBut differ at the binary level."
+msgstr ""
 
 #, c-format
 msgid "An error occurred while comparing files."
@@ -4474,6 +5074,9 @@ msgstr ""
 msgid "WinMerge update available.\n%1 available (you have %2). Download now?"
 msgstr ""
 
+msgid " - All rights reserved."
+msgstr ""
+
 #, c-format
 msgid "Failed to download latest version information"
 msgstr ""
@@ -4493,9 +5096,9 @@ msgstr "G&o to Line %1"
 msgid "Go to Moved Line\tCtrl+Shift+G"
 msgstr ""
 
-#, c-format
+msgctxt "Options dialog|General|Open dialog Auto completion"
 msgid "Disabled"
-msgstr "Disabled"
+msgstr ""
 
 #, c-format
 msgid "From file system"
@@ -4596,6 +5199,10 @@ msgid "DirectWrite Natural"
 msgstr ""
 
 msgid "DirectWrite Natural Symmetric"
+msgstr ""
+
+msgctxt "Options dialog|General|Close windows with Esc"
+msgid "Disabled"
 msgstr ""
 
 msgid "MDI child window or main window"
@@ -4730,10 +5337,17 @@ msgstr ""
 msgid "Word-by-word position and text"
 msgstr ""
 
-msgid "AppData folder"
+msgid "AppData (Roaming) folder"
 msgstr ""
 
 msgid "Install folder"
+msgstr ""
+
+msgid "Documents folder"
+msgstr ""
+
+msgctxt "Options dialog|General|Single instance mode"
+msgid "Disabled"
 msgstr ""
 
 #, c-format
@@ -4741,6 +5355,10 @@ msgid "Allow only one instance to run"
 msgstr "එක් දෘෂ්ටාන්තයක් පමණක් සිදු වීමට ඉඩ හරින්න"
 
 msgid "Allow only one instance; wait for termination"
+msgstr ""
+
+msgctxt "Options dialog|General|Auto-reload modified files"
+msgid "Disabled"
 msgstr ""
 
 msgid "Only on window activated"
@@ -4837,6 +5455,10 @@ msgid "2nd and 3rd"
 msgstr ""
 
 msgid "Filter applied"
+msgstr ""
+
+#, c-format
+msgid "Compare %1"
 msgstr ""
 
 #, c-format
@@ -4968,6 +5590,100 @@ msgid "File operation completed successfully"
 msgstr ""
 
 msgid "File operation canceled"
+msgstr ""
+
+msgid "No error"
+msgstr ""
+
+msgid "Filter expression is empty"
+msgstr ""
+
+msgid "Unknown character in filter expression"
+msgstr ""
+
+msgid "Unterminated string literal"
+msgstr ""
+
+msgid "Syntax error in filter expression"
+msgstr ""
+
+msgid "Failed to parse filter expression"
+msgstr ""
+
+msgid "Invalid literal value"
+msgstr ""
+
+msgid "Invalid regular expression"
+msgstr ""
+
+msgid "Undefined identifier"
+msgstr ""
+
+msgid "Invalid number of arguments"
+msgstr ""
+
+msgid "Filter name not found"
+msgstr ""
+
+msgid "Division by zero in filter expression"
+msgstr ""
+
+msgid "Unknown error"
+msgstr ""
+
+msgid "Invalid property name"
+msgstr ""
+
+msgid "Equals"
+msgstr ""
+
+msgid "Does not equal"
+msgstr ""
+
+msgid "Less than"
+msgstr ""
+
+msgid "Less than or equal to"
+msgstr ""
+
+msgid "Greater than or equal to"
+msgstr ""
+
+msgid "Greater than"
+msgstr ""
+
+msgid "Between"
+msgstr ""
+
+msgid "Not Between"
+msgstr ""
+
+msgid "Contains"
+msgstr ""
+
+msgid "Not Contains"
+msgstr ""
+
+msgid "Contains (regex)"
+msgstr ""
+
+msgid "Not Contains (regex)"
+msgstr ""
+
+msgid "Light"
+msgstr ""
+
+msgid "Dark"
+msgstr ""
+
+msgid "Follow system"
+msgstr ""
+
+#, c-format
+msgid "e.g. %1"
+msgstr ""
+
+msgid "WinMerge detected a previous crash. Please report this if possible."
 msgstr ""
 
 msgid "Prettification"
@@ -5293,6 +6009,9 @@ msgid "Compare headers and footers"
 msgstr ""
 
 msgid "Cannot get Macros.\r\nEnable 'Trust access to Visual Basic Project' in MS Office Macro Security."
+msgstr ""
+
+msgid "Replace line breaks in formulas with spaces"
 msgstr ""
 
 msgid "Compare VBA macros"

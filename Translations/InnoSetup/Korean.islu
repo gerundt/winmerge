@@ -1,7 +1,7 @@
 ﻿[Messages]
 
-WizardInfoBefore=License Agreement
-InfoBeforeLabel=GNU General Public License
+WizardInfoBefore=라이선스 계약
+InfoBeforeLabel=GNU 일반 공중 사용 허가서
 
 [CustomMessages]
 
@@ -39,7 +39,7 @@ FrenchLanguage=프랑스어 메뉴 및 대화상자
 GalicianLanguage=갈리시아 메뉴 및 대화상자
 GermanLanguage=독일어 메뉴 및 대화 상자
 GreekLanguage=그리스어 메뉴 및 대화 상자
-HebrewLanguage=Hebrew menus and dialogs
+HebrewLanguage=히브리어 메뉴 및 대화 상자
 HungarianLanguage=헝가리어 메뉴 및 대화 상자
 ItalianLanguage=이탈리아어 메뉴 및 대화 상자
 JapaneseLanguage=일본어 메뉴 및 대화 상자
@@ -61,6 +61,7 @@ SwedishLanguage=스웨덴어 메뉴 및 대화 상자
 TamilLanguage=타밀어 메뉴 및 대화상자
 TurkishLanguage=튀르키예어 메뉴 및 대화 상자
 UkrainianLanguage=우크라이나 메뉴 및 대화 상자
+VietnameseLanguage=Vietnamese menus and dialogs
 
 ;작업
 ExplorerContextMenu=탐색기 상황에 맞는 메뉴 통합 사용(&E)
@@ -89,3 +90,4 @@ ExplorerNeedsRestart=WinMerge 쉘 확장을 업데이트하려면 탐색기를 �
 
 ; 프로젝트 파일 설명
 ProjectFileDesc=WinMerge 프로젝트 파일
+

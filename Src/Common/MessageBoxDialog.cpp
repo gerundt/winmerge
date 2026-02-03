@@ -42,6 +42,9 @@
 #include "StdAfx.h"
 
 #include "MessageBoxDialog.h"
+#include "DarkModeLib.h"
+#include "IAsyncTask.h"
+#include <atomic>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -74,6 +77,10 @@ IMPLEMENT_DYNAMIC(CMessageBoxDialog, CDialog)
 #define MESSAGE_BOX_TIMER			2201	// Event identifier for the timer.
 
 //////////////////////////////////////////////////////////////////////////////
+// 
+#define WM_USER_ASYNCRESULT		WM_APP + 1	// Message for asynchronous task result notification.
+
+//////////////////////////////////////////////////////////////////////////////
 // Constructors and destructors of the class.
 
 /*
@@ -102,6 +109,9 @@ IMPLEMENT_DYNAMIC(CMessageBoxDialog, CDialog)
 	, m_sMessage(CSize(0, 0))
 	, m_sCheckbox(CSize(0, 0))
 	, m_sButton(CSize(0, 0))
+	, m_pAsyncTask(nullptr)
+	, m_bAsyncTaskCancelFlag(false)
+	, m_pAsyncTaskThread(nullptr)
 {
 	// Enable the active accessibility.
 	ASSERT(!strMessage.IsEmpty());
@@ -354,17 +364,20 @@ struct ModelessMesssageBoxParam
 {
 	CString strMessage;
 	UINT nType = 0;
+	std::shared_ptr<IAsyncTask> pAsyncTask;
 };
 
 /*
  *	Thread for displaying the message boxes asyncronously.
  */
-static UINT ModelessMesssageBoxThread(LPVOID lpParam)
+UINT CMessageBoxDialog::ModelessMesssageBoxThread(LPVOID lpParam)
 {
 	struct ModelessMesssageBoxParam *p = (struct ModelessMesssageBoxParam *)lpParam;
 	
 	// Create the message box dialog.
 	CMessageBoxDialog dlgMessage(nullptr, p->strMessage, _T(""), p->nType);
+	if (p->pAsyncTask)
+		dlgMessage.m_pAsyncTask = p->pAsyncTask; // shared_ptr copy
 	
 	delete p;
 
@@ -374,6 +387,25 @@ static UINT ModelessMesssageBoxThread(LPVOID lpParam)
 	dlgMessage.RunModalLoop();
 	dlgMessage.DestroyWindow();
 
+	return 0;
+}
+
+/*
+ *	Thread for running the asynchronous task.
+ */
+UINT CMessageBoxDialog::AsyncTaskThread(LPVOID lpParam)
+{
+	CMessageBoxDialog *pThis = (CMessageBoxDialog *)lpParam;
+	std::shared_ptr<IAsyncTask> task = std::atomic_load(&pThis->m_pAsyncTask);
+	if (task)
+	{
+		HWND hWnd = pThis->m_hWnd;
+		// reset cancel flag then run the task
+		pThis->m_bAsyncTaskCancelFlag = false;
+		String result = task->RunAndGetMessage(pThis->m_bAsyncTaskCancelFlag);
+		if (!result.empty() && ::IsWindow(hWnd))
+			::PostMessage(hWnd, WM_USER_ASYNCRESULT, reinterpret_cast<WPARAM>(new String(result)), 0);
+	}
 	return 0;
 }
 
@@ -437,6 +469,7 @@ INT_PTR CMessageBoxDialog::DoModal ( )
 		ModelessMesssageBoxParam *pParam = new ModelessMesssageBoxParam();
 		pParam->strMessage = m_strMessage.c_str();
 		pParam->nType      = m_nStyle & ~MB_MODELESS;
+		pParam->pAsyncTask = std::atomic_load(&m_pAsyncTask); // shared_ptr copied
 		AfxBeginThread(ModelessMesssageBoxThread, pParam);
 		return IDOK;
 	}
@@ -476,6 +509,19 @@ void CMessageBoxDialog::EndDialog ( int nResult )
 		SetFormerResult(nResult);
 	}
 	
+	if (std::atomic_load(&m_pAsyncTask))
+	{
+		// request cancellation
+		m_bAsyncTaskCancelFlag = true;
+		// wait for the worker thread if it was started
+		if (m_pAsyncTaskThread)
+		{
+			WaitForSingleObject(m_pAsyncTaskThread->m_hThread, INFINITE);
+			// clear the thread pointer after join
+			m_pAsyncTaskThread = nullptr;
+		}
+	}
+
 	// Call the parent method.
 	__super::EndDialog(nResult);
 }
@@ -496,6 +542,13 @@ BOOL CMessageBoxDialog::OnInitDialog ( )
 		return FALSE;
 	}
 
+	if (std::atomic_load(&m_pAsyncTask))
+	{
+		// Start the asynchronous task.
+		m_bAsyncTaskCancelFlag = false;
+		m_pAsyncTaskThread = AfxBeginThread(AsyncTaskThread, this);
+	}
+
 	// Set the title of the dialog.
 	SetWindowText(m_strTitle.c_str());
 
@@ -511,10 +564,20 @@ BOOL CMessageBoxDialog::OnInitDialog ( )
 	CreateMessageControl();
 	CreateCheckboxControl();
 	CreateButtonControls();
+	if (m_hWnd != nullptr)
+	{
+		DarkMode::setDarkWndSafeEx(m_hWnd, false);
+		DarkMode::setWindowEraseBgSubclass(m_hWnd);
+		if (HWND hTip = m_tooltips.GetSafeHwnd())
+			DarkMode::setDarkTooltips(hTip, static_cast<int>(DarkMode::ToolTipsType::tooltip));
+	}
 
-	const COLORREF clrWindow = GetSysColor(COLOR_WINDOW);
-	if ((clrWindow & 0xff) + ((clrWindow >> 8) & 0xff) + (clrWindow > 16) < 0x80 * 3)
-		::SetWindowTheme(::GetDlgItem(m_hWnd, IDCHECKBOX), _T(""), _T(""));
+	if (!DarkMode::isExperimentalActive())
+	{
+		const COLORREF clrWindow = GetSysColor(COLOR_WINDOW);
+		if ((clrWindow & 0xff) + ((clrWindow >> 8) & 0xff) + (clrWindow > 16) < 0x80 * 3)
+			::SetWindowTheme(::GetDlgItem(m_hWnd, IDCHECKBOX), _T(""), _T(""));
+	}
 
 	// Define the layout of the dialog.
 	DefineLayout();
@@ -561,10 +624,10 @@ BOOL CMessageBoxDialog::OnInitDialog ( )
 		if ( m_bTimeoutDisabled )
 		{
 			// Run through all created buttons.
-            for (vector<MSGBOXBTN>::iterator iter = m_aButtons.begin(); iter != m_aButtons.end(); ++iter)
+			for (vector<MSGBOXBTN>::iterator iter = m_aButtons.begin(); iter != m_aButtons.end(); ++iter)
 			{
 				// Try to retrieve a handle for the button.
-                CWnd* pButtonWnd = GetDlgItem(iter->nID);
+				CWnd* pButtonWnd = GetDlgItem(iter->nID);
 
 				ASSERT(pButtonWnd != nullptr);
 
@@ -854,6 +917,22 @@ BOOL CMessageBoxDialog::OnWndMsg ( UINT message, WPARAM wParam, LPARAM lParam,
 		// The message was handled successfully.
 		return TRUE;
 	}
+	if ( message == WM_USER_ASYNCRESULT)
+	{
+		String* pstrMessage = reinterpret_cast<String*>(wParam);
+		if (pstrMessage != nullptr)
+		{
+			m_strMessage = *pstrMessage;
+			String strMessage = m_strMessage;
+			strutils::replace(strMessage, _T("&"), _T("&&"));
+			m_stcMessage.SetWindowText(strMessage.c_str());
+			m_sMessage = CalcMessageControlSize(strMessage);
+			DefineLayout();
+			Invalidate();
+			delete pstrMessage;
+		}
+		return TRUE;
+	}
 
 	// Call the parent method.
 	return __super::OnWndMsg(message, wParam, lParam, pResult);
@@ -896,7 +975,7 @@ CString CMessageBoxDialog::GenerateRegistryKey ( )
 		int nChecksum = 0;
 
 		// Run through the message string.
-        for ( String::size_type i = 0; i < m_strMessage.length(); i++ )
+		for ( String::size_type i = 0; i < m_strMessage.length(); i++ )
 		{
 			// Get the char at the given position and add it to the checksum.
 			nChecksum += static_cast<int>(static_cast<int>(m_strMessage[i]) * i);
@@ -1265,16 +1344,10 @@ void CMessageBoxDialog::CreateIconControl ( )
 }
 
 /*
- *	Method for creating the text control.
- *
- *	This method create the control displaying the text of the message for the
- *	message box. It will also try to determine the size required for the
- *	message.
+ *	Method for calculating the size required for the message control.
  */
-void CMessageBoxDialog::CreateMessageControl ( )
+CSize CMessageBoxDialog::CalcMessageControlSize(const String& strMessage)
 {
-	ASSERT(!m_strMessage.empty());
-
 	// Create a DC for accessing the display driver.
 	CDC dcDisplay;
 	dcDisplay.CreateDC(_T("DISPLAY"), nullptr, nullptr, nullptr);
@@ -1296,14 +1369,25 @@ void CMessageBoxDialog::CreateMessageControl ( )
 	CRect rcMessage(0, 0, nMaxWidth, nMaxWidth);
 
 	// Draw the text and retrieve the size of the text.
-	dcDisplay.DrawText(m_strMessage.c_str(), rcMessage, DT_LEFT | DT_NOPREFIX | 
+	dcDisplay.DrawText(strMessage.c_str(), rcMessage, DT_LEFT | DT_NOPREFIX | 
 		DT_WORDBREAK | DT_EXPANDTABS | DT_CALCRECT);
-
-	// Save the size required for the message.
-	m_sMessage = rcMessage.Size();
 
 	// Select the old font again.
 	dcDisplay.SelectObject(pOldFont);
+
+	return rcMessage.Size();
+}
+
+/*
+ *	Method for creating the text control.
+ *
+ *	This method create the control displaying the text of the message for the
+ *	message box. It will also try to determine the size required for the
+ *	message.
+ */
+void CMessageBoxDialog::CreateMessageControl ( )
+{
+	ASSERT(!m_strMessage.empty());
 
 	// Create a dummy rect for the control.
 	CRect rcDummy;
@@ -1323,9 +1407,12 @@ void CMessageBoxDialog::CreateMessageControl ( )
 		dwStyle |= SS_LEFT;
 	}
 
-	// Create the static control for the message.
 	String strMessage = m_strMessage;
 	strutils::replace(strMessage, _T("&"), _T("&&"));
+
+	m_sMessage = CalcMessageControlSize(strMessage);
+
+	// Create the static control for the message.
 	m_stcMessage.Create(strMessage.c_str(), dwStyle, rcDummy, this,
 		(UINT)IDC_STATIC);
 

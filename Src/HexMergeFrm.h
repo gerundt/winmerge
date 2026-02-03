@@ -16,7 +16,7 @@
 #include "BasicFlatStatusBar.h"
 #include "MergeFrameCommon.h"
 
-#define HEKSEDIT_INTERFACE_VERSION 2
+#define HEKSEDIT_INTERFACE_VERSION 3
 #include "heksedit.h"
 
 class CHexMergeDoc;
@@ -33,13 +33,14 @@ public:
 // Operations
 public:
 	void UpdateResources();
-	IHeaderBar * GetHeaderInterface();
+	IHeaderBar * GetHeaderInterface() override;
 	CHexMergeDoc * GetMergeDoc() { return m_pMergeDoc; }
 
 	void UpdateAutoPaneResize();
 	void UpdateSplitter();
 	int GetActivePane();
 	void SetActivePane(int nPane);
+	CWnd* GetView(int nPane);
 
 // Attributes
 protected:

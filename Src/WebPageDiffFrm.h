@@ -73,6 +73,7 @@ public:
 	String GetDescription(int pane) const override { return m_strDesc[pane]; }
 	static bool IsLoadable();
 	static bool MatchURLPattern(const String& url);
+	IHeaderBar* GetHeaderInterface() override { return &m_wndFilePathBar; }
 
 // Attributes
 protected:
@@ -198,6 +199,7 @@ protected:
 	afx_msg void OnRefresh();
 	afx_msg void OnSetFocus(CWnd *pNewWnd);
 	afx_msg void OnHelp();
+    afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

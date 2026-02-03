@@ -15,9 +15,11 @@
 #include "DiffContext.h"
 #include "locality.h"
 #include "paths.h"
-#include "MergeApp.h"
+#include "I18n.h"
 #include "FileTransform.h"
 #include "PropertySystem.h"
+#include "FilterEngine/FilterExpression.h"
+#include "RenameMoveDetection.h"
 #include "DebugNew.h"
 
 using Poco::Timestamp;
@@ -323,6 +325,52 @@ static String ColPathGet(const CDiffContext * pCtxt, const void *p, int)
 }
 
 /**
+ * @brief Format Renamed/Moved column data.
+ */
+static String ColStatusGetRenamedMoved(const CDiffContext* pCtxt, const DIFFITEM& di)
+{
+	if (!pCtxt->m_pRenameMoveDetection)
+		return _T("");
+
+	const int nDirs = pCtxt->GetCompareDirs();
+	const String group = strutils::to_str(di.renameMoveGroupId + 1);
+
+	// ---- moved / renamed detection ----
+	bool moved = false;
+	bool renamed = false;
+	pCtxt->m_pRenameMoveDetection->CheckMovedOrRenamed(*pCtxt, di, moved, renamed);
+
+	String label;
+	if (renamed && !moved)
+		label = _("Renamed");
+	else if (moved && !renamed)
+		label = _("Moved");
+	else
+		label = _("Renamed/Moved");
+
+	// ---- format output ----
+	std::vector<std::vector<const DIFFITEM*>> sideItems(nDirs);
+	for (int side = 0; side < nDirs; ++side)
+		sideItems[side] = pCtxt->m_pRenameMoveDetection->GetRenameMoveGroupItemsForSide(di, side);
+
+	auto fmt = [&sideItems](int i) -> String {
+		if (sideItems[i].empty() || sideItems[i].size() > 1)
+			return strutils::format_string1(_("(%1 items)"), strutils::to_str(sideItems[i].size()));
+		return sideItems[i][0]->diffFileInfo[i].GetFile();
+		};
+
+	String files;
+	for (int i = 0; i < nDirs; ++i)
+	{
+		if (i > 0)
+			files += _T(" | ");
+		files += fmt(i);
+	}
+
+	return strutils::format_string2(_("%1 (set %2): "), label, group) + files;
+}
+
+/**
  * @brief Format Result column data.
  * @param [in] pCtxt Pointer to compare context.
  * @param [in] p Pointer to DIFFITEM.
@@ -351,6 +399,10 @@ static String ColStatusGet(const CDiffContext *pCtxt, const void *p, int)
 			s = _("Folder skipped");
 		else
 			s = _("File skipped");
+	}
+	else if (di.renameMoveGroupId != -1)
+	{
+		s = ColStatusGetRenamedMoved(pCtxt, di);
 	}
 	else if (di.diffcode.isSideFirstOnly())
 	{
@@ -406,7 +458,9 @@ static String ColStatusGet(const CDiffContext *pCtxt, const void *p, int)
 	}
 	else if (di.diffcode.isResultDiff()) // diff
 	{
-		if (di.diffcode.isText())
+		if (di.diffcode.isExprDiff())
+			s = strutils::format_string1(_("Files are different (expr: %1)"), ucr::toTString(pCtxt->m_pAdditionalCompareExpression->expression));
+		else if (di.diffcode.isText())
 			s = _("Text files are different");
 		else if (di.diffcode.isBin())
 			s = _("Binary files are different");
@@ -664,7 +718,7 @@ static String ColStatusAbbrGet(const CDiffContext *pCtxt, const void *p, int opt
 		id = N_("Different");
 	}
 
-	return id ? tr(id) : _T("");
+	return id ? I18n::tr(id) : _T("");
 }
 
 /**
@@ -722,7 +776,7 @@ static String GetEOLType(const CDiffContext *, const void *p, int index)
 	}
 	if (di.diffcode.isBin())
 	{
-		return tr("EOL Type", "Binary");
+		return I18n::tr("EOL Type", "Binary");
 	}
 
 	char *id = 0;
@@ -745,7 +799,7 @@ static String GetEOLType(const CDiffContext *, const void *p, int index)
 			stats.ncrlfs, stats.ncrs, stats.nlfs);
 	}
 	
-	return tr(id);
+	return I18n::tr(id);
 }
 
 /**
@@ -1151,6 +1205,8 @@ static int ColStatusSort(const CDiffContext *, const void *p, const void *q, int
 {
 	const DIFFITEM &ldi = *static_cast<const DIFFITEM *>(p);
 	const DIFFITEM &rdi = *static_cast<const DIFFITEM *>(q);
+	if (ldi.renameMoveGroupId != rdi.renameMoveGroupId)
+		return ldi.renameMoveGroupId - rdi.renameMoveGroupId;
 	return cmpdiffcode(rdi.diffcode.diffcode, ldi.diffcode.diffcode);
 }
 
@@ -1338,24 +1394,15 @@ static int ColAllPropertySort(const CDiffContext *pCtxt, const void *p, const vo
 	const DIFFITEM &s = *static_cast<const DIFFITEM *>(q);
 	for (int i = 0; i < pCtxt->GetCompareDirs(); ++i)
 	{
-		if (r.diffcode.exists(i))
-		{
-			for (int j = 0; j < pCtxt->GetCompareDirs(); ++j)
-			{
-				if (s.diffcode.exists(j))
-				{
-					if (!r.diffFileInfo[i].m_pAdditionalProperties && s.diffFileInfo[j].m_pAdditionalProperties)
-						return -1;
-					if (r.diffFileInfo[i].m_pAdditionalProperties && !s.diffFileInfo[j].m_pAdditionalProperties)
-						return 1;
-					if (!r.diffFileInfo[i].m_pAdditionalProperties && !s.diffFileInfo[j].m_pAdditionalProperties)
-						return 0;
-					int result = PropertyValues::CompareValues(*r.diffFileInfo[i].m_pAdditionalProperties, *s.diffFileInfo[j].m_pAdditionalProperties, opt);
-					if (result != 0)
-						return result;
-				}
-			}
-		}
+		if (!r.diffFileInfo[i].m_pAdditionalProperties && s.diffFileInfo[i].m_pAdditionalProperties)
+			return -1;
+		if (r.diffFileInfo[i].m_pAdditionalProperties && !s.diffFileInfo[i].m_pAdditionalProperties)
+			return 1;
+		if (!r.diffFileInfo[i].m_pAdditionalProperties && !s.diffFileInfo[i].m_pAdditionalProperties)
+			return 0;
+		int result = PropertyValues::CompareValues(*r.diffFileInfo[i].m_pAdditionalProperties, *s.diffFileInfo[i].m_pAdditionalProperties, opt);
+		if (result != 0)
+			return result;
 	}
 	return 0;
 }
@@ -1507,7 +1554,7 @@ static DirColInfo f_cols3[] =
 String DirColInfo::GetDisplayName() const
 {
 	if (idName)
-		return tr(idNameContext, idName);
+		return I18n::tr(idNameContext, idName);
 	PropertySystem ps({ regName + 1 });
 	std::vector<String> names;
 	ps.GetDisplayNames(names);
@@ -1532,7 +1579,7 @@ String DirColInfo::GetDisplayName() const
 String DirColInfo::GetDescription() const
 {
 	if (idDesc)
-		return tr(idDesc);
+		return I18n::tr(idDesc);
 	return GetDisplayName();
 }
 

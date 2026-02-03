@@ -255,7 +255,7 @@ void PluginInfo::LoadFilterString()
 		sPiece = sLine.substr(pos+1);
 		if (pos == String::npos)
 			pos = 0;
-		sLine = sLine.substr(0, pos);
+		sLine.resize(pos);
 		if (sPiece.empty())
 			break;
 
@@ -290,7 +290,7 @@ bool PluginInfo::TestAgainstRegList(const String& szTest) const
 		sPiece = sLine.substr(pos+1);
 		if (pos == String::npos)
 			pos = 0;
-		sLine = sLine.substr(0, pos);
+		sLine.resize(pos);
 		sPiece = strutils::makeupper(strutils::trim_ws_begin(sPiece));
 
 		if (::TestAgainstRegList(&m_filters, sPiece))
@@ -304,14 +304,15 @@ std::optional<StringView> PluginInfo::GetExtendedPropertyValue(const String& ext
 {
 	for (auto& item : strutils::split(extendedProperties, ';'))
 	{
-		auto keyvalue = strutils::split(item, '=');
-		if (keyvalue[0] == name)
+		auto pos = item.find('=');
+		if (pos == String::npos)
 		{
-			if (keyvalue.size() > 1)
-				return keyvalue[1];
-			else
-				return _("");
+			if (item == name)
+				return _T("");
+			continue;
 		}
+		if (item.substr(0, pos) == name)
+			return item.substr(pos + 1);
 	}
 	return {};
 }
@@ -753,7 +754,8 @@ static vector<String>& LoadTheScriptletList()
 
 		for (const auto path : {
 				paths::ConcatPath(env::GetProgPath(), _T("MergePlugins")),
-				env::ExpandEnvironmentVariables(_T("%APPDATA%\\WinMerge\\MergePlugins")) })
+				paths::ConcatPath(env::GetAppDataPath(), _T("WinMerge\\MergePlugins")),
+				paths::ConcatPath(env::GetMyDocuments(), _T("WinMerge\\MergePlugins")) })
 		{
 			if (enabledWSH)
 			{

@@ -127,3 +127,10 @@ Src/MergeAppLib_i.c
 Src/MergeAppLib_p.c
 Src/dlldata.c
 /Testing/PluginTests/result
+.idea/
+*.testdurations
+*.lastcodeanalysissucceeded
+*.lib
+unittest-cppcheck-build-dir/
+Src/FilterEngine/FilterLexer.cpp
+Src/FilterEngine/FilterParser.c

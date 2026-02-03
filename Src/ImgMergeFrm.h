@@ -80,6 +80,7 @@ public:
 	static bool IsLoadable();
 	String GetSaveAsPath() const { return m_strSaveAsPath; }
 	void SetSaveAsPath(const String& strSaveAsPath) { m_strSaveAsPath = strSaveAsPath; }
+	IHeaderBar* GetHeaderInterface() override { return &m_wndFilePathBar; }
 
 // Attributes
 protected:
@@ -252,6 +253,7 @@ protected:
 	afx_msg void OnRefresh();
 	afx_msg void OnSetFocus(CWnd *pNewWnd);
 	afx_msg void OnHelp();
+    afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

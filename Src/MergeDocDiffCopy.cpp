@@ -13,7 +13,6 @@
 #include "DiffList.h"
 #include "MergeLineFlags.h"
 #include "MergeFrameCommon.h"
-#include "Logger.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -108,12 +107,8 @@ void CMergeDoc::CopyMultipleList(int srcPane, int dstPane, int firstDiff, int la
 	SetEditedAfterRescan(dstPane);
 
 	int nGroup = GetActiveMergeView()->m_nThisGroup;
-	CMergeEditView* pViewSrc = m_pView[nGroup][srcPane];
 	CMergeEditView* pViewDst = m_pView[nGroup][dstPane];
-	CEPoint currentPosSrc = pViewSrc->GetCursorPos();
-	currentPosSrc.x = 0;
-	CEPoint currentPosDst = pViewDst->GetCursorPos();
-	currentPosDst.x = 0;
+	CEPoint currentPosDst{ 0, pViewDst->GetCursorPos().y };
 
 	CEPoint pt(0, 0);
 	pViewDst->SetCursorPos(pt);
@@ -196,12 +191,8 @@ void CMergeDoc::CopyMultiplePartialList(int srcPane, int dstPane, int activePane
 	SetEditedAfterRescan(dstPane);
 
 	int nGroup = GetActiveMergeView()->m_nThisGroup;
-	CMergeEditView* pViewSrc = m_pView[nGroup][srcPane];
 	CMergeEditView* pViewDst = m_pView[nGroup][dstPane];
-	CEPoint currentPosSrc = pViewSrc->GetCursorPos();
-	currentPosSrc.x = 0;
-	CEPoint currentPosDst = pViewDst->GetCursorPos();
-	currentPosDst.x = 0;
+	CEPoint currentPosDst{ 0, pViewDst->GetCursorPos().y };
 
 	CEPoint pt(0, 0);
 	pViewDst->SetCursorPos(pt);
@@ -238,7 +229,8 @@ void CMergeDoc::CopyMultiplePartialList(int srcPane, int dstPane, int activePane
 				}
 				else
 				{
-					if (!CharacterListCopy(srcPane, dstPane, activePane, firstDiff, ptStart, ptEnd, bGroupWithPrevious, false))
+					CEPoint ptEndAjusted = CEPoint(0, pdi->dend + 1);
+					if (!CharacterListCopy(srcPane, dstPane, activePane, firstDiff, ptStart, ptEndAjusted, bGroupWithPrevious, false))
 						break; // sync failure
 				}
 			}
@@ -520,7 +512,7 @@ bool CMergeDoc::ListCopy(int srcPane, int dstPane, int nDiff /* = -1*/,
 
 		if (!bInSync)
 		{
-			LangMessageBox(IDS_VIEWS_OUTOFSYNC, MB_ICONSTOP);
+			I18n::MessageBox(IDS_VIEWS_OUTOFSYNC, MB_ICONSTOP);
 			return false; // abort copying
 		}
 
@@ -616,7 +608,7 @@ bool CMergeDoc::LineListCopy(int srcPane, int dstPane, int nDiff, int firstLine,
 
 	if (!bInSync)
 	{
-		LangMessageBox(IDS_VIEWS_OUTOFSYNC, MB_ICONSTOP);
+		I18n::MessageBox(IDS_VIEWS_OUTOFSYNC, MB_ICONSTOP);
 		return false; // abort copying
 	}
 
@@ -705,12 +697,11 @@ bool CMergeDoc::InlineDiffListCopy(int srcPane, int dstPane, int nDiff, int firs
 	bool bSrcWasMod = sbuf.IsModified();
 	const int cd_dbegin = cd.dbegin;
 	const int cd_dend = cd.dend;
-	const int cd_blank = cd.blank[srcPane];
 	bool bInSync = SanityCheckDiff(cd);
 
 	if (!bInSync)
 	{
-		LangMessageBox(IDS_VIEWS_OUTOFSYNC, MB_ICONSTOP);
+		I18n::MessageBox(IDS_VIEWS_OUTOFSYNC, MB_ICONSTOP);
 		return false; // abort copying
 	}
 
@@ -862,7 +853,8 @@ std::tuple<CEPoint, CEPoint, CEPoint, CEPoint> CMergeDoc::GetCharacterRange(int 
 	std::vector<WordDiff> worddiffs = GetWordDiffArrayInDiffBlock(nDiff, true);
 
 	int firstWordDiff = -1;
-	if ((m_ptBuf[activePane]->GetLineFlags(ptStart.y) & LF_GHOST) == 0)
+	const int nBeginLineFlag = m_ptBuf[activePane]->GetLineFlags(ptEnd.y);
+	if ((nBeginLineFlag & LF_GHOST) == 0 && (nBeginLineFlag & LF_DIFF) != 0)
 	{
 		for (int i = 0; i < static_cast<int>(worddiffs.size()); ++i)
 		{
@@ -872,7 +864,8 @@ std::tuple<CEPoint, CEPoint, CEPoint, CEPoint> CMergeDoc::GetCharacterRange(int 
 		}
 	}
 	int lastWordDiff = -1;
-	if ((m_ptBuf[activePane]->GetLineFlags(ptEnd.y) & LF_GHOST) == 0)
+	const int nEndLineFlag = m_ptBuf[activePane]->GetLineFlags(ptEnd.y);
+	if ((nEndLineFlag & LF_GHOST) == 0 && (nEndLineFlag & LF_DIFF) != 0)
 	{
 		for (int i = 0; i < static_cast<int>(worddiffs.size()); ++i)
 		{
@@ -1022,7 +1015,7 @@ bool CMergeDoc::CharacterListCopy(int srcPane, int dstPane, int activePane, int 
 
 	if (!bInSync)
 	{
-		LangMessageBox(IDS_VIEWS_OUTOFSYNC, MB_ICONSTOP);
+		I18n::MessageBox(IDS_VIEWS_OUTOFSYNC, MB_ICONSTOP);
 		return false; // abort copying
 	}
 

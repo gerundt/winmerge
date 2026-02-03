@@ -162,7 +162,7 @@ static bool IsDirName(const String& sDir)
 	// You cannot use root directories as the lpFileName input string for FindFirstFile - with or without a trailing backslash.
 	size_t count = 0;
 	if ((sDir[0] && sDir[1] == ':' && (sDir[2] == '\0' || (sDir[2] == '\\' && sDir[3] == '\0'))) ||
-	    // \\host\share or \\host\share\ 
+	    // "\\host\share" or "\\host\share\"
 	    (sDir[0] == '\\' && sDir[1] == '\\' && 
 	     (count = std::count(sDir.begin(), sDir.end(), ('\\'))) <= 4 &&
 	     (count == 3 || (count == 4 && sDir.back() == '\\'))))
@@ -545,7 +545,7 @@ String GetParentPath(const String& path)
 	size_t len = parentPath.length();
 
 	// Remove last '\' from paths
-	if (parentPath[len - 1] == '\\')
+	if (len > 0 && parentPath[len - 1] == '\\')
 	{
 		parentPath.resize(len - 1);
 		--len;
@@ -766,7 +766,8 @@ String FromURL(const String& url)
 	std::vector<tchar_t> path((std::max)(size_t(MAX_PATH), url.length() + 1));
 	DWORD size = static_cast<DWORD>(path.size());
 	PathCreateFromUrl(url.c_str(), path.data(), &size, 0);
-	return path.data();
+	String result(path.data());
+	return ucr::toTString(std::string(result.begin(), result.end()));
 }
 
 String urlEncodeFileName(const String& filename)

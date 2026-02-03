@@ -8,11 +8,7 @@
 #include "stdafx.h"
 #include "EditPluginDlg.h"
 #include "Plugins.h"
-#include "FileTransform.h"
-#include "OptionsMgr.h"
-#include "OptionsDef.h"
 #include "unicoder.h"
-#include "Merge.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -40,7 +36,7 @@ CEditPluginDlg::CEditPluginDlg(internal_plugin::Info& info, CWnd* pParent/* = nu
 {
 	const bool containsNonAsciiChars = std::any_of(m_strDescription.begin(), m_strDescription.end(), [](auto c) { return (c >= 0x80); });
 	if (!containsNonAsciiChars)
-		m_strDescription = tr(ucr::toUTF8(m_strDescription));
+		m_strDescription = I18n::tr(ucr::toUTF8(m_strDescription));
 	auto menuCaption = PluginInfo::GetExtendedPropertyValue(info.m_extendedProperties, _T("MenuCaption"));
 	if (menuCaption.has_value())
 		m_strMenuCaption = menuCaption.value();
@@ -141,7 +137,7 @@ void CEditPluginDlg::ResizeDialog(bool alias, bool hasScript)
 
 void CEditPluginDlg::UpdateControls()
 {
-	if (!m_info.m_userDefined)
+	if (m_info.m_locationType == internal_plugin::LocationType::InstallationPath)
 	{
 		for (auto id : {
 				IDC_PLUGIN_NAME,
@@ -198,7 +194,7 @@ void CEditPluginDlg::UpdateControls()
 	const bool alias = (cursel > 3);
 	const bool urlhandler = (cursel == 0);
 	const bool hasScript = alias ? false : HasScript();
-	EnableDlgItem(IDC_PLUGIN_AUTOMATIC, !urlhandler && m_info.m_userDefined);
+	EnableDlgItem(IDC_PLUGIN_AUTOMATIC, !urlhandler && m_info.m_locationType != internal_plugin::LocationType::InstallationPath);
 	ShowDlgItem(IDC_PLUGIN_TAB, !alias);
 	ShowDlgItem(IDC_PLUGIN_COMMAND_LINE_STATIC, !alias);
 	ShowDlgItem(IDC_PLUGIN_COMMAND_LINE, !alias);
@@ -319,7 +315,7 @@ void CEditPluginDlg::ShowMenu(unsigned menuid, unsigned ctlid)
 	const int curselPluginType = m_ctlEvent.GetCurSel();
 	const int curselMethod = m_ctlTab.GetCurSel();
 	RemoveMenuItems(pPopup, menuid, curselPluginType, curselMethod);
-	theApp.TranslateMenu(menu.m_hMenu);
+	I18n::TranslateMenu(menu.m_hMenu);
 	if (pPopup)
 		pPopup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, rcButton.left, rcButton.top, this);
 }
@@ -476,7 +472,7 @@ void CEditPluginDlg::OnEnChangePluginCommandLine()
 
 void CEditPluginDlg::OnOK()
 {
-	if (!m_info.m_userDefined)
+	if (m_info.m_locationType == internal_plugin::LocationType::InstallationPath)
 		return;
 	UpdateData(TRUE);
 	const int cursel = m_ctlEvent.GetCurSel();
@@ -554,7 +550,7 @@ BOOL CEditPluginDlg::OnInitDialog()
 			{ _(""), L"" },
 			{ _("Text"), L"Text" },
 			{ _("Table"), L"Table" },
-			{ tr("Options dialog|Categories", "Binary"), L"Binary" },
+			{ I18n::tr("Options dialog|Categories", "Binary"), L"Binary" },
 			{ _("Image"), L"Image" },
 			{ _("Webpage"), L"Webpage" },
 		}, m_strWindowType);

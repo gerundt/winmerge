@@ -1,143 +1,145 @@
-# WinMerge 2.16.48 Release Notes
+# WinMerge 2.16.54 Release Notes
 
-- [About This Release](#about-this-release)
-- [What Is New in 2.16.48](#what-is-new-in-21648)
-- [What Is New in 2.16.47 beta?](#what-is-new-in-21647-beta)
-- [Known issues](#known-issues)
+* [About This Release](#about-this-release)
+* [What Is New in 2.16.54](#what-is-new-in-21654)
+* [What Is New in 2.16.53 beta?](#what-is-new-in-21653-beta)
+* [Known issues](#known-issues)
 
-April 2025
+January 2026
 
 ## About This Release
 
-This is a WinMerge 2.16.48 stable release.
+This is a WinMerge 2.16.54 stable release.
 This release replaces earlier WinMerge stable releases as a recommended release.
 
 Please submit bug reports to our bug-tracker.
 
-## What Is New in 2.16.48
+## What Is New in 2.16.54
 
 ### General
 
-- BugFix: Setting the toolbar icons to "Extra Large" cannot save the settings.
-    (#2748)
-- FR: Add `Ctrl+,` keyboard shortcut to open Options dialog box (#2705)
-- Update Merge.rc (PR #2711)
-
-### File compare
-
- - BugFix: [BUG} Phantom line added when identical blocks of text pasted
-     (#2702)
- - BugFix: Fixed crash when quitting WinMerge while the search dialog is open
- - Syntax/Pascal: Add initialization and finalization (PR #2719)
- - Syntax/Pascal: Support multiline strings (PR #2720)
+* BugFix: Cyrilic shortcuts do not work for main menukeyboard shortcuts
+* BugFix: 2 recent-entries per project (#2990)
+* Updated expat to version 2.7.3
 
 ### Folder compare
 
-- BugFix: Unable to compare files with zero mtime using
-    "Modified Date and Size" (#2714)
-- BugFix: Windows7 Winmerge v2.16.46.0 crash prone 
-    (#1 WinMerge crashes after successfully deleting files.) (#2746)
+* Add logInfo, logWarn, logError functions to filter expressions (PR #3131)
+* Add new filter expression functions
+    (if, ifEach, choose, chooseEach, andEach, orEach, notEach) (PR #3132)
+* Add BaseName/IsFolder and new string transformation functions to filters
+    (PR #3146)
+* Add experimental customizable rename/move detection for folder comparison
+    (PR #3126)
 
-### Webpage compare
+### Options window
 
- - BugFix: Fixed an issue where comparisons could fail when tab characters
-     were present.
- - BugFix: Fixed incorrect line wrapping in certain HTML elements.
- - BugFix: Fixed an issue where differences within \<pre\> elements could appear
-     concatenated instead of on separate lines.
+* Adjusted the height of the Options dialog and the position of the Defaults
+    button
 
-### Plugins
+### Shell extension
 
- - BugFix: ApacheTika and PlantUML plugins: Fixed issue where no error message
-     was displayed when execution failed (#715)
- - BugFix: ApacheTika plugin: Fixed failure to run when the filename contained 
-     non-alphanumeric characters (now uses the short filename instead) (#715)
- - AIConvertText plugin: Added models gpt-4.1, gpt-4.1-mini, and gpt-4.1-nano
-
-### Translations
-
-- Translation updates:
-  - Brazilian (PR #2706,#2715,#2726)
-  - Chinese Simplified (PR #2710,#2730)
-  - Corsican (PR #2722)
-  - French (PR #2716)
-  - Hungarian (PR #2703,#2713,#2724)
-  - Italian (PR #2704,#2723,#2737)
-  - Japanese
-  - Lithuanian (PR #2708)
-
-## What Is New in 2.16.47 Beta
-
-### General
-
-- BugFix: /inifile won't work with root directory (#2635)
-- BugFix: "Another application has updated" message when window is deactivated
-    (#2668)
-- Reduced flickering of title bar buttons and the status bar.
-- Rewrite English.pot, add JXL image extension (PR #2682)
-- Add Output Pane for Logs and Messages (PR #2663)
-
-### File compare
-
-- BugFix: Fixed an issue where $ in regular expressions in Substitution filters
-    didn't work correctly with "Ignore carriage return differences" enabled.
-    (#2640)
-- BugFix: Syntax highlighting of Python multiline strings failed on lines > 1
-    (#2643)
-- BugFix: Fixed an issue where "&" appeared as an underline in the status bar
-    when using both Unpacker and Prediffer plugins.
-- BugFix: Sync Codepage Settings on Options and Diff Window (#2678)
-- Update C syntax highlighting keyword list. (PR #2669)
-
-### Image compare
-
-- Rewrite English.pot, add JXL image extension (PR #2682)
-
-### Options dialog
-
-- BugFix: Fixed an issue where ShellExtensionU.dll was not properly
-    unregistered when clicking the Unregister shell extension button in the
-    Shell Integration options. (#2419)
-- Modify the "Options (Compare > Image)" dialog. (PR #2655)
-
-### Color schemes
-
-- Add Visual Studio Dark color scheme (PR #2634)
-- Twilight - new dark theme (PR #2694)
+* BugFix: Add-AppxPackage fails if path ends with backslash (PR #3145)
 
 ### Installer
 
-- BugFix: Context menu not working if installed from non-elevated (non admin)
-    user on win 10 x64 (#2638) (PR #2639)
-
-### Manual
-
-- Help pages -> Appendix A. Shortcut keys (#2659)
+* Removed build-time tools (lemon.exe, re2c.exe) from the installer package.
 
 ### Translations
 
-- Translation updates:
-  - Brazilian (PR #2675,#2688,#2697)
-  - Chinese Simplified (PR #2700) 
-  - Corsican (PR #2632,#2676)
-  - Hebrew (PR #2673)
-  - Italian (PR #2689,#2689)
-  - Japanese
-  - Polish (PR #2671)
-  - Portuguese (PR #2650,#2695)
-  - Swedish (PR #2679)
-  - Turkish (PR #2636)
+* New translation: Vietnamese (PR #3142)
+* Translation updates:
+  * Brazilian (PR #3150)
+  * Chinese Simplified (PR #3156)
+  * French (PR #3137)
+  * German (PR #3148)
+  * Hungarian (PR #3149)
+  * Italian (PR #3147)
+  * Japanese
+  * Korean (PR #3125,#3127)
+  * Lithuanian (PR #3144,#3153)
+  * Polish (PR #3154,#3155)
+  * Turkish (PR #3152)
+  * Ukrainian (PR #3130)
 
-### Internals
+## What Is New in 2.16.53 Beta
 
-- BugFix: Fix build in VS2022 17.13.0 (PR #2645)
-- BugFix: Use zopflipng to reduce size of splash.png (PR #2646)
-- README major update, Twilight theme minor edit (PR #2696)
+### General
+
+* Allow comparing files by editing header path (Ctrl+L / Alt+D) (PR #3093)
+
+### File compare
+
+* Async binary comparison for “Selected files are identical” dialog
+    (PR #3060)
+
+### Binary compare
+
+* BugFix: Fixed crash when an error occurs while opening files in the binary
+    comparison window.
+
+### Image compare
+
+* [ImageCompare] Problems with unsupported formats (#3044)
+
+* Update freeimage to 3.19.10
+
+### Webpage compare
+
+* BugFix: Fixed garbled filenames displayed in Web comparison tabs and header
+    bar
+
+### Folder compare
+
+* BugFix: This line cannot be displayed correctly after translation.
+    msgid "Failed to extract archive.\nCompare as text file?" (#3073)
+
+* BugFix: Unexpected file closure when moving files from a comparison (#3088)
+
+* Add Display Filter to Folder Compare (PR #3106)
+
+* Add folder statistics filter attributes and helper menu (PR #3111)
+
+* Introduce isWithin() and inRange() for explicit inclusive/exclusive range
+    checks (PR #3124)
+
+### Options dialog
+
+* Add option to select user data location (AppData or Documents) (PR #3078)
+
+### Plugins
+
+* CompareMSExcelFiles: Replace line breaks with space in MSExcel formulas
+    (PR #3028)
+
+* Updated jq to 1.8.1
+
+### Translations
+
+* Translation updates:
+
+  * Brazilian (PR #3034,#3064,#3085,#3101,#3107,#3121)
+  * Chinese Simplified (PR #3035,#3077,#3086,#3097,#3123)
+  * Chinese Traditional (PR #3052,#3073,WinMerge/frhed#26)
+  * Corsican (PR #3119)
+  * French (PR #3072,#3105,#3106)
+  * German (PR #3037,#3068,#3081,#3098,#3108,#3115)
+  * Hungarian (PR #3036,#3061,#3080,#3100,#3116)
+  * Italian (PR #3033,#3062,#3099,#3113,#3118)
+  * Japanese
+  * Korean (PR #3062,#3082)
+  * Lithuanian (PR #3032,#3065,#3087,#3104,#3114)
+  * Polish (PR #3050,#3089,#3103,#3112,#3122)
+  * Turkish (PR #3043,#3063,#3083,#3102,#3111,#3117)
+
+### Manual
+
+* Added FAQ about file selection order in Windows Explorer. (#3090,#3094)
 
 ## Known issues
 
- - Pressing OK in the Options window while the INI file specified by /inifile is open for comparison in WinMerge may corrupt the file. (#2685)
- - Suggestion to make the result of image comparison more reliable (#1391)
- - Crashes when comparing large files (#325)
- - Very slow to compare significantly different directories (#322)
- - Vertical scrollbar breaks after pasting text (#296)
+* Pressing OK in the Options window while the INI file specified by /inifile is open for comparison in WinMerge may corrupt the file. (#2685)
+* Suggestion to make the result of image comparison more reliable (#1391)
+* Crashes when comparing large files (#325)
+* Very slow to compare significantly different directories (#322)
+* Vertical scrollbar breaks after pasting text (#296)

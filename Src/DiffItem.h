@@ -59,6 +59,7 @@ struct DIFFCODE
 		FILTERFLAGS=0x20000U, INCLUDED=0x00000U, SKIPPED=0x20000U,
 		SCANFLAGS=0x100000U, NEEDSCAN=0x100000U,
 		THREEWAYFLAGS=0x200000U, THREEWAY=0x200000U,
+		EXPRFLAGS = 0x400000U, EXPRDIFF = 0x400000U,
 		SIDEFLAGS=0x70000000U, FIRST=0x10000000U, SECOND=0x20000000U, THIRD=0x40000000U, BOTH=0x30000000U, ALL=0x70000000U,
 	};
 
@@ -137,7 +138,11 @@ public:
 	}
 	bool existAll() const
 	{
-		return ((diffcode & DIFFCODE::THREEWAY) ? DIFFCODE::ALL : DIFFCODE::BOTH) == (diffcode & DIFFCODE::ALL);
+		return (isThreeway() ? DIFFCODE::ALL : DIFFCODE::BOTH) == (diffcode & DIFFCODE::ALL);
+	}
+	bool isThreeway() const
+	{
+		return (diffcode & DIFFCODE::THREEWAY) != 0;
 	}
 
 	// compare result
@@ -152,6 +157,7 @@ public:
 	// filter status
 	bool isResultFiltered() const { return CheckFilter(diffcode, DIFFCODE::SKIPPED); }
 	// type
+	bool isExprDiff() const { return Check(diffcode, DIFFCODE::EXPRFLAGS, DIFFCODE::EXPRDIFF); }
 	bool isText() const { return Check(diffcode, DIFFCODE::TEXTFLAGS, DIFFCODE::TEXT); }
 	bool isBin() const { return (diffcode & DIFFCODE::BIN) != 0; }
 	bool isImage() const { return (diffcode & DIFFCODE::IMAGE) != 0; }
@@ -245,6 +251,7 @@ public:
 									// (see `DirColInfo` arrays in `DirViewColItems.cpp`) *>
 	DIFFCODE diffcode;				/**< Compare result */
 	unsigned customFlags;			/**< ViewCustomFlags flags */
+	int renameMoveGroupId;				/**< ID of moved group, or -1 if not part of a moved group */
 
 	String getFilepath(int nIndex, const String &sRoot) const;
 	String getItemRelativePath() const;
@@ -293,7 +300,8 @@ public:
 //**** CTOR, DTOR
 public:
 	DIFFITEM() : parent(nullptr), children(nullptr), Flink(nullptr), Blink(nullptr), 
-					nidiffs(-1), nsdiffs(-1), customFlags(ViewCustomFlags::INVALID_CODE) 
+					nidiffs(-1), nsdiffs(-1), customFlags(ViewCustomFlags::INVALID_CODE),
+					renameMoveGroupId(-1)
 					// `DiffFileInfo` and `DIFFCODE` have their own initializers. 
 					{}
 	~DIFFITEM();

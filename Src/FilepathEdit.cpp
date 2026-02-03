@@ -13,7 +13,6 @@
 #include "stdafx.h"
 #include <Shlwapi.h>
 #include "FilepathEdit.h"
-#include "Merge.h"
 #include "ClipBoard.h"
 #include "FileOrFolderSelect.h"
 #include "Win_VersionHelper.h"
@@ -40,6 +39,7 @@ BEGIN_MESSAGE_MAP(CFilepathEdit, CEdit)
 	ON_COMMAND(ID_EDIT_CUT, OnEditCut)
 	ON_COMMAND(ID_EDIT_UNDO, OnEditUndo)
 	ON_COMMAND(ID_EDIT_SELECT_ALL, OnEditSelectAll)
+	ON_COMMAND_RANGE(ID_DIR_ITEM_RENAME, ID_DIR_ITEM_RENAME, OnContextMenuSelected)
 	ON_COMMAND_RANGE(ID_EDITOR_COPY_PATH, ID_EDITOR_SELECT_FILE, OnContextMenuSelected)
 END_MESSAGE_MAP()
 
@@ -112,6 +112,7 @@ CFilepathEdit::CFilepathEdit()
  , m_crText(RGB(0,0,0))
  , m_bActive(false)
  , m_bInEditing(false)
+ , m_bPathEditing(false)
  , m_bEnabledFileSelection(false)
  , m_bEnabledFolderSelection(false)
 {
@@ -142,6 +143,19 @@ void CFilepathEdit::SetOriginalText(const String& sString)
 	m_sOriginalText = sString;
 
 	RefreshDisplayText();
+}
+
+String CFilepathEdit::GetPath() const
+{
+	return m_sFilepath;
+}
+
+void CFilepathEdit::SetPath(const String& sString)
+{
+	if (m_sFilepath.compare(sString) == 0)
+		return;
+
+	m_sFilepath = sString;
 }
 
 /**
@@ -246,7 +260,7 @@ void CFilepathEdit::OnContextMenu(CWnd* pWnd, CPoint point)
 
 		CMenu menu;
 		VERIFY(menu.LoadMenu(IDR_POPUP_EDITOR_HEADERBAR));
-		theApp.TranslateMenu(menu.m_hMenu);
+		I18n::TranslateMenu(menu.m_hMenu);
 
 		CMenu* pPopup = menu.GetSubMenu(0);
 		ASSERT(pPopup != nullptr);
@@ -258,7 +272,10 @@ void CFilepathEdit::OnContextMenu(CWnd* pWnd, CPoint point)
 			// no filename, we have to disable the unwanted menu entry
 			pPopup->EnableMenuItem(ID_EDITOR_COPY_FILENAME, MF_GRAYED);
 		if (!m_bEnabledFileSelection && !m_bEnabledFolderSelection)
+		{
 			pPopup->EnableMenuItem(ID_EDITOR_SELECT_FILE, MF_GRAYED);
+			pPopup->EnableMenuItem(ID_EDITOR_EDIT_PATH, MF_GRAYED);
+		}
 
 		// invoke context menu
 		pPopup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
@@ -287,20 +304,30 @@ void CFilepathEdit::OnNcPaint()
 	dc.FillSolidRect(CRect(rect.left + margin, rect.bottom - margin, rect.right, rect.bottom), m_crBackGnd);
 }
 
+static float PointToPixel(CDC& dc, float pt)
+{
+	const int lpx = dc.GetDeviceCaps(LOGPIXELSX);
+	return pt * lpx / 72.0f;
+}
+
 void CFilepathEdit::OnPaint()
 {
 	__super::OnPaint();
 	if (!m_bInEditing)
 	{
 		CClientDC dc(this);
-		CFont *pFontOld = dc.SelectObject(GetFont());	
-		int oldTextColor = dc.SetTextColor(m_crText);
-		int oldBkMode = dc.SetBkMode(TRANSPARENT);
+		Gdiplus::Graphics graphics(dc);
+		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
 		CRect rc = GetMenuCharRect(&dc);
-		dc.TextOutW(rc.left, 0, IsWin7_OrGreater() ? _T("\u2261") : _T("="));
-		dc.SetBkMode(oldBkMode);
-		dc.SetTextColor(oldTextColor);
-		dc.SelectObject(pFontOld);
+		Gdiplus::Pen pen(Gdiplus::Color(255, GetRValue(m_crText), GetGValue(m_crText), GetBValue(m_crText)), PointToPixel(dc, 0.75f));
+		const int lineCount = 3;
+		const float spacing = PointToPixel(dc, 2.25f);
+		const int padding = static_cast<int>(PointToPixel(dc, 0.75f));
+		for (int i = 0; i < lineCount; ++i)
+		{
+			float y = rc.top + (rc.Height() - (lineCount - 1) * spacing) / 2 + i * spacing;
+			graphics.DrawLine(&pen, static_cast<float>(rc.left + padding), y, static_cast<float>(rc.right - padding), y);
+		}
 	}
 }
 
@@ -311,7 +338,7 @@ void CFilepathEdit::OnKillFocus(CWnd* pNewWnd)
 	{
 		m_bInEditing = false;
 		SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
-		SetBackColor(MakeBackColor(false, false));
+		SetBackColor(MakeBackColor(m_bActive, false));
 		RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
 		SetReadOnly(true);
 		SetWindowText(m_sOriginalText.c_str());
@@ -322,8 +349,7 @@ CRect CFilepathEdit::GetMenuCharRect(CDC* pDC)
 {
 	CRect rc;
 	GetClientRect(rc);
-	int charWidth;
-	pDC->GetCharWidth('=', '=', &charWidth);
+	int charWidth = static_cast<int>(PointToPixel(*pDC, 6.0f));
 	rc.left = rc.right - charWidth;
 	return rc;
 }
@@ -352,7 +378,7 @@ BOOL CFilepathEdit::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	CRect rc = GetMenuCharRect(&dc);
 	if (PtInRect(&rc, pt))
 	{
-		SetCursor(LoadCursor(nullptr, IDC_ARROW));
+		SetCursor(LoadCursor(nullptr, IDC_HAND));
 		return TRUE;
 	}
 	return __super::OnSetCursor(pWnd, nHitTest, message);
@@ -416,16 +442,32 @@ void CFilepathEdit::OnContextMenuSelected(UINT nID)
 		else
 			iBegin = 0;
 		break;
+	case ID_DIR_ITEM_RENAME:
 	case ID_EDITOR_EDIT_CAPTION:
+	case ID_EDITOR_EDIT_PATH:
+	{
 		m_bInEditing = true;
 		SetReadOnly(false);
 		SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
 		SetBackColor(::GetSysColor(COLOR_WINDOW));
 		RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
-		SetWindowText(((!m_sOriginalText.empty() && m_sOriginalText.at(0) == '*') ? m_sOriginalText.substr(2) : m_sOriginalText).c_str());
+		String text;
+		if (nID == ID_EDITOR_EDIT_CAPTION || nID == ID_DIR_ITEM_RENAME)
+		{
+			m_bPathEditing = false;
+			text = (!m_sOriginalText.empty() && m_sOriginalText.at(0) == '*') ? m_sOriginalText.substr(2) : m_sOriginalText;
+		}
+		else
+		{
+			m_bPathEditing = true;
+			text = m_sFilepath;
+			SHAutoComplete(m_hWnd, SHACF_FILESYSTEM | SHACF_FILESYS_ONLY | (m_bEnabledFolderSelection ? SHACF_FILESYS_DIRS : 0));
+		}
+		SetWindowText(text.c_str());
 		SetSel(0, -1);
 		SetFocus();
 		return;
+	}
 	case ID_EDITOR_SELECT_FILE:
 	{
 		CString text;
@@ -460,20 +502,44 @@ BOOL CFilepathEdit::PreTranslateMessage(MSG *pMsg)
 	{
 		if (pMsg->wParam == VK_RETURN)
 		{
+			RecreateEdit(); // to disable AutoComplete
 			m_bInEditing = false;
 			SetTextColor(::GetSysColor(COLOR_CAPTIONTEXT));
-			SetBackColor(MakeBackColor(true, false));
+			SetBackColor(MakeBackColor(m_bActive, false));
 			RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
 			SetReadOnly();
 			CString text;
 			GetWindowText(text);
-			String orgtext = m_sOriginalText;
-			if (!orgtext.empty() && orgtext[0] == '*')
-				orgtext = orgtext.substr(2);
-			if (text == orgtext.c_str())
+			if (m_bPathEditing)
+			{
+				m_bPathEditing = false;
+				String orgtext = m_sFilepath;
+				if (!(text == orgtext.c_str() || text.IsEmpty()))
+				{
+					bool existing = paths::DoesPathExist((const tchar_t *)text);
+					if (existing)
+					{
+						if (m_bEnabledFileSelection && !paths::IsDirectory((const tchar_t *)text) ||
+							m_bEnabledFolderSelection && paths::IsDirectory((const tchar_t *)text))
+							m_sFilepath = static_cast<const tchar_t*>(text);
+						else
+							existing = false;
+					}
+					if (existing)
+						GetParent()->PostMessage(WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), EN_USER_FILE_SELECTED), (LPARAM)m_hWnd);
+				}
 				SetWindowText(m_sOriginalText.c_str());
+			}
 			else
-				GetParent()->PostMessage(WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), EN_USER_CAPTION_CHANGED), (LPARAM)m_hWnd);
+			{
+				String orgtext = m_sOriginalText;
+				if (!orgtext.empty() && orgtext[0] == '*')
+					orgtext = orgtext.substr(2);
+				if (text == orgtext.c_str())
+					SetWindowText(m_sOriginalText.c_str());
+				else
+					GetParent()->PostMessage(WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), EN_USER_CAPTION_CHANGED), (LPARAM)m_hWnd);
+			}
 			::SetFocus(nullptr);
 			return TRUE;
 		}
@@ -500,6 +566,7 @@ BOOL CFilepathEdit::PreTranslateMessage(MSG *pMsg)
  */
 void CFilepathEdit::SetActive(bool bActive)
 {
+	const bool bOldActive = m_bActive;
 	m_bActive = bActive;
 
 	if (m_hWnd == nullptr)
@@ -508,16 +575,12 @@ void CFilepathEdit::SetActive(bool bActive)
 	CRect rcWnd;
 	GetWindowRect(&rcWnd);
 
-	if (bActive)
-	{
-		SetTextColor(::GetSysColor(m_bInEditing ? COLOR_WINDOWTEXT : COLOR_CAPTIONTEXT));
-	}
-	else
-	{
-		SetTextColor(::GetSysColor(m_bInEditing ? COLOR_WINDOWTEXT : COLOR_INACTIVECAPTIONTEXT));
-	}
+	SetTextColor(::GetSysColor(
+	    m_bInEditing ? COLOR_WINDOWTEXT :
+	    bActive      ? COLOR_CAPTIONTEXT : COLOR_INACTIVECAPTIONTEXT));
 	SetBackColor(MakeBackColor(bActive, m_bInEditing));
-	RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
+	if (bOldActive != bActive)
+		RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
 }
 
 /**
@@ -550,6 +613,9 @@ HBRUSH CFilepathEdit::CtlColor(CDC* pDC, UINT nCtlColor)
  */
 void CFilepathEdit::SetBackColor(COLORREF rgb)
 {
+	if (m_crBackGnd == rgb)
+		return;
+
 	//set background color ref (used for text's background)
 	m_crBackGnd = rgb;
 	
@@ -569,11 +635,40 @@ void CFilepathEdit::SetBackColor(COLORREF rgb)
  */
 void CFilepathEdit::SetTextColor(COLORREF rgb)
 {
+	if (m_crText == rgb)
+		return;
+
 	//set text color ref
 	m_crText = rgb;
 
 	//redraw
 	Invalidate(TRUE);
+}
+
+/**
+ * @brief Recreate the edit control.
+ */
+void CFilepathEdit::RecreateEdit()
+{
+	BOOL hadFocus = (GetFocus() == this);
+	CWnd* parent = GetParent();
+	UINT id = GetDlgCtrlID();
+	DWORD style = GetStyle();
+	DWORD exStyle = GetExStyle();
+	CFont* font = GetFont();
+	CRect rc;
+	GetWindowRect(&rc);
+	parent->ScreenToClient(&rc);
+	CString text;
+	GetWindowText(text);
+
+	DestroyWindow();
+
+	CreateEx(exStyle, _T("EDIT"), text, style, rc, parent, id);
+	if (font)
+		SetFont(font);
+	if (hadFocus)
+		SetFocus();
 }
 
 void CFilepathEdit::OnSysColorChange()

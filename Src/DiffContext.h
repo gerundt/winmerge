@@ -21,6 +21,8 @@ class CompareStats;
 class IAbortable;
 class CDiffWrapper;
 class CompareOptions;
+class RenameMoveDetection;
+struct FilterExpression;
 struct DIFFOPTIONS;
 
 /** Interface to a provider of plugin info */
@@ -213,6 +215,8 @@ public:
 	std::unique_ptr<PropertySystem> m_pPropertySystem; /**< pointer to Property System */
 	std::vector<std::map<std::vector<uint8_t>, DuplicateInfo>> m_duplicateValues; /**< Number of duplicate hash values */
 	std::vector<String> m_vCurrentlyHiddenItems; /**< The list of currently hidden items */
+	std::unique_ptr<FilterExpression> m_pAdditionalCompareExpression; /** Additional compare condition applied in folder comparison */
+	std::unique_ptr<RenameMoveDetection> m_pRenameMoveDetection; /** Move detection object */
 
 private:
 	/**

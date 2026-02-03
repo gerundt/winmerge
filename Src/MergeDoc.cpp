@@ -624,17 +624,20 @@ void CMergeDoc::FlagTrivialLines(void)
 				DIFFOPTIONS diffOptions = {0};
 				m_diffWrapper.GetOptions(&diffOptions);
 
+				strdiff::EolCompareMode eolMode = diffOptions.bIgnoreLineBreaks ? strdiff::EOL_AS_SPACE :
+					diffOptions.bIgnoreEol ? strdiff::EOL_IGNORE : strdiff::EOL_STRICT;
+
 				// Make the call to stringdiffs, which does all the hard & tedious computations
 				int result = strdiff::Compare(str[0], str[1],
 					!diffOptions.bIgnoreCase,
-					!diffOptions.bIgnoreEol,
+					eolMode,
 					diffOptions.nIgnoreWhitespace,
 					diffOptions.bIgnoreNumbers);
 				if (m_nBuffers >= 2 && result == 0)
 				{
 					result = strdiff::Compare(str[1], str[2],
 						!diffOptions.bIgnoreCase,
-						!diffOptions.bIgnoreEol,
+						eolMode,
 						diffOptions.nIgnoreWhitespace,
 						diffOptions.bIgnoreNumbers);
 				}
@@ -795,8 +798,14 @@ void CMergeDoc::ShowRescanError(int nRescanResult, IDENTLEVEL identical)
 	// Files are not binaries, but they are identical
 	if (identical != IDENTLEVEL::NONE)
 	{
+		if (m_pView[0][0] && m_pView[0][0]->IsTextBufferInitialized() && !GetParentFrame()->IsActivated())
+		{
+			GetParentFrame()->InitialUpdateFrame(this, true);
+			GetParentFrame()->SendMessageToDescendants(WM_IDLEUPDATECMDUI, static_cast<WPARAM>(true), 0, true, true);
+		}
 		CMergeFrameCommon::ShowIdenticalMessage(m_filePaths, identical == IDENTLEVEL::ALL,
-			[this](const tchar_t* msg, UINT flags, UINT id) -> int { return ShowMessageBox(msg, flags, id); });
+			std::none_of(m_filePaths.begin(), m_filePaths.end(), [](const String& s) { return s.empty(); })
+			&& !IsModified());
 	}
 }
 
@@ -2164,24 +2173,21 @@ CMergeDoc::TableProps CMergeDoc::MakeTablePropertiesByFileName(const String& pat
 	const String& csvFilePattern = GetOptionsMgr()->GetString(OPT_CMP_CSV_FILEPATTERNS);
 	if (!csvFilePattern.empty())
 	{
-		filterCSV.UseMask(true);
-		filterCSV.SetMask(csvFilePattern);
+		filterCSV.SetMaskOrExpression(csvFilePattern);
 		if (filterCSV.includeFile(path))
 			return { true, strutils::from_charstr(GetOptionsMgr()->GetString(OPT_CMP_CSV_DELIM_CHAR)), quote, allowNewlineIQuotes };
 	}
 	const String& tsvFilePattern = GetOptionsMgr()->GetString(OPT_CMP_TSV_FILEPATTERNS);
 	if (!tsvFilePattern.empty())
 	{
-		filterTSV.UseMask(true);
-		filterTSV.SetMask(tsvFilePattern);
+		filterTSV.SetMaskOrExpression(tsvFilePattern);
 		if (filterTSV.includeFile(path))
 			return { true, '\t', quote, allowNewlineIQuotes };
 	}
 	const String& dsvFilePattern = GetOptionsMgr()->GetString(OPT_CMP_DSV_FILEPATTERNS);
 	if (!dsvFilePattern.empty())
 	{
-		filterDSV.UseMask(true);
-		filterDSV.SetMask(dsvFilePattern);
+		filterDSV.SetMaskOrExpression(dsvFilePattern);
 		if (filterDSV.includeFile(path))
 			return { true, strutils::from_charstr(GetOptionsMgr()->GetString(OPT_CMP_DSV_DELIM_CHAR)), quote };
 	}
@@ -2368,7 +2374,7 @@ bool CMergeDoc::OpenDocs(int nFiles, const FileLocation ifileloc[],
 			m_pEncodingErrorBar.reset(new CEncodingErrorBar());
 			m_pEncodingErrorBar->Create(GetParentFrame());
 		}
-		m_pEncodingErrorBar->SetText(LoadResString(idres));
+		m_pEncodingErrorBar->SetText(I18n::LoadString(idres));
 		GetParentFrame()->ShowControlBar(m_pEncodingErrorBar.get(), TRUE, FALSE);
 	}
 
@@ -2401,7 +2407,7 @@ bool CMergeDoc::OpenDocs(int nFiles, const FileLocation ifileloc[],
 			// Sensitive to EOL on, allow mixing EOL off, and files have a different EOL style.
 			// All lines will differ, that is not very interesting and probably not wanted.
 			// Propose to turn off the option 'sensitive to EOL'
-			String s = theApp.LoadString(IDS_SUGGEST_IGNOREEOL);
+			String s = I18n::LoadString(IDS_SUGGEST_IGNOREEOL);
 			if (ShowMessageBox(s, MB_YESNO | MB_ICONWARNING | MB_DONT_ASK_AGAIN, IDS_SUGGEST_IGNOREEOL) == IDYES)
 			{
 				diffOptions.bIgnoreEol = true;
@@ -2644,7 +2650,8 @@ void CMergeDoc::UpdateHeaderPath(int pane)
 
 	m_sCurrentHeaderTitle[pane] = sText;
 
-	pf->GetHeaderInterface()->SetText(pane, sText);
+	pf->GetHeaderInterface()->SetCaption(pane, sText);
+	pf->GetHeaderInterface()->SetPath(pane, m_filePaths[pane]);
 
 	SetTitle(nullptr);
 }
@@ -3468,7 +3475,7 @@ void CMergeDoc::OnToolsGenerateReport()
 		return;
 
 	if (GenerateReport(s))
-		LangMessageBox(IDS_REPORT_SUCCESS, MB_OK | MB_ICONINFORMATION);
+		I18n::MessageBox(IDS_REPORT_SUCCESS, MB_OK | MB_ICONINFORMATION);
 }
 
 /**
@@ -3483,7 +3490,7 @@ void CMergeDoc::OnToolsGeneratePatch()
 	// If there are changes in files, tell user to save them first
 	if (IsModified())
 	{
-		LangMessageBox(IDS_SAVEFILES_FORPATCH, MB_ICONSTOP);
+		I18n::MessageBox(IDS_SAVEFILES_FORPATCH, MB_ICONSTOP);
 		return;
 	}
 
@@ -3509,7 +3516,7 @@ void CMergeDoc::AddSyncPoint()
 	for (int nBuffer = 0; nBuffer < m_nBuffers; ++nBuffer)
 		if (nLine[nBuffer] >= m_ptBuf[nBuffer]->GetLineCount())
 		{
-			LangMessageBox(IDS_SYNCPOINT_LASTBLOCK, MB_ICONSTOP);
+			I18n::MessageBox(IDS_SYNCPOINT_LASTBLOCK, MB_ICONSTOP);
 			return;
 		}
 
@@ -3533,7 +3540,7 @@ void CMergeDoc::AddSyncPoint()
 bool CMergeDoc::DeleteSyncPoint(int pane, int nLine, bool bRescan)
 {
 	const auto syncpoints = GetSyncPointList();	
-	for (auto syncpnt : syncpoints)
+	for (const auto& syncpnt : syncpoints)
 	{
 		if (syncpnt[pane] == nLine)
 		{

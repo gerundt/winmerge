@@ -735,6 +735,36 @@ CRLF) והשני לא, אך תוכן השורה תואם, הבדלים אלה מ
 
     <section>
       <title>
+Ignore line breaks (treat as spaces)<indexterm>
+          <primary>מסננים</primary>
+          <secondary>line breaks</secondary>
+        </indexterm></title>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+<option>Disabled</option> (default): Line breaks (EOL characters) are not
+treated as spaces.</para>
+        </listitem>
+
+        <listitem>
+          <para>
+<option>Enabled</option>: Within a diff hunk, line breaks are treated as
+spaces. For example, the following difference is ignored: <screen>Left:
+abc def
+
+Right:
+abc
+def
+</screen> <note> Useful when combined with whitespace options
+such as <option>Whitespaces → Ignore change</option> or <option>Whitespaces
+→ Ignore all</option>.  </note></para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>
 הפעל זיהוי בלוקים שהועברו<indexterm>
           <primary>הבדלים שהועברו</primary>
         </indexterm></title>
@@ -957,6 +987,17 @@ linkend="CompareFiles_diffcolors" />.</para>
           <listitem>
             <para>
 משווה רק גדלי קבצים, כך שהוא מהיר אבל לא מדויק כמו שיטות התוכן.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Existence</term>
+
+          <listitem>
+            <para>
+Compares only whether files exist on both sides. If a file exists on both
+the left and right, they are considered identical, without checking
+contents, size, or timestamps.</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -1205,6 +1246,229 @@ C:\Users\All Users הוא קישור סמלי ל-C:\ProgramData, והפעלת א
 ליבות ה-CPU הזמינות.</para>
     </section>
 
+    <section>
+      <title>
+Additional comparison conditions<indexterm>
+          <primary>filter expression</primary>
+        </indexterm></title>
+
+      <para>
+Allows specifying additional comparison conditions using filter expressions
+when comparing folders.  For example, even if files are considered identical
+by the selected comparison method (such as Full Contents), you can add
+conditions like <screen>allequal(Date)</screen> or <screen>LeftDate = RightDate</screen> to require that file modification dates also match.
+When you click the <guilabel>=</guilabel> button to the right of the input
+field, a menu appears with items such as <guilabel>Compare Size</guilabel>
+and <guilabel>Compare Date</guilabel>.  Selecting <guilabel>Compare
+Date</guilabel> automatically inserts <literal>allequal(Date)</literal> into
+the field.</para>
+    </section>
+
+    <section>
+      <title>
+Rename/move detection<indexterm>
+          <primary>rename detection</primary>
+        </indexterm><indexterm>
+          <primary>move detection</primary>
+        </indexterm></title>
+ 
+      <itemizedlist>
+        <listitem>
+          <para>
+<option>Disabled</option> (default): WinMerge does not detect renamed or
+moved files/folders.</para>
+        </listitem>
+ 
+        <listitem>
+          <para>
+<option>Rename detection</option>: Detects files or folders with different
+names but matching detection keys within the same directory.  Files/folders
+are grouped together when they share the same detection key.</para>
+        </listitem>
+ 
+        <listitem>
+          <para>
+<option>Rename and move detection</option>: Detects files or folders with
+different names or in different directories but matching detection keys.
+This mode detects both renamed items (same directory) and moved items
+(different directories).</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>
+Rename/move detection keys<indexterm>
+          <primary>rename detection keys</primary>
+        </indexterm><indexterm>
+          <primary>move detection keys</primary>
+        </indexterm></title>
+ 
+      <para>
+Specifies the filter expression used to generate detection keys for matching
+files/folders across sides.  Items with matching keys are grouped together
+as potentially renamed or moved items.  For example, setting the key to
+<literal>Size</literal> will group files with the same size, while
+<literal>Name</literal> will group files with the same filename (useful for
+detecting moves).</para>
+ 
+      <para>
+When you click the <guilabel>=</guilabel> button to the right of the input
+field, a helper menu appears with common detection key expressions:</para>
+ 
+      <variablelist>
+        <varlistentry>
+          <term>Name</term>
+          <listitem>
+            <para>
+Matches files/folders by name. Useful for detecting files that have been
+moved to different directories but kept the same name.</para>
+          </listitem>
+        </varlistentry>
+ 
+        <varlistentry>
+          <term>BaseName</term>
+          <listitem>
+            <para>
+Matches files by name without extension. For example, "file.txt" and
+"file.doc" would match.</para>
+          </listitem>
+        </varlistentry>
+ 
+        <varlistentry>
+          <term>normalizeUnicode(Name, "NFC")</term>
+          <listitem>
+            <para>
+Matches files by normalized Unicode filename. Useful for detecting files
+with equivalent names but different Unicode representations.</para>
+          </listitem>
+        </varlistentry>
+ 
+        <varlistentry>
+          <term>Size</term>
+          <listitem>
+            <para>
+Matches files by size. Useful for detecting files that have been renamed but
+have the same size.</para>
+          </listitem>
+        </varlistentry>
+ 
+        <varlistentry>
+          <term>Date</term>
+          <listitem>
+            <para>
+Matches files by modification date/time.</para>
+          </listitem>
+        </varlistentry>
+ 
+        <varlistentry>
+          <term>if(IsFolder, Name, prop("Hash.MD5"))</term>
+          <listitem>
+            <para>
+For folders, matches by name. For files, matches by MD5 hash of content.
+This is the most accurate method for detecting renamed files, but requires
+computing MD5 hashes which can be slow for large files.</para>
+          </listitem>
+        </varlistentry>
+ 
+        <varlistentry>
+          <term>Property-based keys</term>
+          <listitem>
+            <para>
+The menu also provides access to Windows file properties such as
+<literal>System.Author</literal>, <literal>System.Title</literal>, etc. You
+can use these to match files based on their metadata.</para>
+          </listitem>
+        </varlistentry>
+ 
+        <varlistentry>
+          <term>String transformation functions</term>
+          <listitem>
+            <para>
+The menu includes string transformation functions that can be applied to
+detection keys:</para>
+            <itemizedlist>
+              <listitem>
+                <para>
+<literal>replace(str, "from", "to")</literal> - Replace text in the key</para>
+              </listitem>
+              <listitem>
+                <para>
+<literal>regexReplace(str, "pattern", "replacement")</literal> - Replace
+using regular expressions</para>
+              </listitem>
+              <listitem>
+                <para>
+<literal>toLower(str)</literal> / <literal>toUpper(str)</literal> - Convert
+case</para>
+              </listitem>
+              <listitem>
+                <para>
+<literal>toHalfWidth(str)</literal> / <literal>toFullWidth(str)</literal> -
+Convert character width</para>
+              </listitem>
+              <listitem>
+                <para>
+<literal>toSimplifiedChinese(str)</literal> /
+<literal>toTraditionalChinese(str)</literal> - Convert Chinese characters</para>
+              </listitem>
+              <listitem>
+                <para>
+<literal>toHiragana(str)</literal> / <literal>toKatakana(str)</literal> -
+Convert Japanese characters</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+ 
+      <para>
+You can combine multiple keys using the <literal>+</literal> operator with a
+separator.  For example, <literal>Name + "|" + Size</literal> will create a
+composite key combining both filename and size.</para>
+ 
+      <note>
+        <para>
+The detection key expression is evaluated for each side of a file/folder
+comparison to produce a key.  Items are grouped when their keys match. For
+example, with the key <literal>Size</literal>, a file of 1024 bytes on the
+left and a file of 1024 bytes on the right (even with different names) will
+be grouped together.</para>
+      </note>
+    </section>
+ 
+    <section>
+      <title>
+Merge renamed items into a single item<indexterm>
+          <primary>merge renamed items</primary>
+        </indexterm></title>
+ 
+      <itemizedlist>
+        <listitem>
+          <para>
+<option>Disabled</option> (default): Renamed/moved items remain as separate
+entries in the folder comparison tree.  The items are grouped together
+(indicated by a common group ID), but each side's file/folder is shown
+separately.</para>
+        </listitem>
+ 
+        <listitem>
+          <para>
+<option>Enabled</option>: Items that have been detected as renamed but are
+in the same directory are merged into a single entry.  This simplifies the
+comparison tree by showing a single item that exists on multiple sides with
+different names.  Items in different directories (moved items) are not
+merged even when this option is enabled.</para>
+        </listitem>
+      </itemizedlist>
+ 
+      <note>
+        <para>
+Merging only occurs when each side has at most one item in the group and the
+items are in the same parent directory.  If multiple files match on one side
+(ambiguous case), they are not merged.</para>
+      </note>
+    </section>
   </section>
 
   <section id="Configuration_compare_table">
@@ -1814,7 +2078,86 @@ TBD</para>
       </indexterm></title>
 
     <para>
-TBD</para>
+The Color Schemes page allows you to customize the overall color appearance
+of WinMerge, including support for light and dark modes. You can select and
+manage color schemes for each mode, and save or delete your own custom
+schemes.</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>Color mode</term>
+        <listitem>
+          <para>
+Selects the color mode for the application. Choose from:</para>
+          <itemizedlist>
+            <listitem>
+              <para>
+<option>Light</option> (default): Uses the color scheme specified for light
+mode. When selected, the appearance of dialog windows, menus, and other UI
+elements will be shown in a light style.</para>
+            </listitem>
+            <listitem>
+              <para>
+<option>Dark</option>: Uses the color scheme specified for dark mode. When
+selected, the appearance of dialog windows, menus, and other UI elements
+will be shown in a dark style.</para>
+            </listitem>
+            <listitem>
+              <para>
+<option>Follow system</option>: Automatically switches between light and
+dark mode based on your operating system's setting.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Light mode scheme</term>
+        <listitem>
+          <para>
+Selects the color scheme to use when <guilabel>Color mode</guilabel> is set
+to Light. Available schemes include <option>Default</option> (default),
+<option>Modern</option>, and any user-defined schemes you have saved.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Dark mode scheme</term>
+        <listitem>
+          <para>
+Selects the color scheme to use when <guilabel>Color mode</guilabel> is set
+to Dark. Available schemes include <option>VS Dark</option> (default),
+<option>Solarized Dark</option>, and any user-defined schemes you have
+saved.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Save current scheme</term>
+        <listitem>
+          <para>
+Saves the current color settings as a new scheme. The scheme is saved as an
+INI file. <emphasis> Only schemes saved in the
+<filename>Documents/WinMerge/ColorSchemes</filename> folder will appear in
+the <guilabel>Light mode scheme</guilabel> and <guilabel>Dark mode
+scheme</guilabel> lists.  </emphasis></para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Delete current scheme</term>
+        <listitem>
+          <para>
+Deletes the currently selected color scheme. This button is only enabled for
+user-defined schemes (not for built-in schemes like Default or VS Dark).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>
+Use these options to tailor the WinMerge interface to your preferences or to
+match your system theme. Custom color schemes make it easy to share or reuse
+your preferred color settings.</para>
   </section>
 
   <section id="Configuration_colors_differences">
@@ -2039,6 +2382,35 @@ TBD</para>
 <guimenuitem>עם עורך חיצוני</guimenuitem> </menuchoice> או <menuchoice>
 <guimenuitem>פתח ימני</guimenuitem> <guimenuitem>עם עורך
 חיצוני</guimenuitem> </menuchoice>.</para>
+    </section>
+
+    <section>
+      <title>
+Store user data in<indexterm>
+          <primary>user data</primary>
+          <secondary>storage location</secondary>
+        </indexterm></title>
+    
+      <para>
+Specifies where WinMerge stores user data such as filters, plugins, color
+schemes, and configuration logs.</para>
+    
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>AppData (Roaming) folder</guilabel> (default): Stores user data in
+the roaming application data folder of your user profile.</para>
+        </listitem>
+    
+        <listitem>
+          <para>
+<guilabel>Documents folder</guilabel>: Stores user data in the
+<filename>WinMerge</filename> subfolder of your Documents directory.</para>
+        </listitem>
+      </itemizedlist>
+    
+      <para>
+This setting affects newly created user data only.</para>
     </section>
 
     <section>

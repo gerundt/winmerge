@@ -13,8 +13,6 @@
 
 #include "stdafx.h"
 #include "DirFrame.h"
-#include "OptionsDef.h"
-#include "OptionsMgr.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -25,8 +23,8 @@
  */
 enum
 {
-	PANE_COMPMETHOD = 1,
-	PANE_FILTER,
+	PANE_FILTER = 1,
+	PANE_COMPMETHOD,
 	PANE_LEFT_RO,
 	PANE_MIDDLE_RO,
 	PANE_RIGHT_RO,
@@ -39,7 +37,7 @@ const int COMPMETHOD_PANEL_WIDTH = 100;
 /**
  * @brief Width of filter name pane in statusbar
  */
-const int FILTER_PANEL_WIDTH = 100;
+const int FILTER_PANEL_WIDTH = 200;
 
 /**
  * @brief Bottom statusbar panels and indicators
@@ -78,6 +76,10 @@ BEGIN_MESSAGE_MAP(CDirFrame, CMergeFrameCommon)
 	ON_WM_CREATE()
 	ON_WM_CLOSE()
 	ON_WM_SIZE()
+	ON_COMMAND(ID_VIEW_DISPLAY_FILTER_BAR_MENU, OnViewDisplayFilterBar)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DISPLAY_FILTER_BAR_MENU, OnUpdateDisplayViewFilterBar)
+	ON_COMMAND(IDCANCEL, OnDisplayFilterBarClose)
+	ON_COMMAND(IDC_FILTERFILE_MASK_MENU, OnDisplayFilterBarMaskMenu)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -114,8 +116,8 @@ int CDirFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	const int lpx = CClientDC(this).GetDeviceCaps(LOGPIXELSX);
 	auto pointToPixel = [lpx](int point) { return MulDiv(point, lpx, 72); };
 	m_wndStatusBar.SetPaneInfo(0, 0, SBPS_STRETCH | SBPS_NOBORDERS, 0);
-	m_wndStatusBar.SetPaneInfo(PANE_COMPMETHOD, ID_STATUS_FILTER, SBPS_CLICKABLE, pointToPixel(COMPMETHOD_PANEL_WIDTH));
 	m_wndStatusBar.SetPaneInfo(PANE_FILTER, ID_STATUS_FILTER, SBPS_CLICKABLE, pointToPixel(FILTER_PANEL_WIDTH));
+	m_wndStatusBar.SetPaneInfo(PANE_COMPMETHOD, ID_STATUS_FILTER, SBPS_CLICKABLE, pointToPixel(COMPMETHOD_PANEL_WIDTH));
 	m_wndStatusBar.SetPaneInfo(PANE_LEFT_RO, ID_STATUS_LEFTDIR_RO, SBPS_CLICKABLE, pointToPixel(RO_PANEL_WIDTH));
 	m_wndStatusBar.SetPaneInfo(PANE_MIDDLE_RO, ID_STATUS_MIDDLEDIR_RO, SBPS_CLICKABLE, pointToPixel(RO_PANEL_WIDTH));
 	m_wndStatusBar.SetPaneInfo(PANE_RIGHT_RO, ID_STATUS_RIGHTDIR_RO, SBPS_CLICKABLE, pointToPixel(RO_PANEL_WIDTH));
@@ -145,7 +147,7 @@ void CDirFrame::SetStatus(const tchar_t* szStatus)
  */
 void CDirFrame::SetCompareMethodStatusDisplay(int nCompMethod)
 {
-	m_wndStatusBar.SetPaneText(PANE_COMPMETHOD, LoadResString(IDS_COMPMETHOD_FULL_CONTENTS + nCompMethod).c_str());
+	m_wndStatusBar.SetPaneText(PANE_COMPMETHOD, I18n::LoadString(IDS_COMPMETHOD_FULL_CONTENTS + nCompMethod).c_str());
 }
 
 /**
@@ -182,6 +184,8 @@ void CDirFrame::OnClose()
  */
 BOOL CDirFrame::DestroyWindow() 
 {
+	HideProgressBar();
+	HideFilterBar();
 	// save docking positions and sizes
 	CDockState dockState;
 	GetDockState(dockState);
@@ -196,3 +200,73 @@ void CDirFrame::OnSize(UINT nType, int cx, int cy)
 	
 	m_wndFilePathBar.Resize();
 }
+
+void CDirFrame::ShowProgressBar()
+{
+	if (m_pCmpProgressBar == nullptr)
+		m_pCmpProgressBar.reset(new DirCompProgressBar());
+
+	if (!::IsWindow(m_pCmpProgressBar->GetSafeHwnd()))
+		m_pCmpProgressBar->Create(this);
+
+	ShowControlBar(m_pCmpProgressBar.get(), TRUE, FALSE);
+}
+
+void CDirFrame::HideProgressBar()
+{
+	if (m_pCmpProgressBar != nullptr && ::IsWindow(m_pCmpProgressBar->GetSafeHwnd()))
+	{
+		ShowControlBar(m_pCmpProgressBar.get(), FALSE, FALSE);
+		m_pCmpProgressBar->DestroyWindow();
+	}
+	m_pCmpProgressBar.reset();
+}
+
+void CDirFrame::OnViewDisplayFilterBar()
+{
+	if (!m_pDirFilterBar)
+		ShowFilterBar();
+	else
+		HideFilterBar();
+}
+
+void CDirFrame::OnUpdateDisplayViewFilterBar(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable(TRUE);
+	pCmdUI->SetCheck(m_pDirFilterBar != nullptr);
+}
+
+void CDirFrame::OnDisplayFilterBarClose()
+{
+	HideFilterBar();
+	GetActiveView()->SetFocus();
+}
+
+void CDirFrame::OnDisplayFilterBarMaskMenu()
+{
+	m_pDirFilterBar->ShowFilterMaskMenu();
+}
+
+void CDirFrame::ShowFilterBar()
+{
+	if (!m_pDirFilterBar)
+		m_pDirFilterBar.reset(new CDirFilterBar());
+	if (!::IsWindow(m_pDirFilterBar->GetSafeHwnd()) && !m_pDirFilterBar->Create(this))
+	{
+		TRACE0("Failed to create filter bar\n");
+		m_pDirFilterBar.reset();
+		return;
+	}
+	ShowControlBar(m_pDirFilterBar.get(), TRUE, FALSE);
+}
+
+void CDirFrame::HideFilterBar()
+{
+	if (m_pDirFilterBar != nullptr && ::IsWindow(m_pDirFilterBar->GetSafeHwnd()))
+	{
+		ShowControlBar(m_pDirFilterBar.get(), FALSE, FALSE);
+		m_pDirFilterBar->DestroyWindow();
+	}
+	m_pDirFilterBar.reset();
+}
+

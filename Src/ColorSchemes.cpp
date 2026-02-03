@@ -5,29 +5,64 @@
 #include "DirTravel.h"
 #include "paths.h"
 #include "Environment.h"
+#include <set>
 
 namespace ColorSchemes
 {
 
-String GetColorSchemesFolder()
+std::vector<String> GetColorSchemesFolders()
 {
-	return paths::ConcatPath(env::GetProgPath(), _T("ColorSchemes"));
+	std::vector<String> folders;
+	folders.push_back(paths::ConcatPath(env::GetProgPath(), _T("ColorSchemes")));
+	folders.push_back(paths::ConcatPath(env::GetAppDataPath(), _T("WinMerge\\ColorSchemes")));
+	folders.push_back(paths::ConcatPath(env::GetMyDocuments(), _T("WinMerge\\ColorSchemes")));
+	return folders;
+}
+
+String GetPrivateColorSchemesFolder(bool useMyDocument)
+{
+	const auto folders = GetColorSchemesFolders();
+	return folders[useMyDocument ? 2 : 1];
+}
+
+bool IsPrivateColorSchemePath(const String& path)
+{
+	const String parentFolder = paths::GetParentPath(path);
+	int i = 0;
+	for (const auto& folder : GetColorSchemesFolders())
+	{
+		if (i > 0)
+		{
+			if (strutils::compare_nocase(folder, parentFolder) == 0)
+				return true;
+		}
+		++i;
+	}
+	return false;
 }
 
 String GetColorSchemePath(const String& name)
 {
-	const String path = paths::ConcatPath(GetColorSchemesFolder(), name + _T(".ini"));
-	if (!paths::DoesPathExist(path))
-		return _T("");
-	return path;
+	for (const String& folder : GetColorSchemesFolders())
+	{
+		const String path = paths::ConcatPath(folder, name + _T(".ini"));
+		if (paths::DoesPathExist(path))
+			return path;
+	}
+	return _T("");
 }
 
 std::vector<String> GetColorSchemeNames()
 {
-	DirItemArray dirs, files;
-	std::vector<String> names;
+	DirItemArray files;
+	std::set<String> names;
 
-	LoadAndSortFiles(GetColorSchemesFolder(), &dirs, &files, false);
+	for (const String& folder : GetColorSchemesFolders())
+	{
+		DirItemArray dirs, filesTmp;
+		DirTravel::LoadAndSortFiles(folder, &dirs, &filesTmp, false);
+		files.insert(files.end(), filesTmp.begin(), filesTmp.end());
+	}
 
 	for (DirItem& item : files)
 	{
@@ -35,10 +70,10 @@ std::vector<String> GetColorSchemeNames()
 		String ext;
 		paths::SplitFilename(item.filename, nullptr, &filename, &ext);
 		if (strutils::compare_nocase(ext, _T("ini")) == 0)
-			names.push_back(filename);
+			names.insert(filename);
 	}
 
-	return names;
+	return std::vector<String>(names.begin(), names.end());
 }
 
 }

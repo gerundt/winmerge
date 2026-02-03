@@ -768,6 +768,45 @@
     <ClCompile Include="FrameWndHelper.cpp">
       <Filter>MFCGui\Common\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FilterErrorMessages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\ValidatingEdit.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFilterHelperMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterConditionDlg.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyColorDialog.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFontDialog.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FiltersPropertySheet.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsManager.cpp">
+      <Filter>MFCGui\Main\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="I18nGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertySystemMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinRtLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DirFilterBar.cpp">
+      <Filter>MFCGui\MDIChild\FolderCompare\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenameMoveDetection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charsets.h">
@@ -1462,6 +1501,45 @@
     </ClInclude>
     <ClInclude Include="FrameWndHelper.h">
       <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterErrorMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ValidatingEdit.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileFilterHelperMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterConditionDlg.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyColorDialog.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFontDialog.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FiltersPropertySheet.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsManager.h">
+      <Filter>MFCGui\Main\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="I18n.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="I18nGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertySystemMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DirFilterBar.h">
+      <Filter>MFCGui\MDIChild\FolderCompare\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenameMoveDetection.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

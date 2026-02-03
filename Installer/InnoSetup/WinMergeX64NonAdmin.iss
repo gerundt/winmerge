@@ -58,7 +58,7 @@
 [Setup]
 AppName=WinMerge
 AppVersion={#AppVersion}
-AppVerName=WinMerge {#AppVersion} {#ARCH} (Current user, 64-bit)
+AppVerName=WinMerge {#ARCH} (Current user, 64-bit)
 AppPublisher=Thingamahoochie Software
 AppPublisherURL=https://WinMerge.org/
 AppSupportURL=https://WinMerge.org/
@@ -165,6 +165,7 @@ Name: Swedish; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is5\Swedish.
 Name: Tamil; MessagesFile: compiler:Default.isl,..\..\Translations\InnoSetup\Tamil.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Tamil.txt
 Name: Turkish; MessagesFile: compiler:Languages\Turkish.isl,..\..\Translations\InnoSetup\Turkish.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Turkish.txt
 Name: Ukrainian; MessagesFile: compiler:Languages\Ukrainian.isl,..\..\Translations\InnoSetup\Ukrainian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Ukrainian.txt
+Name: Vietnamese; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is5\Vietnamese.islu,..\..\Translations\InnoSetup\Vietnamese.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Vietnamese.txt
 
 
 [Messages]
@@ -301,6 +302,8 @@ Name: Languages\Turkish; Description: {cm:TurkishLanguage}; Flags: disablenounin
 Name: Languages\Ukrainian; Description: {cm:UkrainianLanguage}; Flags: disablenouninstallwarning; Types: full; Languages: not Ukrainian
 Name: Languages\Ukrainian; Description: {cm:UkrainianLanguage}; Flags: disablenouninstallwarning; Types: full typical compact; Languages: Ukrainian
 
+Name: Languages\Vietnamese; Description: {cm:VietnameseLanguage}; Flags: disablenouninstallwarning; Types: full; Languages: not Vietnamese
+Name: Languages\Vietnamese; Description: {cm:VietnameseLanguage}; Flags: disablenouninstallwarning; Types: full typical compact; Languages: Vietnamese
 
 [Tasks]
 Name: ShellExtension; Description: {cm:ExplorerContextMenu}; GroupDescription: {cm:OptionalFeatures}
@@ -550,6 +553,8 @@ Source: ..\..\Translations\Docs\Readme\ReadMe-Turkish.txt; DestDir: {app}\Docs; 
 Source: ..\..\Translations\WinMerge\Ukrainian.po; DestDir: {app}\Languages; Components: Languages\Ukrainian; Flags: ignoreversion comparetimestamp
 Source: ..\..\Translations\ShellExtension\Ukrainian.po; DestDir: {app}\Languages\ShellExtension; Components: Languages\Ukrainian; Flags: ignoreversion comparetimestamp
 Source: ..\..\Translations\Docs\Readme\ReadMe-Ukrainian.txt; DestDir: {app}\Docs; Components: Languages\Ukrainian
+Source: ..\..\Translations\ShellExtension\Vietnamese.po; DestDir: {app}\Languages\ShellExtension; Components: Languages\Vietnamese; Flags: ignoreversion comparetimestamp
+Source: ..\..\Translations\Docs\Readme\ReadMe-Vietnamese.txt; DestDir: {app}\Docs; Components: Languages\Vietnamese
 
 ;Filters
 Source: ..\..\Filters\*.flt; DestDir: {app}\Filters; Flags: sortfilesbyextension comparetimestamp ignoreversion; Components: filters
@@ -559,12 +564,12 @@ Source: ..\..\Filters\FileFilter.tmpl; DestDir: {app}\Filters; Flags: sortfilesb
 Source: ..\..\ColorSchemes\*.ini; DestDir: {app}\ColorSchemes; Flags: sortfilesbyextension comparetimestamp ignoreversion
 
 ;Documentation
-Source: ..\..\Docs\Users\ReadMe.txt; DestDir: {app}\Docs; Flags: comparetimestamp ignoreversion promptifolder; Components: Core
-Source: ..\..\Docs\Users\Contributors.txt; DestDir: {app}; Flags: comparetimestamp ignoreversion promptifolder; Components: Core
-Source: ..\..\Docs\Users\ReleaseNotes.html; DestDir: {app}\Docs; Flags: comparetimestamp ignoreversion promptifolder; Components: Core
-Source: ..\..\Docs\Users\ChangeLog.html; DestDir: {app}\Docs; Flags: comparetimestamp ignoreversion promptifolder; Components: Core
+Source: ..\..\Docs\Users\ReadMe.txt; DestDir: {app}\Docs; Flags: overwritereadonly uninsremovereadonly; Components: Core
+Source: ..\..\Docs\Users\Contributors.txt; DestDir: {app}; Flags: overwritereadonly uninsremovereadonly; Components: Core
+Source: ..\..\Docs\Users\ReleaseNotes.html; DestDir: {app}\Docs; Flags: overwritereadonly uninsremovereadonly; Components: Core
+Source: ..\..\Docs\Users\ChangeLog.html; DestDir: {app}\Docs; Flags: overwritereadonly uninsremovereadonly; Components: Core
 Source: ..\..\Build\Manual\htmlhelp\WinMerge.chm; DestDir: {app}\Docs\; Flags: overwritereadonly uninsremovereadonly; Components: Core
-Source: ..\..\Docs\users\GPL.rtf; DestDir: {app}\Docs\; Flags: comparetimestamp ignoreversion promptifolder; Components: Core
+Source: ..\..\Docs\users\GPL.rtf; DestDir: {app}\Docs\; Flags: overwritereadonly uninsremovereadonly; Components: Core
 
 ;Plugins
 ;Please note IgnoreVersion and CompareTimeStamp are to instruct the installer to not not check for version info and go straight to comparing modification dates
@@ -603,6 +608,8 @@ Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\pl.po; DestDir: {app}\Frhed\
 Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\ru.po; DestDir: {app}\Frhed\Languages; Components: Languages\Russian
 Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\sk.po; DestDir: {app}\Frhed\Languages; Components: Languages\Slovak
 Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\sl.po; DestDir: {app}\Frhed\Languages; Components: Languages\Slovenian
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\ta.po; DestDir: {app}\Frhed\Languages; Components: Languages\Tamil
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\zh-TW.po; DestDir: {app}\Frhed\Languages; Components: Languages\ChineseTraditional
 Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\heksedit.lng; DestDir: {app}\Frhed\Languages; Components: Core
 
 ;WinIMerge
@@ -616,14 +623,18 @@ Source: ..\..\Build\{#ARCH}\Release\WinIMerge\vcomp140.dll; DestDir: {app}; Comp
 Source: ..\..\Build\{#ARCH}\Release\WinWebDiff\LICENSE*.txt; DestDir: {app}\WinWebDiff; Components: Core
 Source: ..\..\Build\{#ARCH}\Release\WinWebDiff\WinWebDiffLib.dll; DestDir: {app}\WinWebDiff; Flags: ignoreversion replacesameversion; Components: Core
 
+;darkmodelib
+Source: ..\..\Build\{#ARCH}\Release\darkmodelib\LICENSE.md; DestDir: {app}\darkmodelib; Components: Core
+Source: ..\..\Build\{#ARCH}\Release\darkmodelib\darkmode.dll; DestDir: {app}\darkmodelib; Flags: ignoreversion replacesameversion; Components: Core
+
 ;GNU patch
-Source: ..\..\Build\msys2\*.*; DestDir: {app}\Commands\msys2; Flags: recursesubdirs; Components: Plugins
+Source: ..\..\Build\msys2\*.*; DestDir: {app}\Commands\msys2; Flags: recursesubdirs; Components: Plugins; Excludes: "lemon*,re2c*"
 ; HTML Tidy
 Source: ..\..\Build\tidy-html5\bin\*.*; DestDir: {app}\Commands\tidy-html5; Flags: recursesubdirs; Components: Plugins
 Source: ..\..\Build\tidy-html5\tidy-html5-5.4.0\README\LICENSE.md; DestDir: {app}\Commands\tidy-html5; Flags: recursesubdirs; Components: Plugins
 ; jq
 Source: ..\..\Build\jq\jq-windows-i386.exe; DestDir: {app}\Commands\jq; DestName: jq.exe; Flags: recursesubdirs; Components: Plugins
-Source: ..\..\Build\jq\jq-jq-1.7.1\COPYING; DestDir: {app}\Commands\jq; Flags: recursesubdirs; Components: Plugins
+Source: ..\..\Build\jq\jq-jq-1.8.1\COPYING; DestDir: {app}\Commands\jq; Flags: recursesubdirs; Components: Plugins
 ; md4c
 Source: ..\..\Build\md4c\mingw32\bin\*.*; DestDir: {app}\Commands\md4c; Flags: recursesubdirs; Components: Plugins
 Source: ..\..\Build\md4c\mingw32\share\licenses\md4c\LICENSE.md; DestDir: {app}\Commands\md4c; Flags: recursesubdirs; Components: Plugins

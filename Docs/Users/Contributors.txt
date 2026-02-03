@@ -30,7 +30,7 @@ Localization:
   Downzen team <https://downzen.com>
 
 * Basque:
-  Xabier Aramendi <Azpidatziak@gmail.com>  
+  Xabier Aramendi <Azpidatziak@gmail.com>
 
 * Bulgarian:
   Sld <sld|mail.bg>
@@ -41,7 +41,7 @@ Localization:
 * Catalan:
   Jordi Vilar <jvilar@users.sourceforge.net>
   Domènec <domenec72 at gmail.com>
-  Josep Maria Antolín Segura 
+  Josep Maria Antolín Segura
   Pere Orga <pere at orga.cat>
 
 * Simplified Chinese:
@@ -57,6 +57,7 @@ Localization:
   Calvin Lin <ylin77 at gmail.com>
   SiderealArt <admin at siderealart.me>
   abc0922001
+  love80312
 
 * Corsican:
   Patriccollu di Santa Maria è Sichè
@@ -89,6 +90,7 @@ Localization:
   gandf
   Lolo S. <slolo2000 at hotmail.com>
   Need74
+  t3chnob0y
 
 * Galician:
   Medulio
@@ -97,6 +99,7 @@ Localization:
 
 * German:
   Tim Gerundt <tim@gerundt.de>
+  René Nicolaus <translation@havoc.de>
   Winfried Peter <winfried.peter@omicron.at>
   Joerg Schneider <tonda@users.sourceforge.net>
   Mr-Update
@@ -162,6 +165,7 @@ Localization:
   jota11
   Gabriel Camargo Fukushima
   Marcello-mco
+  RicardoPC1967
 
 * Portuguese (Portugal):
   Nelson Simão
@@ -208,6 +212,7 @@ Localization:
   Göran Håkansson <goran.x.hakansson@telia.com>
   pgert <pgert at yahoo.se>
   Timmy Almroth <timmy.almroth at tim-international.net>
+  Sweden12
 
 * Tamil:
   தமிழ்நேரம் <https://TamilNeram.github.io>
@@ -217,12 +222,17 @@ Localization:
   Ozkan UNVER <turquaz37915@users.sourceforge.net>
   Kaya Zeren <kaya.zeren at zeron.net>
   iLyax
+  bilimiyorum
 
 * Ukranian
   Vitaliy Stopchans'kyy <stopcha@gmail.com>
   Warrior <warr11r@rambler.ru>
   Vlad
   Serhii Romashko
+  sggua
+
+* Vietnamese
+  IoeCmcomc
 
 Other Contributors (code, ideas, testing..):
 * James Abbatiello <abbeyj@users.sourceforge.net>
@@ -288,7 +298,7 @@ Other Contributors (code, ideas, testing..):
 * HaroldPetersInskipp (Midnight color scheme)
 * srgank
 * baka0815
-* Yurii Hordiienko 
+* Yurii Hordiienko
 * wiera987
 * wilfzim
 * Mavaddat Javid
@@ -302,11 +312,13 @@ Other Contributors (code, ideas, testing..):
 * libraplanet
 * Steve Lambillion
 * Rob Kodey (VS Dark color scheme)
+* ozone10 (darkmodelib)
+* Anthony Lee Stark
 
 WinMerge includes code from:
 * Jared Breland <jbreland@legroom.net> (Installer's modpath script)
 * Brent Corkum (BCMenu)
-* Paul DiLascia (CStaticLink) 
+* Paul DiLascia (CStaticLink)
 * Michael Dunn (CShellFileOp)
 * Francis Irving (original conflict file parser)
 * Michael P. Mehl (CMessageBoxDialog)
@@ -331,10 +343,12 @@ External components used by WinMerge
   * wil (MIT) (https://github.com/microsoft/wil)
   * rapidjson (MIT) (https://rapidjson.org/)
   * LibXDiff (LGPL-2.1) (https://github.com/git/git/tree/master/xdiff)
+* darkmodelib (MPL-2.0) (https://github.com/ozone10/darkmodelib)
 * Google C++ Testing Framework (BSD-3-Clause) (http://google.github.io/googletest/)
 * GNU patch (msys2 package) (GPL-3.0) (https://savannah.gnu.org/projects/patch/, https://github.com/msys2/MSYS2-packages/tree/master/patch)
 * 7-zip (LGPL) (https://www.7-zip.org/)
 * LibXDiff (LGPL-2.1) (https://github.com/git/git/tree/master/xdiff)
+* StackWalker (BSD-2-Clause) (https://github.com/JochenKalmbach/StackWalker)
 * html-tidy5 (https://github.com/htacg/tidy-html5/blob/next/README/LICENSE.md) (http://www.html-tidy.org/)
 * jq (MIT) (https://stedolan.github.io/jq/)
 * wil (MIT) (https://github.com/microsoft/wil)
