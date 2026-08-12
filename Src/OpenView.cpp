@@ -39,6 +39,9 @@
 #include "OptionsProject.h"
 #include "Merge7zFormatMergePluginImpl.h"
 #include "DarkModeLib.h"
+#include "ClipboardHistory.h"
+#include "ClipboardHistoryMenu.h"
+#include "PluginMenu.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -61,6 +64,10 @@ IMPLEMENT_DYNCREATE(COpenView, CFormView)
 BEGIN_MESSAGE_MAP(COpenView, CFormView)
 	//{{AFX_MSG_MAP(COpenView)
 	ON_CONTROL_RANGE(BN_CLICKED, IDC_PATH0_BUTTON, IDC_PATH2_BUTTON, OnPathButton)
+	ON_NOTIFY(BCN_DROPDOWN, IDC_PATH0_BUTTON, (OnDropDown<IDC_PATH0_BUTTON, IDR_POPUP_BROWSE>))
+	ON_NOTIFY(BCN_DROPDOWN, IDC_PATH1_BUTTON, (OnDropDown<IDC_PATH1_BUTTON, IDR_POPUP_BROWSE>))
+	ON_NOTIFY(BCN_DROPDOWN, IDC_PATH2_BUTTON, (OnDropDown<IDC_PATH2_BUTTON, IDR_POPUP_BROWSE>))
+	ON_COMMAND_RANGE(ID_EDITOR_CLIPBOARD_FIRST, ID_EDITOR_CLIPBOARD_LAST, OnSelectClipboardItem)
 	ON_BN_CLICKED(IDC_SWAP01_BUTTON, (OnSwapButton<IDC_PATH0_COMBO, IDC_PATH1_COMBO>))
 	ON_BN_CLICKED(IDC_SWAP12_BUTTON, (OnSwapButton<IDC_PATH1_COMBO, IDC_PATH2_COMBO>))
 	ON_BN_CLICKED(IDC_SWAP02_BUTTON, (OnSwapButton<IDC_PATH0_COMBO, IDC_PATH2_COMBO>))
@@ -113,8 +120,8 @@ BEGIN_MESSAGE_MAP(COpenView, CFormView)
 	ON_COMMAND(ID_EDIT_CUT, OnEditAction<WM_CUT>)
 	ON_COMMAND(ID_EDIT_UNDO, OnEditAction<WM_UNDO>)
 	ON_COMMAND(ID_EDIT_SELECT_ALL, (OnEditAction<EM_SETSEL, 0, -1>))
-	ON_COMMAND_RANGE(ID_MERGE_COMPARE_TEXT, ID_MERGE_COMPARE_WEBPAGE, OnCompare)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_MERGE_COMPARE_TEXT, ID_MERGE_COMPARE_WEBPAGE, OnUpdateCompare)
+	ON_COMMAND_RANGE(ID_MERGE_COMPARE_TEXT, ID_MERGE_COMPARE_FOLDER, OnCompare)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_MERGE_COMPARE_TEXT, ID_MERGE_COMPARE_FOLDER, OnUpdateCompare)
 	ON_COMMAND_RANGE(ID_UNPACKERS_FIRST, ID_UNPACKERS_LAST, OnCompare)
 	ON_COMMAND_RANGE(ID_OPEN_WITH_UNPACKER, ID_OPEN_WITH_UNPACKER, OnCompare)
 	ON_MESSAGE(WM_USER + 1, OnUpdateStatus)
@@ -153,6 +160,7 @@ COpenView::COpenView()
 	, m_bIgnoreMissingTrailingEol(false)
 	, m_bIgnoreLineBreaks(false)
 	, m_nCompareMethod(0)
+	, m_nLastDropDownButton(0)
 	, m_hTheme(nullptr)
 {
 	// CWnd::EnableScrollBarCtrl() called inside CScrollView::UpdateBars() is quite slow.
@@ -202,10 +210,8 @@ void COpenView::OnInitialUpdate()
 	if (!IsVista_OrGreater())
 	{
 		// fallback for XP 
-		SendDlgItemMessage(IDC_OPTIONS, BM_SETSTYLE, BS_PUSHBUTTON, TRUE);
-		SendDlgItemMessage(ID_SAVE_PROJECT, BM_SETSTYLE, BS_PUSHBUTTON, TRUE);
-		SendDlgItemMessage(IDOK, BM_SETSTYLE, BS_PUSHBUTTON, TRUE);
-		SendDlgItemMessage(IDC_SELECT_FILTER, BM_SETSTYLE, BS_PUSHBUTTON, TRUE);
+		for (int id : { IDC_OPTIONS, ID_SAVE_PROJECT, IDOK, IDC_SELECT_FILTER, IDC_PATH0_BUTTON, IDC_PATH1_BUTTON, IDC_PATH2_BUTTON })
+			SendDlgItemMessage(id, BM_SETSTYLE, BS_PUSHBUTTON, TRUE);
 	}
 
 	m_sizeOrig = GetTotalSize();
@@ -673,6 +679,22 @@ void COpenView::OnPathButton(UINT nId)
 	}	
 }
 
+/**
+ * @brief Called when clipboard history item is selected from Browse dropdown.
+ */
+void COpenView::OnSelectClipboardItem(UINT nId)
+{
+	const int itemIndex = nId - ID_EDITOR_CLIPBOARD_FIRST;
+	const int pathIndex = m_nLastDropDownButton - IDC_PATH0_BUTTON;
+	if (itemIndex < 0 || static_cast<size_t>(itemIndex) >= m_cachedClipboardItems.size() || pathIndex < 0 || pathIndex >= std::size(m_strPath))
+		return;
+
+	// Set the URL to the path field
+	m_strPath[pathIndex] = ClipboardHistoryMenu::BuildClipboardItemUrl(m_cachedClipboardItems, itemIndex);
+	UpdateData(FALSE);
+	UpdateButtonStates();
+}
+
 void COpenView::OnSwapButton(int id1, int id2)
 {
 	String s1, s2;
@@ -723,7 +745,7 @@ void COpenView::OnCompare(UINT nID)
 			PackingInfo tmpPackingInfo(m_strUnpackerPipeline);
 			if (ID_UNPACKERS_FIRST <= nID && nID <= ID_UNPACKERS_LAST)
 			{
-				tmpPackingInfo.SetPluginPipeline(CMainFrame::GetPluginPipelineByMenuId(nID, FileTransform::UnpackerEventNames, ID_UNPACKERS_FIRST));
+				tmpPackingInfo.SetPluginPipeline(PluginMenu::GetPluginPipelineByMenuId(&tmpPackingInfo, nID, FileTransform::UnpackerEventNames, ID_UNPACKERS_FIRST));
 				nID = 0;
 			}
 			PrediffingInfo tmpPrediffingInfo(m_strPredifferPipeline);
@@ -819,22 +841,21 @@ void COpenView::OnCompare(UINT nID)
 	bool recurse = pDoc->m_bRecurse;
 	std::unique_ptr<CMainFrame::OpenFolderParams> pOpenFolderParams;
 	if (!pDoc->m_hiddenItems.empty())
-	{
-		pOpenFolderParams = std::make_unique<CMainFrame::OpenFolderParams>();
-		pOpenFolderParams->m_hiddenItems = pDoc->m_hiddenItems;
-	}
+		pOpenFolderParams = std::make_unique<CMainFrame::OpenFolderParams>(recurse, pDoc->m_hiddenItems);
+	else
+		pOpenFolderParams = std::make_unique<CMainFrame::OpenFolderParams>(recurse);
 	if (nID == IDOK)
 	{
 		GetMainFrame()->DoFileOrFolderOpen(
 			&tmpPathContext, dwFlags.data(),
-			nullptr, _T(""), recurse, nullptr, &tmpPackingInfo, &tmpPrediffingInfo, 0, pOpenFolderParams.get());
+			nullptr, _T(""), nullptr, &tmpPackingInfo, &tmpPrediffingInfo, 0, pOpenFolderParams.get());
 	}
 	else if (ID_UNPACKERS_FIRST <= nID && nID <= ID_UNPACKERS_LAST)
 	{
-		tmpPackingInfo.SetPluginPipeline(CMainFrame::GetPluginPipelineByMenuId(nID, FileTransform::UnpackerEventNames, ID_UNPACKERS_FIRST));
+		tmpPackingInfo.SetPluginPipeline(PluginMenu::GetPluginPipelineByMenuId(&tmpPackingInfo, nID, FileTransform::UnpackerEventNames, ID_UNPACKERS_FIRST));
 		GetMainFrame()->DoFileOrFolderOpen(
 			&tmpPathContext, dwFlags.data(),
-			nullptr, _T(""), recurse, nullptr, &tmpPackingInfo, &tmpPrediffingInfo, 0, pOpenFolderParams.get());
+			nullptr, _T(""), nullptr, &tmpPackingInfo, &tmpPrediffingInfo, 0, pOpenFolderParams.get());
 	}
 	else if (nID == ID_OPEN_WITH_UNPACKER)
 	{
@@ -845,7 +866,7 @@ void COpenView::OnCompare(UINT nID)
 			tmpPackingInfo.SetPluginPipeline(dlg.GetPluginPipeline());
 			GetMainFrame()->DoFileOrFolderOpen(
 				&tmpPathContext, dwFlags.data(),
-				nullptr, _T(""), recurse, nullptr, &tmpPackingInfo, &tmpPrediffingInfo, 0, pOpenFolderParams.get());
+				nullptr, _T(""), nullptr, &tmpPackingInfo, &tmpPrediffingInfo, 0, pOpenFolderParams.get());
 		}
 	}
 	else
@@ -1110,14 +1131,28 @@ void COpenView::DropDown(NMHDR* pNMHDR, LRESULT* pResult, UINT nID, UINT nPopupI
 	CMenu* pPopup = menu.GetSubMenu(0);
 	if (pPopup != nullptr)
 	{
-		if (nID == IDOK && GetDlgItem(IDC_UNPACKER_COMBO)->IsWindowEnabled())
+		// For Browse buttons, populate with clipboard history
+		if (nPopupID == IDR_POPUP_BROWSE)
+		{
+			// Remember which button was clicked for OnSelectClipboardItem
+			m_nLastDropDownButton = nID;
+
+			pPopup->RemoveMenu(0, MF_BYPOSITION); // Remove dummy item from resource
+
+			// Get clipboard history items
+			constexpr unsigned MAX_HISTORY_ITEMS = 15;
+			m_cachedClipboardItems = ClipboardHistory::GetItems(MAX_HISTORY_ITEMS);
+			ClipboardHistoryMenu::PopulateMenu(pPopup, m_cachedClipboardItems, ID_EDITOR_CLIPBOARD_FIRST, ID_EDITOR_CLIPBOARD_LAST);
+		}
+		else if (nID == IDOK && GetDlgItem(IDC_UNPACKER_COMBO)->IsWindowEnabled())
 		{
 			UpdateData(TRUE);
 			String tmpPath[3];
 			for (int i = 0; i < 3; i++)
 				tmpPath[i] = m_strPath[i].empty() ? _T("|.|") : m_strPath[i];
 			String filteredFilenames = strutils::join(std::begin(tmpPath), std::end(tmpPath), _T("|"));
-			CMainFrame::AppendPluginMenus(pPopup, filteredFilenames, FileTransform::UnpackerEventNames, true, ID_UNPACKERS_FIRST);
+			PluginMenu::AppendPluginMenus(pPopup, nullptr, filteredFilenames, FileTransform::UnpackerEventNames, 
+				PluginMenu::AddAllMenu|PluginMenu::AddSelectMenu, ID_UNPACKERS_FIRST);
 		}
 		pPopup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 			rcButton.left, rcButton.bottom, GetMainFrame());

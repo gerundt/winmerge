@@ -57,6 +57,7 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_SHOW_MISSING_LEFT_ONLY, true);
 	pOptions->InitOption(OPT_SHOW_MISSING_MIDDLE_ONLY, true);
 	pOptions->InitOption(OPT_SHOW_MISSING_RIGHT_ONLY, true);
+	pOptions->InitOption(OPT_SHOW_EMPTY_FOLDERS, true);
 
 	pOptions->InitOption(OPT_SHOW_MENUBAR, true);
 	pOptions->InitOption(OPT_SHOW_TOOLBAR, true);
@@ -68,6 +69,7 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_RESIZE_PANES, false);
 
 	pOptions->InitOption(OPT_SYNTAX_HIGHLIGHT, true);
+	pOptions->InitOption(OPT_SYNTAX_HIGHLIGHT_MODE, 1);
 	pOptions->InitOption(OPT_WORDWRAP, false);
 	pOptions->InitOption(OPT_WORDWRAP_TABLE, false);
 	pOptions->InitOption(OPT_VIEW_LINENUMBERS, false);
@@ -113,7 +115,14 @@ void Init(COptionsMgr *pOptions)
 
 	pOptions->InitOption(OPT_REPORTFILES_REPORTTYPE, 0, 0, 3);
 	pOptions->InitOption(OPT_REPORTFILES_COPYTOCLIPBOARD, false);
+	pOptions->InitOption(OPT_REPORTFILES_OPENREPORTFILE, false);
 	pOptions->InitOption(OPT_REPORTFILES_INCLUDEFILECMPREPORT, false);
+	pOptions->InitOption(OPT_REPORTFILES_INCLUDEALLIMAGEPAGES, true);
+
+	pOptions->InitOption(OPT_ARCHIVE_INCLUDEREPORT, false);
+	pOptions->InitOption(OPT_ARCHIVE_INCLUDEPATCH, false);
+	pOptions->InitOption(OPT_ARCHIVE_INCLUDEPROJECT, false);
+	pOptions->InitOption(OPT_ARCHIVE_COPYTOCLIPBOARD, false);
 
 	pOptions->InitOption(OPT_AUTOMATIC_RESCAN, false);
 	pOptions->InitOption(OPT_ALLOW_MIXED_EOL, false);
@@ -152,7 +161,7 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_CMP_ADDITIONAL_CONDITION, _T(""));
 	pOptions->InitOption(OPT_CMP_RENAME_MOVE_DETECTION, 0);
 	pOptions->InitOption(OPT_CMP_RENAME_MOVE_KEY, _T(""));
-	pOptions->InitOption(OPT_CMP_MERGE_RENAMED_ITEMS, false);
+	pOptions->InitOption(OPT_CMP_RENAME_MOVE_MERGE_MODE, 0);
 
 	pOptions->InitOption(OPT_CMP_BIN_FILEPATTERNS, _T("*.bin;*.frx"));
 
@@ -166,6 +175,7 @@ void Init(COptionsMgr *pOptions)
 
 	pOptions->InitOption(OPT_CMP_IMG_FILEPATTERNS, _T("*.bmp;*.cut;*.dds;*.dng;*.exr;*.g3;*.gif;*.heic;*.hdr;*.ico;*.iff;*.lbm;*.j2k;*.j2c;*.jng;*.jp2;*.jpg;*.jif;*.jpeg;*.jpe;*.jxl;*.jxr;*.wdp;*.hdp;*.koa;*.mng;*.pcd;*.pcx;*.pfm;*.pct;*.pict;*.pic;*.png;*.pbm;*.pgm;*.ppm;*.psd;*.ras;*.sgi;*.rgb;*.rgba;*.bw;*.tga;*.targa;*.tif;*.tiff;*.wap;*.wbmp;*.wbm;*.webp;*.xbm;*.xpm"));
 	pOptions->InitOption(OPT_CMP_IMG_SHOWDIFFERENCES, true);
+	pOptions->InitOption(OPT_CMP_IMG_BLINKDIFFERENCES, false);
 	pOptions->InitOption(OPT_CMP_IMG_OVERLAYMODE, 0, 0, 3);
 	pOptions->InitOption(OPT_CMP_IMG_OVERLAYALPHA, 30, 0, 100);
 	pOptions->InitOption(OPT_CMP_IMG_DRAGGING_MODE, 1, 0, 5);
@@ -180,6 +190,7 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_CMP_IMG_BLINKINTERVAL, 800, 200, 8000);
 	pOptions->InitOption(OPT_CMP_IMG_OVERLAYANIMATIONINTERVAL, 1000, 200, 8000);
 	pOptions->InitOption(OPT_CMP_IMG_OCR_RESULT_TYPE, 0, 0, 2);
+	pOptions->InitOption(OPT_CMP_IMG_PREFER_WIC_DECODER, false);
 
 	pOptions->InitOption(OPT_CMP_WEB_USERDATAFOLDER_TYPE, 0, 0, 1);
 	pOptions->InitOption(OPT_CMP_WEB_USERDATAFOLDER_PERPANE, true);

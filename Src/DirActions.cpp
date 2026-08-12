@@ -21,6 +21,7 @@
 #include "FileActionScript.h"
 #include "locality.h"
 #include "FileFilterHelper.h"
+#include "RenameMoveDetection.h"
 #include "DebugNew.h"
 
 static void ThrowConfirmCopy(const CDiffContext& ctxt, int origin, int destination, size_t count,
@@ -150,6 +151,100 @@ static void ThrowConfirmationNeededException(const CDiffContext& ctxt, const Str
 	exp.m_toPath = std::move(strDest);
 
 	throw exp;
+}
+
+/**
+ * @brief Add a DIFFITEM to the list of items to be compressed.
+ */
+void AddZipItem(const CDiffContext& ctxt, const DIFFITEM& di, int index, bool bDiffsOnly, std::vector<CompressibleItem>& items)
+{
+	if (di.diffcode.diffcode == 0)
+		 return;
+
+	if (di.diffcode.isDirectory())
+	{
+		if (di.HasChildren())
+		{
+			for (DIFFITEM* pdic = di.GetFirstChild(); pdic; pdic = pdic->GetFwdSiblingLink())
+				AddZipItem(ctxt, *pdic, index, bDiffsOnly, items);
+			return;
+		}
+
+		if (bDiffsOnly && !IsItemNavigableDiff(ctxt, di))
+			return;
+
+		if (!di.diffcode.exists(index))
+			return;
+
+		CompressibleItem ci;
+		const String & sFilename = di.diffFileInfo[index].filename.get();
+		const String & sSubdir = di.diffFileInfo[index].path.get();
+		ci.name = sSubdir.length() ? paths::ConcatPath(sSubdir, sFilename) : sFilename;
+		ci.fullPath = paths::ConcatPath(di.getFilepath(index, ctxt.GetNormalizedPath(index)), sFilename);
+		ci.recurse = true;
+		items.push_back(std::move(ci));
+		return;
+	}
+
+	if (bDiffsOnly && !IsItemNavigableDiff(ctxt, di))
+		return;
+	
+	if (!di.diffcode.exists(index))
+		return;
+	
+	CompressibleItem ci;
+	const String & sFilename = di.diffFileInfo[index].filename.get();
+	const String & sSubdir = di.diffFileInfo[index].path.get();
+	ci.name = sSubdir.length() ? paths::ConcatPath(sSubdir, sFilename) : sFilename;
+	ci.fullPath = paths::ConcatPath(di.getFilepath(index, ctxt.GetNormalizedPath(index)), sFilename);
+	ci.recurse = false;
+	items.push_back(std::move(ci));
+}
+
+/**
+ * @brief Add a DIFFITEM to the list of items to be included in a patch.
+ */
+void AddPatchItem(const CDiffContext& ctxt, const DIFFITEM& di, bool bDiffsOnly, std::vector<PatchItem>& items)
+{
+	if (di.diffcode.diffcode == 0)
+		return;
+
+	if (di.diffcode.isDirectory())
+	{
+		for (DIFFITEM* pdic = di.GetFirstChild(); pdic; pdic = pdic->GetFwdSiblingLink())
+			AddPatchItem(ctxt, *pdic, bDiffsOnly, items);
+		return;
+	}
+
+	if (bDiffsOnly && !IsItemNavigableDiff(ctxt, di))
+		return;
+
+	if (!di.diffcode.exists(0) && !di.diffcode.exists(1))
+		return;
+
+	PatchItem pi;
+
+	// Set left side path if it exists, otherwise leave empty
+	if (di.diffcode.exists(0))
+	{
+		const String& sFilename = di.diffFileInfo[0].filename.get();
+		const String& sSubdir = di.diffFileInfo[0].path.get();
+		pi.leftpatch = sSubdir.length() ? paths::ConcatPath(sSubdir, sFilename) : sFilename;
+		pi.leftFile = paths::ConcatPath(di.getFilepath(0, ctxt.GetNormalizedPath(0)), sFilename);
+	}
+
+	// Set right side path if it exists, otherwise leave empty
+	if (di.diffcode.exists(1))
+	{
+		const String& sFilenameR = di.diffFileInfo[1].filename.get();
+		const String& sSubdirR = di.diffFileInfo[1].path.get();
+		pi.rightpatch = sSubdirR.length() ? paths::ConcatPath(sSubdirR, sFilenameR) : sFilenameR;
+		pi.rightFile = paths::ConcatPath(di.getFilepath(1, ctxt.GetNormalizedPath(1)), sFilenameR);
+	}
+
+	// Set icon index based on diff status
+	pi.diffStatus = GetColImage(di);
+	items.push_back(std::move(pi));
 }
 
 /**
@@ -303,6 +398,21 @@ UPDATEITEM_TYPE UpdateDiffAfterOperation(const FileActionItem & act, CDiffContex
 DIFFITEM* FindItemFromPaths(const CDiffContext& ctxt, const PathContext& paths)
 {
 	const int nDirs = paths.GetSize();
+	if (ctxt.m_pRenameMoveDetection && ctxt.m_pRenameMoveDetection->HasMergedMovedItems())
+	{
+		// Cannot use hierarchical search if we have renamed/moved items merged
+		for (DIFFITEM* pos = ctxt.GetFirstDiffPosition(); pos;)
+		{
+			DIFFITEM* cur = pos;
+			const DIFFITEM& di = ctxt.GetNextDiffPosition(pos);
+			PathContext files;
+			ctxt.GetComparePaths(*cur, files);
+			if (paths.GetSize() == files.GetSize() && std::equal(files.begin(), files.end(), paths.begin()))
+				return cur;
+		}
+		return nullptr;
+	}
+
 	String filename[3];
 	std::vector<String> pathComponents[3];
 
@@ -629,9 +739,19 @@ bool IsShowable(const CDiffContext& ctxt, const DIFFITEM &di, const DirViewFilte
 
 	if (di.diffcode.isResultFiltered())
 	{
+		if (!filter.show_skipped)
+			return false;
+
+		if (!filter.displayFilterHelper.IsEmpty())
+		{
+			return di.diffcode.isDirectory() ? 
+				filter.displayFilterHelper.includeDir(di) :
+				filter.displayFilterHelper.includeFile(di);
+		}
+
 		// Treat SKIPPED as a 'super'-flag. If item is skipped and user
 		// wants to see skipped items show item regardless of other flags
-		return filter.show_skipped;
+		return true;
 	}
 
 	if (di.diffcode.isDirectory())
@@ -663,6 +783,9 @@ bool IsShowable(const CDiffContext& ctxt, const DIFFITEM &di, const DirViewFilte
 
 			// result filters
 			if (di.diffcode.isResultError() && false/* !GetMainFrame()->m_bShowErrors FIXME:*/)
+				return false;
+
+			if (!filter.displayFilterHelper.IsEmpty() && !filter.displayFilterHelper.includeDir(di))
 				return false;
 		}
 		else // recursive mode (including tree-mode)
@@ -729,6 +852,8 @@ bool IsShowable(const CDiffContext& ctxt, const DIFFITEM &di, const DirViewFilte
 					else if (di.diffcode.isResultDiff() && !filter.show_different)
 						bShowable = false;
 				}
+				if (!filter.displayFilterHelper.IsEmpty() && !filter.displayFilterHelper.includeDir(di))
+					bShowable = false;
 				if (!bShowable)
 				{
 					DIFFITEM *diffpos = ctxt.GetFirstChildDiffPosition(&di);
@@ -741,9 +866,24 @@ bool IsShowable(const CDiffContext& ctxt, const DIFFITEM &di, const DirViewFilte
 					return false;
 				}
 			}
+			else
+			{
+				bool bShowable = true;
+				if (!filter.displayFilterHelper.IsEmpty() && !filter.displayFilterHelper.includeDir(di))
+					bShowable = false;
+				if (!bShowable)
+				{
+					DIFFITEM *diffpos = ctxt.GetFirstChildDiffPosition(&di);
+					while (diffpos != nullptr)
+					{
+						const DIFFITEM &dic = ctxt.GetNextSiblingDiffPosition(diffpos);
+						if (dic.diffcode.isDirectory() && IsShowable(ctxt, dic, filter))
+							return true;
+					}
+					return false;
+				}
+			}
 		}
-		if (!filter.displayFilterHelper.IsEmpty() && !filter.displayFilterHelper.includeDir(di))
-			return false;
 	}
 	else
 	{

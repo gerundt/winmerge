@@ -137,6 +137,7 @@
     <Import Project="..\..\Src\FilterEngine\FilterEngine.vcxitems" Label="Shared" />
     <Import Project="..\..\Externals\poco\XML\XML.vcxitems" Label="Shared" />
     <Import Project="..\..\Externals\poco\Foundation\Foundation.vcxitems" Label="Shared" />
+    <Import Project="..\..\Externals\tree-sitter\tree-sitter.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -190,7 +191,7 @@
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\Util\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\dependencies\pcre2\src;..\..\Externals\poco\dependencies\expat\src;..\..\Externals\poco\dependencies\v8_double_conversion\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0501;NDEBUG;WIN32;_WINDOWS;POCO_STATIC;POCO_NO_AUTOMATIC_LIBS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;EDITPADC_CLASS=;UNICODE;_AFX_NO_MFC_CONTROLS_IN_DIALOGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -238,7 +239,7 @@
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\Util\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\dependencies\pcre2\src;..\..\Externals\poco\dependencies\expat\src;..\..\Externals\poco\dependencies\v8_double_conversion\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0501;NDEBUG;WIN64;_WINDOWS;POCO_STATIC;POCO_NO_AUTOMATIC_LIBS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;EDITPADC_CLASS=;UNICODE;_AFX_NO_MFC_CONTROLS_IN_DIALOGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -283,7 +284,7 @@
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\Util\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\dependencies\pcre2\src;..\..\Externals\poco\dependencies\expat\src;..\..\Externals\poco\dependencies\v8_double_conversion\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0501;NDEBUG;WIN64;_WINDOWS;POCO_STATIC;POCO_NO_AUTOMATIC_LIBS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;EDITPADC_CLASS=;UNICODE;_AFX_NO_MFC_CONTROLS_IN_DIALOGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -327,7 +328,7 @@
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\Util\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\dependencies\pcre2\src;..\..\Externals\poco\dependencies\expat\src;..\..\Externals\poco\dependencies\v8_double_conversion\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0501;NDEBUG;WIN64;_WINDOWS;POCO_STATIC;POCO_NO_AUTOMATIC_LIBS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;EDITPADC_CLASS=;UNICODE;_AFX_NO_MFC_CONTROLS_IN_DIALOGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -370,7 +371,7 @@
     <ClCompile>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\Util\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\dependencies\pcre2\src;..\..\Externals\poco\dependencies\expat\src;..\..\Externals\poco\dependencies\v8_double_conversion\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0501;_DEBUG;WIN32;_WINDOWS;POCO_STATIC;POCO_NO_AUTOMATIC_LIBS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;EDITPADC_CLASS=;UNICODE;_AFX_NO_MFC_CONTROLS_IN_DIALOGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -413,7 +414,7 @@
     <ClCompile>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\Util\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\dependencies\pcre2\src;..\..\Externals\poco\dependencies\expat\src;..\..\Externals\poco\dependencies\v8_double_conversion\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0501;_DEBUG;WIN64;_WINDOWS;POCO_STATIC;POCO_NO_AUTOMATIC_LIBS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;EDITPADC_CLASS=;UNICODE;_AFX_NO_MFC_CONTROLS_IN_DIALOGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -454,7 +455,7 @@
     <ClCompile>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\Util\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\dependencies\pcre2\src;..\..\Externals\poco\dependencies\expat\src;..\..\Externals\poco\dependencies\v8_double_conversion\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0501;_DEBUG;WIN64;_WINDOWS;POCO_STATIC;POCO_NO_AUTOMATIC_LIBS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;EDITPADC_CLASS=;UNICODE;_AFX_NO_MFC_CONTROLS_IN_DIALOGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -494,7 +495,7 @@
     <ClCompile>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\Util\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\Src;..\..\Src\CompareEngines;..\..\Src\Common;..\..\Externals\crystaledit\editlib;..\..\Src\diffutils;..\..\Src\diffutils\lib;..\..\Src\diffutils\src;..\..\Externals\boost;..\..\Externals\poco\Foundation\include;..\..\Externals\poco\XML\include;..\..\Externals\poco\dependencies\pcre2\src;..\..\Externals\poco\dependencies\expat\src;..\..\Externals\poco\dependencies\v8_double_conversion\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0501;_DEBUG;WIN64;_WINDOWS;POCO_STATIC;POCO_NO_AUTOMATIC_LIBS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;EDITPADC_CLASS=;UNICODE;_AFX_NO_MFC_CONTROLS_IN_DIALOGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -531,7 +532,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\charsets.c">
+    <ClCompile Include="..\..\Src\Common\charsets.c">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\Src\codepage_detect.cpp">
@@ -544,6 +545,11 @@
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <ClCompile Include="..\..\Src\Common\ExConverter.cpp">
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Common\locality.cpp">
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
@@ -633,8 +639,12 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Environment.cpp">
+    <ClCompile Include="..\..\Src\Common\Environment.cpp">
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\DirViewColItems.cpp">
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
@@ -728,12 +738,12 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
-    <ClCompile Include="..\..\Src\PathContext.cpp">
+    <ClCompile Include="..\..\Src\Common\PathContext.cpp">
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
-    <ClCompile Include="..\..\Src\paths.cpp">
+    <ClCompile Include="..\..\Src\Common\paths.cpp">
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
@@ -788,8 +798,17 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
+    <ClCompile Include="..\..\Src\SyntaxParserHelper.cpp">
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
     <ClCompile Include="..\..\Src\xdiff_gnudiff_compat.cpp">
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\TreeSitterParser.cpp">
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName)2.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
@@ -810,10 +829,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Src\charsets.h" />
+    <ClInclude Include="..\..\Src\Common\charsets.h" />
     <ClInclude Include="..\..\Src\codepage_detect.h" />
     <ClInclude Include="..\..\Src\Common\cio.h" />
     <ClInclude Include="..\..\Src\Common\ExConverter.h" />
+    <ClInclude Include="..\..\Src\Common\locality.h" />
     <ClInclude Include="..\..\Src\Common\OptionsMgr.h" />
     <ClInclude Include="..\..\Src\Common\RegOptionsMgr.h" />
     <ClInclude Include="..\..\Src\Common\VersionInfo.h" />
@@ -831,7 +851,8 @@
     <ClInclude Include="..\..\Src\DirItem.h" />
     <ClInclude Include="..\..\Src\DirScan.h" />
     <ClInclude Include="..\..\Src\DirTravel.h" />
-    <ClInclude Include="..\..\Src\Environment.h" />
+    <ClInclude Include="..\..\Src\Common\Environment.h" />
+    <ClInclude Include="..\..\Src\DirViewColItems.h" />
     <ClInclude Include="..\..\Src\FileFlags.h" />
     <ClInclude Include="..\..\Src\FileFilter.h" />
     <ClInclude Include="..\..\Src\FileFilterHelper.h" />
@@ -854,8 +875,8 @@
     <ClInclude Include="..\..\Src\Common\multiformatText.h" />
     <ClInclude Include="..\..\Src\OptionsDef.h" />
     <ClInclude Include="..\..\Src\PatchHTML.h" />
-    <ClInclude Include="..\..\Src\PathContext.h" />
-    <ClInclude Include="..\..\Src\paths.h" />
+    <ClInclude Include="..\..\Src\Common\PathContext.h" />
+    <ClInclude Include="..\..\Src\Common\paths.h" />
     <ClInclude Include="..\..\Src\PluginManager.h" />
     <ClInclude Include="..\..\Src\Plugins.h" />
     <ClInclude Include="..\..\Src\Common\RegKey.h" />
@@ -865,6 +886,7 @@
     <ClInclude Include="..\..\Src\HashCalc.h" />
     <ClInclude Include="..\..\Src\PropertySystem.h" />
     <ClInclude Include="..\..\Src\SubstitutionList.h" />
+    <ClInclude Include="..\..\Src\SyntaxParserHelper.h" />
     <ClInclude Include="..\..\Src\UniMarkdownFile.h" />
     <ClInclude Include="..\..\Src\Common\varprop.h" />
     <ClInclude Include="..\..\Src\xdiff_gnudiff_compat.h" />

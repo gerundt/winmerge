@@ -27,6 +27,7 @@ inline const String OPT_SHOW_DIFFERENT_RIGHT_ONLY {_T("Settings/ShowDifferentRig
 inline const String OPT_SHOW_MISSING_LEFT_ONLY {_T("Settings/ShowMissingLeftOnly"s)};
 inline const String OPT_SHOW_MISSING_MIDDLE_ONLY {_T("Settings/ShowMissingMiddleOnly"s)};
 inline const String OPT_SHOW_MISSING_RIGHT_ONLY {_T("Settings/ShowMissingRightOnly"s)};
+inline const String OPT_SHOW_EMPTY_FOLDERS {_T("Settings/ShowEmptyFolders"s)};
 inline const String OPT_TREE_MODE {_T("Settings/TreeMode"s)};
 
 // Show/hide toolbar/statusbar/tabbar
@@ -40,6 +41,7 @@ inline const String OPT_TOOLBAR_SIZE {_T("Settings/ToolbarSize"s)};
 inline const String OPT_RESIZE_PANES {_T("Settings/AutoResizePanes"s)};
 
 inline const String OPT_SYNTAX_HIGHLIGHT {_T("Settings/HiliteSyntax"s)};
+inline const String OPT_SYNTAX_HIGHLIGHT_MODE {_T("Settings/HiliteSyntaxMode"s)};
 inline const String OPT_VIEW_WHITESPACE {_T("Settings/ViewWhitespace"s)};
 inline const String OPT_VIEW_EOL {_T("Settings/ViewEOL"s)};
 inline const String OPT_SCROLL_TO_FIRST {_T("Settings/ScrollToFirst"s)};
@@ -76,10 +78,18 @@ inline const String OPT_ACTIVE_FRAME_MAX {_T("Settings/ActiveFrameMax"s)};
 inline const String OPT_ACTIVE_PANE {_T("Settings/ActivePane"s)};
 inline const String OPT_LOCBAR_MOVECURSOR_ONCLICK {_T("Settings/LocBarMoveCursorOnClick"s)};
 
-// Folder Compare Report
+// Folder/File Compare Report
 inline const String OPT_REPORTFILES_REPORTTYPE {_T("ReportFiles/ReportType"s)};
 inline const String OPT_REPORTFILES_COPYTOCLIPBOARD {_T("ReportFiles/CopyToClipboard"s)};
+inline const String OPT_REPORTFILES_OPENREPORTFILE {_T("ReportFiles/OpenReportFile"s)};
 inline const String OPT_REPORTFILES_INCLUDEFILECMPREPORT {_T("ReportFiles/IncludeFileCmpReport"s)};
+inline const String OPT_REPORTFILES_INCLUDEALLIMAGEPAGES {_T("ReportFiles/IncludeAllImagePages"s)};
+
+// archive
+inline const String OPT_ARCHIVE_INCLUDEREPORT {_T("Archives/IncludeReport"s)};
+inline const String OPT_ARCHIVE_INCLUDEPATCH {_T("Archives/IncludePatch"s)};
+inline const String OPT_ARCHIVE_INCLUDEPROJECT {_T("Archives/IncludeProject"s)};
+inline const String OPT_ARCHIVE_COPYTOCLIPBOARD {_T("Archives/CopyToClipboard"s)};
 
 // File compare
 inline const String OPT_AUTOMATIC_RESCAN {_T("Settings/AutomaticRescan"s)};
@@ -240,11 +250,12 @@ inline const String OPT_CMP_ADDITIONAL_CONDITION {_T("Settings/AdditionalCompare
 // Renamed/moved detection options
 inline const String OPT_CMP_RENAME_MOVE_DETECTION {_T("Settings/RenameMoveDetection"s)};
 inline const String OPT_CMP_RENAME_MOVE_KEY {_T("Settings/RenameMoveKey"s)};
-inline const String OPT_CMP_MERGE_RENAMED_ITEMS {_T("Settings/MergeRenamedItems"s)};
+inline const String OPT_CMP_RENAME_MOVE_MERGE_MODE {_T("Settings/RenameMoveMergeMode"s)};
 
 // Image Compare options
 inline const String OPT_CMP_IMG_FILEPATTERNS {_T("Settings/ImageFilePatterns"s)};
 inline const String OPT_CMP_IMG_SHOWDIFFERENCES {_T("Settings/ImageShowDifferences"s)};
+inline const String OPT_CMP_IMG_BLINKDIFFERENCES {_T("Settings/ImageBlinkDifferences"s)};
 inline const String OPT_CMP_IMG_OVERLAYMODE {_T("Settings/ImageOverlayMode"s)};
 inline const String OPT_CMP_IMG_OVERLAYALPHA {_T("Settings/ImageOverlayAlpha"s)};
 inline const String OPT_CMP_IMG_DRAGGING_MODE {_T("Settings/ImageDraggingMode"s)};
@@ -261,6 +272,7 @@ inline const String OPT_CMP_IMG_OVERLAYANIMATIONINTERVAL {_T("Settings/ImageOver
 
 inline const String OPT_CMP_ENABLE_IMGCMP_IN_DIRCMP {_T("Settings/EnableImageCompareInFolderCompare"s)};
 inline const String OPT_CMP_IMG_OCR_RESULT_TYPE {_T("Settings/ImageOcrResultType"s)};
+inline const String OPT_CMP_IMG_PREFER_WIC_DECODER {_T("Settings/ImagePreferWICDecoder"s)};
 
 // WebPage Compare options
 inline const String OPT_CMP_WEB_USERDATAFOLDER_TYPE {_T("Settings/WebPageUserDataFolderType"s)};

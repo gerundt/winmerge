@@ -16,6 +16,8 @@
 #include "FrameWndHelper.h"
 #include "Merge.h"
 #include "MainFrm.h"
+#include "MergeLogger.h"
+#include "MergeTextFormatter.h"
 #include "BCMenu.h"
 #include "IDirDoc.h"
 #include "OptionsDef.h"
@@ -34,6 +36,7 @@
 #include "DropHandler.h"
 #include "Environment.h"
 #include "MyColorDialog.h"
+#include "PluginMenu.h"
 #include <cmath>
 
 #ifdef _DEBUG
@@ -77,8 +80,8 @@ BEGIN_MESSAGE_MAP(CImgMergeFrame, CMergeFrameCommon)
 	ON_COMMAND(ID_FILE_RIGHT_READONLY, OnFileReadOnlyRight)
 	ON_UPDATE_COMMAND_UI(ID_FILE_RIGHT_READONLY, OnUpdateFileReadOnlyRight)
 	ON_COMMAND(ID_RESCAN, OnFileReload)
-	ON_COMMAND_RANGE(ID_MERGE_COMPARE_TEXT, ID_MERGE_COMPARE_WEBPAGE, OnFileRecompareAs)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_MERGE_COMPARE_TEXT, ID_MERGE_COMPARE_WEBPAGE, OnUpdateFileRecompareAs)
+	ON_COMMAND_RANGE(ID_MERGE_COMPARE_TEXT, ID_MERGE_COMPARE_FOLDER, OnFileRecompareAs)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_MERGE_COMPARE_TEXT, ID_MERGE_COMPARE_FOLDER, OnUpdateFileRecompareAs)
 	// [Edit] menu
 	ON_COMMAND(ID_EDIT_UNDO, OnEditUndo)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_UNDO, OnUpdateEditUndo)
@@ -167,8 +170,8 @@ BEGIN_MESSAGE_MAP(CImgMergeFrame, CMergeFrameCommon)
 	ON_COMMAND_RANGE(ID_IMG_OVERLAYANIMINTERVAL_200, ID_IMG_OVERLAYANIMINTERVAL_4000, OnImgOverlayAnimationInterval)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_IMG_OVERLAYANIMINTERVAL_200, ID_IMG_OVERLAYANIMINTERVAL_4000, OnUpdateImgOverlayAnimationInterval)
 	ON_COMMAND(ID_IMG_COMPARE_EXTRACTED_TEXT, OnImgCompareExtractedText)
-	// [Tools] menu
-	ON_COMMAND(ID_TOOLS_GENERATEREPORT, OnToolsGenerateReport)
+	ON_COMMAND(ID_FILE_SHELLMENU, OnShellMenu)
+	ON_UPDATE_COMMAND_UI(ID_FILE_SHELLMENU, OnUpdateShellMenu)
 	// [Plugins] menu
 	ON_COMMAND_RANGE(ID_UNPACKERS_FIRST, ID_UNPACKERS_LAST, OnFileRecompareAs)
 	ON_COMMAND(ID_OPEN_WITH_UNPACKER, OnOpenWithUnpacker)
@@ -229,7 +232,7 @@ CImgMergeFrame::~CImgMergeFrame()
 
 bool CImgMergeFrame::OpenDocs(int nFiles, const FileLocation fileloc[], const bool bRO[], const String strDesc[], CMDIFrameWnd *pParent)
 {
-	CMergeFrameCommon::LogComparisonStart(nFiles, fileloc, strDesc, &m_infoUnpacker, nullptr);
+	MergeLogger::LogComparisonStart(nFiles, fileloc, strDesc, &m_infoUnpacker, nullptr);
 
 	CWaitCursor waitstatus;
 	int nNormalBuffer = 0;
@@ -276,7 +279,7 @@ bool CImgMergeFrame::OpenDocs(int nFiles, const FileLocation fileloc[], const bo
 
 	GetMainFrame()->WatchDocuments(this);
 
-	CMergeFrameCommon::LogComparisonCompleted(*this);
+	MergeLogger::LogComparisonCompleted(*this);
 
 	return true;
 }
@@ -293,17 +296,17 @@ void CImgMergeFrame::MoveOnLoad(int nPane, int)
 	m_pImgMergeWindow->SetActivePane(nPane);
 }
 
-void CImgMergeFrame::ChangeFile(int nBuffer, const String& path)
+bool CImgMergeFrame::ChangeFile(int nBuffer, const String& path, const String& description)
 {
 	if (!PromptAndSaveIfNeeded(true))
-		return;
+		return false;
 
 	for (int pane = 0; pane < m_pImgMergeWindow->GetPaneCount(); ++pane)
 		RevokeDragDrop(m_pImgMergeWindow->GetPaneHWND(pane));
 
 	m_filePaths[nBuffer] = path;
-	m_nBufferType[nBuffer] = BUFFERTYPE::NORMAL;
-	m_strDesc[nBuffer].clear();
+	m_nBufferType[nBuffer] = description.empty() ? BUFFERTYPE::NORMAL : BUFFERTYPE::NORMAL_NAMED;
+	m_strDesc[nBuffer] = description;
 	int nActivePane = m_pImgMergeWindow->GetActivePane();
 
 	OpenImages();
@@ -319,6 +322,8 @@ void CImgMergeFrame::ChangeFile(int nBuffer, const String& path)
 
 	UpdateHeaderPath(nBuffer);
 	UpdateLastCompareResult();
+
+	return true;
 }
 
 bool CImgMergeFrame::IsModified() const
@@ -558,11 +563,11 @@ int CImgMergeFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	m_wndFilePathBar.SetPaneCount(m_pImgMergeWindow->GetPaneCount());
-	m_wndFilePathBar.SetOnSetFocusCallback([&](int pane) {
+	m_wndFilePathBar.SetOnSetFocusCallback([this](int pane) {
 		if (m_nActivePane != pane)
 			m_pImgMergeWindow->SetActivePane(pane);
 	});
-	m_wndFilePathBar.SetOnCaptionChangedCallback([&](int pane, const String& sText) {
+	m_wndFilePathBar.SetOnCaptionChangedCallback([this](int pane, const String& sText) {
 		if (m_strDesc[pane] != sText)
 		{
 			m_strDesc[pane] = sText;
@@ -572,9 +577,28 @@ int CImgMergeFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		}
 		m_pImgMergeWindow->SetActivePane(pane);
 	});
-	m_wndFilePathBar.SetOnFileSelectedCallback([&](int pane, const String& sFilepath) {
-		ChangeFile(pane, sFilepath);
-		m_pImgMergeWindow->SetActivePane(pane);
+	m_wndFilePathBar.SetOnFileSelectedCallback([this](int pane, const String& sFilepath, const String& sDescription) {
+		if (ChangeFile(pane, sFilepath, sDescription))
+		{
+			m_pImgMergeWindow->SetActivePane(pane);
+			// Only add to MRU if description is empty (i.e., not from clipboard history)
+			if (sDescription.empty())
+				MruHelper::addToMru(pane, sFilepath);
+		}
+	});
+	m_wndFilePathBar.SetOnGetRecentItemsCallback([](int pane, unsigned maxCount, MruHelper::RecentItemType type) {
+		return MruHelper::GetRecentFiles(pane, maxCount, type);
+	});
+	m_wndFilePathBar.SetOnGetClipboardHistoryCallback([](unsigned maxCount) {
+		auto allItems = ClipboardHistory::GetItems(maxCount, 1);
+		std::vector<ClipboardHistory::Item> imageItems;
+		for (const auto& item : allItems)
+		{
+			// Filter to show only items with image data
+			if (item.pBitmapTempFile)
+				imageItems.push_back(item);
+		}
+		return imageItems;
 	});
 
 	// Merge frame also has a dockable bar at the very left
@@ -628,6 +652,7 @@ void CImgMergeFrame::LoadOptions()
 
 	m_pImgMergeWindow->SetHorizontalSplit(GetOptionsMgr()->GetBool(OPT_SPLIT_HORIZONTALLY));
 	m_pImgMergeWindow->SetShowDifferences(GetOptionsMgr()->GetBool(OPT_CMP_IMG_SHOWDIFFERENCES));
+	m_pImgMergeWindow->SetBlinkDifferences(GetOptionsMgr()->GetBool(OPT_CMP_IMG_BLINKDIFFERENCES));
 	m_pImgMergeWindow->SetOverlayMode(static_cast<IImgMergeWindow::OVERLAY_MODE>(GetOptionsMgr()->GetInt(OPT_CMP_IMG_OVERLAYMODE)));
 	m_pImgMergeWindow->SetOverlayAlpha(GetOptionsMgr()->GetInt(OPT_CMP_IMG_OVERLAYALPHA) / 100.0);
 	m_pImgMergeWindow->SetDraggingMode(static_cast<IImgMergeWindow::DRAGGING_MODE>(GetOptionsMgr()->GetInt(OPT_CMP_IMG_DRAGGING_MODE)));
@@ -643,11 +668,13 @@ void CImgMergeFrame::LoadOptions()
 	m_pImgMergeWindow->SetVectorImageZoomRatio(GetOptionsMgr()->GetInt(OPT_CMP_IMG_VECTOR_IMAGE_ZOOM_RATIO) / 1000.0f);
 	m_pImgMergeWindow->SetBlinkInterval(GetOptionsMgr()->GetInt(OPT_CMP_IMG_BLINKINTERVAL));
 	m_pImgMergeWindow->SetOverlayAnimationInterval(GetOptionsMgr()->GetInt(OPT_CMP_IMG_OVERLAYANIMATIONINTERVAL));
+	m_pImgMergeWindow->SetPreferWICDecoder(GetOptionsMgr()->GetBool(OPT_CMP_IMG_PREFER_WIC_DECODER));
 }
 
 void CImgMergeFrame::SaveOptions()
 {
 	GetOptionsMgr()->SaveOption(OPT_CMP_IMG_SHOWDIFFERENCES, m_pImgMergeWindow->GetShowDifferences());
+	GetOptionsMgr()->SaveOption(OPT_CMP_IMG_BLINKDIFFERENCES, m_pImgMergeWindow->GetBlinkDifferences());
 	GetOptionsMgr()->SaveOption(OPT_CMP_IMG_OVERLAYMODE, m_pImgMergeWindow->GetOverlayMode());
 	GetOptionsMgr()->SaveOption(OPT_CMP_IMG_OVERLAYALPHA, static_cast<int>(m_pImgMergeWindow->GetOverlayAlpha() * 100));
 	GetOptionsMgr()->SaveOption(OPT_CMP_IMG_DRAGGING_MODE, static_cast<int>(m_pImgMergeWindow->GetDraggingMode()));
@@ -700,9 +727,22 @@ void CImgMergeFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDe
 
 void CImgMergeFrame::OnClose() 
 {
+	// Prevent re-entry while dialog is showing
+	if (m_bInOnClose)
+		return;
+
+	struct OnCloseGuard
+	{
+		bool &m_flag;
+		explicit OnCloseGuard(bool &flag) : m_flag(flag) { m_flag = true; }
+		~OnCloseGuard() { m_flag = false; }
+	} guard(m_bInOnClose);
+
 	// Allow user to cancel closing
 	if (!PromptAndSaveIfNeeded(true))
+	{
 		return;
+	}
 
 	// clean up pointers.
 	CMergeFrameCommon::OnClose();
@@ -768,7 +808,7 @@ bool CImgMergeFrame::DoFileSave(int pane)
 				compareResult == 0);
 		}
 
-		CMergeFrameCommon::LogFileSaved(m_filePaths[pane]);
+		MergeLogger::LogFileSaved(m_filePaths[pane]);
 	}
 	return true;
 }
@@ -830,7 +870,7 @@ RETRY:
 		m_fileInfo[pane].Update(m_filePaths[pane]);
 		UpdateHeaderPath(pane);
 
-		CMergeFrameCommon::LogFileSaved(m_filePaths[pane]);
+		MergeLogger::LogFileSaved(m_filePaths[pane]);
 	}
 	return true;
 }
@@ -1015,13 +1055,13 @@ void CImgMergeFrame::OnFileRecompareAs(UINT nID)
 	}
 	if (ID_UNPACKERS_FIRST <= nID && nID <= ID_UNPACKERS_LAST)
 	{
-		infoUnpacker.SetPluginPipeline(CMainFrame::GetPluginPipelineByMenuId(nID, FileTransform::UnpackerEventNames, ID_UNPACKERS_FIRST));
+		infoUnpacker.SetPluginPipeline(PluginMenu::GetPluginPipelineByMenuId(&infoUnpacker, nID, FileTransform::UnpackerEventNames, ID_UNPACKERS_FIRST));
 		nID = GetOptionsMgr()->GetBool(OPT_PLUGINS_OPEN_IN_SAME_FRAME_TYPE) ? ID_MERGE_COMPARE_IMAGE : -ID_MERGE_COMPARE_IMAGE;
 	}
 
 	CloseNow();
 	GetMainFrame()->DoFileOrFolderOpen(&paths, dwFlags, strDesc, _T(""),
-		GetOptionsMgr()->GetBool(OPT_CMP_INCLUDE_SUBDIRS), nullptr, &infoUnpacker, nullptr, nID);
+		nullptr, &infoUnpacker, nullptr, nID);
 }
 
 void CImgMergeFrame::OnUpdateFileRecompareAs(CCmdUI* pCmdUI)
@@ -1042,7 +1082,7 @@ void CImgMergeFrame::OnOpenWithUnpacker()
 		String strDesc[3] = { m_strDesc[0], m_strDesc[1], m_strDesc[2] };
 		CloseNow();
 		GetMainFrame()->DoFileOrFolderOpen(&paths, dwFlags, strDesc, _T(""),
-			GetOptionsMgr()->GetBool(OPT_CMP_INCLUDE_SUBDIRS), nullptr, &infoUnpacker, nullptr,
+			nullptr, &infoUnpacker, nullptr,
 			GetOptionsMgr()->GetBool(OPT_PLUGINS_OPEN_IN_SAME_FRAME_TYPE) ? ID_MERGE_COMPARE_IMAGE : -ID_MERGE_COMPARE_IMAGE);
 	}
 }
@@ -1141,7 +1181,7 @@ void CImgMergeFrame::UpdateHeaderSizes()
  */
 void CImgMergeFrame::SetTitle(LPCTSTR lpszTitle)
 {
-	String sTitle = (lpszTitle != nullptr) ? lpszTitle : CMergeFrameCommon::GetTitleString(*this);
+	String sTitle = (lpszTitle != nullptr) ? lpszTitle : MergeTextFormatter::GetTitleString(*this);
 	CMergeFrameCommon::SetTitle(sTitle.c_str());
 	if (m_hWnd != nullptr)
 		SetWindowText(sTitle.c_str());
@@ -1208,71 +1248,27 @@ bool CImgMergeFrame::OpenImages()
  */
 bool CImgMergeFrame::PromptAndSaveIfNeeded(bool bAllowCancel)
 {
-	bool bLModified = false, bMModified = false, bRModified = false;
-	bool result = true;
-	bool bLSaveSuccess = false, bMSaveSuccess = false, bRSaveSuccess = false;
+	bool bModified[3] = { false, false, false };
+	String paths[3] = { };
 
-	if (m_pImgMergeWindow->GetPaneCount() == 3)
+	int nPaneCount = m_pImgMergeWindow->GetPaneCount();
+	for (int i = 0; i < nPaneCount; ++i)
 	{
-		bLModified = m_pImgMergeWindow->IsModified(0);
-		bMModified = m_pImgMergeWindow->IsModified(1);
-		bRModified = m_pImgMergeWindow->IsModified(2);
+		bModified[i] = m_pImgMergeWindow->IsModified(i);
+		paths[i] = m_filePaths.GetPath(i);
 	}
-	else
-	{
-		bLModified = m_pImgMergeWindow->IsModified(0);
-		bRModified = m_pImgMergeWindow->IsModified(1);
-	}
-	if (!bLModified && !bMModified && !bRModified)
+	if (!bModified[0] && !bModified[1] && !bModified[2])
 		 return true;
 
-	SaveClosingDlg dlg;
-	dlg.DoAskFor(bLModified, bMModified, bRModified);
-	if (!bAllowCancel)
-		dlg.m_bDisableCancel = true;
-	if (!m_filePaths.GetLeft().empty())
-		dlg.m_sLeftFile = m_strSaveAsPath.empty() ? m_filePaths.GetLeft() : m_strSaveAsPath;
-	else
-		dlg.m_sLeftFile = m_strSaveAsPath.empty() ?m_strDesc[0] : m_strSaveAsPath;
-	if (m_pImgMergeWindow->GetPaneCount() == 3)
-	{
-		if (!m_filePaths.GetMiddle().empty())
-			dlg.m_sMiddleFile = m_strSaveAsPath.empty() ? m_filePaths.GetMiddle() : m_strSaveAsPath;
-		else
-			dlg.m_sMiddleFile = m_strSaveAsPath.empty() ? m_strDesc[1] : m_strSaveAsPath;
-	}
-	if (!m_filePaths.GetRight().empty())
-		dlg.m_sRightFile = m_strSaveAsPath.empty() ? m_filePaths.GetRight() : m_strSaveAsPath;
-	else
-		dlg.m_sRightFile = m_strSaveAsPath.empty() ? m_strDesc[m_pImgMergeWindow->GetPaneCount() - 1] : m_strSaveAsPath;
-
-	if (dlg.DoModal() == IDOK)
-	{
-		if (bLModified && dlg.m_leftSave == SaveClosingDlg::SAVECLOSING_SAVE)
-		{
-			bLSaveSuccess = DoFileSave(0);
-			if (!bLSaveSuccess)
-				result = false;
-		}
-
-		if (bMModified && dlg.m_middleSave == SaveClosingDlg::SAVECLOSING_SAVE)
-		{
-			bMSaveSuccess = DoFileSave(1);
-			if (!bMSaveSuccess)
-				result = false;
-		}
-
-		if (bRModified && dlg.m_rightSave == SaveClosingDlg::SAVECLOSING_SAVE)
-		{
-			bRSaveSuccess = DoFileSave(m_pImgMergeWindow->GetPaneCount() - 1);
-			if (!bRSaveSuccess)
-				result = false;
-		}
-	}
-	else
-	{	
-		result = false;
-	}
+	bool result = SaveClosingDlg::ShowAndSave(
+		nPaneCount,
+		bModified,
+		paths,
+		m_strDesc,
+		m_strSaveAsPath,
+		bAllowCancel,
+		[this](int i) { return DoFileSave(i); }
+	);
 
 	return result;
 }
@@ -1293,7 +1289,7 @@ bool CImgMergeFrame::CloseNow()
  */
 CString CImgMergeFrame::GetTooltipString() const
 {
-	return CMergeFrameCommon::GetTooltipString(*this).c_str();
+	return MergeTextFormatter::GetTooltipString(*this).c_str();
 }
 
 /**
@@ -1331,11 +1327,11 @@ bool CImgMergeFrame::MergeModeKeyDown(MSG* pMsg)
 	bool bHandled = false;
 
 	// Allow default text selection when SHIFT pressed
-	if (::GetAsyncKeyState(VK_SHIFT))
+	if (::GetAsyncKeyState(VK_SHIFT) < 0)
 		return false;
 
 	// Allow default editor functions when CTRL pressed
-	if (::GetAsyncKeyState(VK_CONTROL))
+	if (::GetAsyncKeyState(VK_CONTROL) < 0)
 		return false;
 
 	// If we are in merging mode (merge with cursor keys)
@@ -1491,7 +1487,7 @@ LRESULT CImgMergeFrame::OnStorePaneSizes(WPARAM wParam, LPARAM lParam)
 
 void CImgMergeFrame::OnUpdateStatusNum(CCmdUI* pCmdUI) 
 {
-	const String s = CMergeFrameCommon::GetDiffStatusString(m_pImgMergeWindow->GetCurrentDiffIndex(), m_pImgMergeWindow->GetDiffCount());
+	const String s = MergeTextFormatter::GetDiffStatusString(m_pImgMergeWindow->GetCurrentDiffIndex(), m_pImgMergeWindow->GetDiffCount());
 	pCmdUI->SetText(s.c_str());
 }
 	
@@ -2228,138 +2224,97 @@ void CImgMergeFrame::OnImgCompareExtractedText()
 	GetMainFrame()->ShowTextMergeDoc(m_pDirDoc, m_filePaths.GetSize(), text, desc, _T(".yaml"));
 }
 
-bool CImgMergeFrame::GenerateReport(const String& sFileName) const
+void CImgMergeFrame::OnShellMenu()
 {
-	return GenerateReport(sFileName, true);
+	const int pane = m_pImgMergeWindow->GetActivePane();
+	if (pane < 0)
+		return;
+	const String path = m_filePaths[pane];
+	CMergeFrameCommon::ShowShellMenu(CWnd::FromHandle(m_pImgMergeWindow->GetPaneHWND(pane)), path);
+}
+
+void CImgMergeFrame::OnUpdateShellMenu(CCmdUI* pCmdUI)
+{
+	const int pane = m_pImgMergeWindow->GetActivePane();
+	pCmdUI->Enable(pane < 0 ? false : !m_filePaths[pane].empty());
 }
 
 /**
  * @brief Generate report from file compare results.
  */
-bool CImgMergeFrame::GenerateReport(const String& sFileName, bool allPages) const
+bool CImgMergeFrame::GenerateReport(ReportContext& reportContext) const
 {
 	String imgdir_full, imgdir, path, name, ext;
 	String title[3];
 	std::vector<std::array<String, 3>> diffimg_filename;
-	paths::SplitFilename(sFileName, &path, &name, &ext);
-	imgdir_full = paths::ConcatPath(path, name) + _T(".files");
+	imgdir_full = reportContext.outputDirectory;
 	imgdir = paths::FindFileName(imgdir_full);
 	paths::CreateIfNeeded(imgdir_full);
 
+	const int paneCount = m_pImgMergeWindow->GetPaneCount();
 	int curPages[3]{};
-	for (int pane = 0; pane < m_pImgMergeWindow->GetPaneCount(); ++pane)
+	for (int pane = 0; pane < paneCount; ++pane)
 		curPages[pane] = m_pImgMergeWindow->GetCurrentPage(pane);
-	if (allPages)
+	if (reportContext.includeAllImagePages)
 	{
 		diffimg_filename.resize(m_pImgMergeWindow->GetMaxPageCount());
 		for (int page = 0; page < m_pImgMergeWindow->GetMaxPageCount(); ++page)
 		{
 			m_pImgMergeWindow->SetCurrentPageAll(page);
-			for (int pane = 0; pane < m_pImgMergeWindow->GetPaneCount(); ++pane)
+			for (int pane = 0; pane < paneCount; ++pane)
 			{
-				title[pane] = m_strDesc[pane].empty() ? ucr::toTString(m_pImgMergeWindow->GetFileName(pane)) : m_strDesc[pane];
+				title[pane] = MergeTextFormatter::GetReportTitleString(*this, pane);
 				const int curPage = m_pImgMergeWindow->GetCurrentPage(pane) + 1;
-				diffimg_filename[page][pane] = strutils::format(_T("%s/%d_%d.png"),
-					imgdir, pane + 1, curPage);
+				diffimg_filename[page][pane] = strutils::format(_T("%s/%d_%d_%d.png"),
+					imgdir, reportContext.index + 1, pane + 1, curPage);
 				m_pImgMergeWindow->SaveDiffImageAs(pane,
-					ucr::toUTF16(strutils::format(_T("%s\\%d_%d.png"),
-						imgdir_full, pane + 1, curPage)).c_str());
+					ucr::toUTF16(strutils::format(_T("%s\\%d_%d_%d.png"),
+						imgdir_full, reportContext.index + 1, pane + 1, curPage)).c_str());
 			}
 		}
 	}
 	else
 	{
 		diffimg_filename.resize(1);
-		for (int pane = 0; pane < m_pImgMergeWindow->GetPaneCount(); ++pane)
+		for (int pane = 0; pane < paneCount; ++pane)
 		{
-			title[pane] = m_strDesc[pane].empty() ? ucr::toTString(m_pImgMergeWindow->GetFileName(pane)) : m_strDesc[pane];
+			title[pane] = MergeTextFormatter::GetReportTitleString(*this, pane);
 			const int curPage = m_pImgMergeWindow->GetCurrentPage(pane) + 1;
-			diffimg_filename[0][pane] = strutils::format(_T("%s/%d_%d.png"),
-				imgdir, pane + 1, curPage);
+			diffimg_filename[0][pane] = strutils::format(_T("%s/%d_%d_%d.png"),
+				imgdir, reportContext.index + 1, pane + 1, curPage);
 			m_pImgMergeWindow->SaveDiffImageAs(pane,
-				ucr::toUTF16(strutils::format(_T("%s\\%d_%d.png"),
-					imgdir_full, pane + 1, curPage)).c_str());
+				ucr::toUTF16(strutils::format(_T("%s\\%d_%d_%d.png"),
+					imgdir_full, reportContext.index + 1, pane + 1, curPage)).c_str());
 		}
 	}
-	for (int pane = 0; pane < m_pImgMergeWindow->GetPaneCount(); ++pane)
+	for (int pane = 0; pane < paneCount; ++pane)
 		m_pImgMergeWindow->SetCurrentPage(pane, curPages[pane]);
 
-	UniStdioFile file;
-	if (!file.Open(sFileName, _T("wt")))
-	{
-		String errMsg = GetSysError(GetLastError());
-		String msg = strutils::format_string1(
-			_("Error creating the report:\n%1"), errMsg);
-		AfxMessageBox(msg.c_str(), MB_OK | MB_ICONSTOP);
-		return false;
-	}
-
-	file.SetCodepage(ucr::CP_UTF_8);
+	UniStdioFile& file = reportContext.file;
 
 	file.WriteString(
-		_T("<!DOCTYPE html>\n")
-		_T("<html>\n")
-		_T("<head>\n")
-		_T("<meta charset=\"UTF-8\">\n")
-		_T("<title>WinMerge Image Compare Report</title>\n")
-		_T("<style type=\"text/css\">\n")
-		_T("table { table-layout: fixed; width: 100%; height: 100%; border-collapse: collapse; }\n")
-		_T("th {position: sticky; top: 0;}\n")
-		_T("td,th { border: solid 1px black; }\n")
-		_T(".title { color: white; background-color: blue; vertical-align: top; padding: 4px 4px; background: linear-gradient(mediumblue, darkblue);}\n")
-		_T(".img   { overflow: scroll; text-align: center; }\n")
-		_T("</style>\n")
-		_T("</head>\n")
-		_T("<body>\n")
-		_T("<table>\n")
-		_T("<tr>\n"));
+		strutils::format(_T("<table class=\"cmp-table-image cmp-table-full cmp-table-%d\">\n")
+		_T("<tr>\n"), paneCount));
 	for (int pane = 0; pane < m_pImgMergeWindow->GetPaneCount(); ++pane)
-		file.WriteString(strutils::format(_T("<th class=\"title\">%s</th>\n"), title[pane]));
+		file.WriteString(strutils::format(_T("<th class=\"title %s\">%s</th>\n"), 
+			(pane == 0) ? _T("title-left") : (
+					(pane == m_pImgMergeWindow->GetPaneCount() - 1) ? _T("title-right") : _T("title-middle")),
+			title[pane]));
 	file.WriteString(_T("</tr>\n"));
 	for (const auto filenames: diffimg_filename)
 	{
 		file.WriteString(
 			_T("<tr>\n"));
-		for (int pane = 0; pane < m_pImgMergeWindow->GetPaneCount(); ++pane)
+		for (int pane = 0; pane < paneCount; ++pane)
 			file.WriteString(
-				strutils::format(_T("<td><div class=\"img\"><img src=\"%s\" alt=\"%s\"></div></td>\n"),
-					paths::urlEncodeFileName(filenames[pane]), filenames[pane]));
+				strutils::format(_T("<td><div data-group=\"%d\" class=\"cmp-div-image\"><img src=\"%s\" alt=\"%s\"></div></td>\n"),
+					reportContext.index + 1, paths::urlEncodeFileName(filenames[pane]), filenames[pane]));
 		file.WriteString(
 			_T("</tr>\n"));
 	}
 	file.WriteString(
-		_T("</table>\n")
-		_T("</body>\n")
-		_T("</html>\n"));
+		_T("</table>\n"));
 	return true;
-}
-
-/**
- * @brief Generate report from file compare results.
- */
-void CImgMergeFrame::OnToolsGenerateReport()
-{
-	String s;
-	BOOL allPages = true;
-	
-#if NTDDI_VERSION >= NTDDI_VISTA
-	CFileDialog dlg(FALSE, _T("htm"), nullptr,
-		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-		_("HTML Files (*.htm,*.html)|*.htm;*.html|All Files (*.*)|*.*||").c_str());
-	dlg.AddCheckButton(1001, _("All pages").c_str(), true);
-	if (dlg.DoModal() != IDOK)
-		return;
-	dlg.GetCheckButtonState(1001, allPages);
-	s = dlg.GetPathName();
-#else
-	CString folder;
-	if (!SelectFile(AfxGetMainWnd()->GetSafeHwnd(), s, false, folder, _T(""), _("HTML Files (*.htm,*.html)|*.htm;*.html|All Files (*.*)|*.*||"), _T("htm")))
-		return;
-#endif
-
-	CWaitCursor waitstatus;
-	if (GenerateReport(s, allPages))
-		I18n::MessageBox(IDS_REPORT_SUCCESS, MB_OK | MB_ICONINFORMATION);
 }
 
 void CImgMergeFrame::OnRefresh()

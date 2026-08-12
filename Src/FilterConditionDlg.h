@@ -1,7 +1,7 @@
 /** 
  * @file  FilterConditionDlg.h
  *
- * @brief Declaration of the dialog used to select codepages
+ * @brief Declaration of CFilterConditionDlg class, which implements the dialog for creating/editing filter conditions based on file/folder properties.
  */
 #pragma once
 
@@ -32,6 +32,7 @@ public:
 	String m_sValue2;
 	String m_sExpression;
 	bool m_bRecursive;
+	bool m_bCaseSensitive;
 	CComboBox m_ctlValue1;
 	CComboBox m_ctlValue2;
 	CTime m_tmValue1;
@@ -51,6 +52,8 @@ public:
 protected:
 	String GetExpression();
 	String GetLHS() const;
+	bool IsStringField(bool includeContent = true) const;
+	void UpdateCodepageValue();
 
 	// Generated message map functions
 	//{{AFX_MSG(CFilterConditionDlg)

@@ -1,140 +1,144 @@
-# WinMerge 2.16.54 Release Notes
+# WinMerge 2.16.58 Release Notes
 
 * [About This Release](#about-this-release)
-* [What Is New in 2.16.54](#what-is-new-in-21654)
-* [What Is New in 2.16.53 beta?](#what-is-new-in-21653-beta)
+* [What Is New in 2.16.58?](#what-is-new-in-21658)
+* [What Is New in 2.16.57 Beta?](#what-is-new-in-21657-beta)
 * [Known issues](#known-issues)
 
-January 2026
+July 2026
 
 ## About This Release
 
-This is a WinMerge 2.16.54 stable release.
+This is a WinMerge 2.16.58 stable release.
 This release replaces earlier WinMerge stable releases as a recommended release.
 
 Please submit bug reports to our bug-tracker.
 
-## What Is New in 2.16.54
-
-### General
-
-* BugFix: Cyrilic shortcuts do not work for main menukeyboard shortcuts
-* BugFix: 2 recent-entries per project (#2990)
-* Updated expat to version 2.7.3
-
-### Folder compare
-
-* Add logInfo, logWarn, logError functions to filter expressions (PR #3131)
-* Add new filter expression functions
-    (if, ifEach, choose, chooseEach, andEach, orEach, notEach) (PR #3132)
-* Add BaseName/IsFolder and new string transformation functions to filters
-    (PR #3146)
-* Add experimental customizable rename/move detection for folder comparison
-    (PR #3126)
-
-### Options window
-
-* Adjusted the height of the Options dialog and the position of the Defaults
-    button
-
-### Shell extension
-
-* BugFix: Add-AppxPackage fails if path ends with backslash (PR #3145)
-
-### Installer
-
-* Removed build-time tools (lemon.exe, re2c.exe) from the installer package.
-
-### Translations
-
-* New translation: Vietnamese (PR #3142)
-* Translation updates:
-  * Brazilian (PR #3150)
-  * Chinese Simplified (PR #3156)
-  * French (PR #3137)
-  * German (PR #3148)
-  * Hungarian (PR #3149)
-  * Italian (PR #3147)
-  * Japanese
-  * Korean (PR #3125,#3127)
-  * Lithuanian (PR #3144,#3153)
-  * Polish (PR #3154,#3155)
-  * Turkish (PR #3152)
-  * Ukrainian (PR #3130)
-
-## What Is New in 2.16.53 Beta
-
-### General
-
-* Allow comparing files by editing header path (Ctrl+L / Alt+D) (PR #3093)
+## What Is New in 2.16.58?
 
 ### File compare
 
-* Async binary comparison for “Selected files are identical” dialog
-    (PR #3060)
+* BugFix: Crash (Access Violation) when file changes externally over a given
+    threshold (#3456, PR #3457)
 
-### Binary compare
-
-* BugFix: Fixed crash when an error occurs while opening files in the binary
-    comparison window.
-
-### Image compare
-
-* [ImageCompare] Problems with unsupported formats (#3044)
-
-* Update freeimage to 3.19.10
-
-### Webpage compare
-
-* BugFix: Fixed garbled filenames displayed in Web comparison tabs and header
-    bar
+* BugFix: Parts of the panes become black text on a black background after
+    copying changes in 3-way merge mode (#3468, #3469)
 
 ### Folder compare
 
-* BugFix: This line cannot be displayed correctly after translation.
-    msgid "Failed to extract archive.\nCompare as text file?" (#3073)
+* BugFix: Fix archive vs folder comparison selecting the wrong source
+    (#3449, PR #3458)
 
-* BugFix: Unexpected file closure when moving files from a comparison (#3088)
+* BugFix: Fix HICON resource leaks in image list initialization
 
-* Add Display Filter to Folder Compare (PR #3106)
+### Select files or folders dialog
 
-* Add folder statistics filter attributes and helper menu (PR #3111)
+* BugFix: Handle exceptions raised while creating the common file dialog
+    (#3462, PR #3464)
 
-* Introduce isWithin() and inRange() for explicit inclusive/exclusive range
-    checks (PR #3124)
+* BugFix: Fix MRU handling for three-way comparisons. (#3452)
 
-### Options dialog
+### File Compare Report
 
-* Add option to select user data location (AppData or Documents) (PR #3078)
+* Add support for generating a single HTML report from multiple file
+    comparisons (PR #3450)
 
-### Plugins
+### Patch Generation
 
-* CompareMSExcelFiles: Replace line breaks with space in MSExcel formulas
-    (PR #3028)
+* Add a file list with checkboxes to the Generate Patch dialog (PR #3470)
 
-* Updated jq to 1.8.1
+### Archive Generation
+
+* Add support for creating comparison archives (PR #3483)
+
+### Command line
+
+* Add /g command line option for single-instance groups (PR #3472)
 
 ### Translations
 
 * Translation updates:
 
-  * Brazilian (PR #3034,#3064,#3085,#3101,#3107,#3121)
-  * Chinese Simplified (PR #3035,#3077,#3086,#3097,#3123)
-  * Chinese Traditional (PR #3052,#3073,WinMerge/frhed#26)
-  * Corsican (PR #3119)
-  * French (PR #3072,#3105,#3106)
-  * German (PR #3037,#3068,#3081,#3098,#3108,#3115)
-  * Hungarian (PR #3036,#3061,#3080,#3100,#3116)
-  * Italian (PR #3033,#3062,#3099,#3113,#3118)
+  * Brazilian (PR #3459, PR #3476, PR #3489)
+  * Chinese Simplified (PR #3460, PR #3479)
+  * French (PR #3478, PR #3491)
+  * German (PR #3480, PR #3486)
+  * Italian (PR #3455, PR #3473, PR #3477, PR #3488)
   * Japanese
-  * Korean (PR #3062,#3082)
-  * Lithuanian (PR #3032,#3065,#3087,#3104,#3114)
-  * Polish (PR #3050,#3089,#3103,#3112,#3122)
-  * Turkish (PR #3043,#3063,#3083,#3102,#3111,#3117)
+  * Korean (PR #3447, PR #3481, PR #3487)
+  * Lithuanian (PR #3461, PR #3471, PR #3492)
+  * Polish (PR #3463, PR #3490)
+  * Turkish (PR #3465, PR #3474)
+  * Russian (PR #3448, PR #3484)
 
-### Manual
+## What Is New in 2.16.57 Beta?
 
-* Added FAQ about file selection order in Windows Explorer. (#3090,#3094)
+### General
+
+* BugFix: Fixed an issue where file mapping failures could incorrectly trigger a crash (#3412)
+
+* Add module-relative offsets to crash log stack traces
+
+### File compare
+
+* BugFix: Avoid crash (issue #3402) by using GetFullLineLength() to avoid accessing line EOL directly
+
+* BugFix: Fix incorrect caret position in status bar
+
+* BugFix: Clear sync points before reloading compare files
+
+* BugFix: Fix assertion failure on empty buffer access when all lines are deleted from a pane
+
+* Add display line filter bar for file compare window (PR #3374)
+
+* Improve syntax highlighting with Tree-sitter integration for better support of multiple languages (PR #3306, PR #3337, PR #3338, PR #3350, PR #3415, PR #3427, PR #3440)
+
+* Refactor syntax parsing behind ISyntaxParser interface (PR #3415)
+
+### Folder compare
+
+* BugFix: Crash when trying to delete a "left-only" or "right-only" file during renaming (#3411)
+
+* BugFix: ZIP export includes unchanged files in subfolders (#3444, PR#3445)
+
+* Refactor filter evaluation parameters with new EvalContext for better code maintainability (PR #3353)
+
+### Archive support
+
+* BugFix: Fix error dialogs when comparing two Rar4 files (#3392)
+
+* Update 7-Zip to 26.02
+
+### Select Files or Folders dialog
+
+* Add support for clipboard URL comparison and clipboard history menu (PR #3352)
+
+### Plugins
+
+* Add HandleSchemeClipboard plugin (PR #3352)
+
+### Project files
+
+* Warn user before opening project files containing plugin arguments for security reasons (PR #3397, #3396)
+
+### Translations
+
+* Translation updates:
+
+  * Brazilian (PR #3431)
+  * Chinese Simplified (PR #3429, PR #3438)
+  * Chinese Traditional (PR #3426)
+  * Corsican (PR #3420)
+  * French (PR #3393, PR #3406, PR #3408, PR #3435)
+  * German (PR #3432)
+  * Italian (PR #3399, PR #3434, PR #3446)
+  * Korean (PR #3422, PR #3433)
+  * Lithuanian (PR #3405, PR #3439)
+  * Polish (PR #3418, PR #3430)
+  * Portuguese (PR #3391, PR #3414)
+  * Russian (PR #3395, PR #3428)
+  * Spanish (PR #3421, PR #3423, PR #3424, PR #3425)
+  * Turkish (PR #3403, PR #3436)
 
 ## Known issues
 
@@ -143,3 +147,4 @@ Please submit bug reports to our bug-tracker.
 * Crashes when comparing large files (#325)
 * Very slow to compare significantly different directories (#322)
 * Vertical scrollbar breaks after pasting text (#296)
+

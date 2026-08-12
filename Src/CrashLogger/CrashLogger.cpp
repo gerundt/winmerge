@@ -21,7 +21,6 @@ namespace
 	constexpr const tchar_t* CRASH_DUMP_PATTERN = _T("WinMerge*.dmp");
 
 	static volatile bool g_bCrashLoggingEnabled = false;
-	static void* g_hVectoredHandler = nullptr;
 
 	/**
 	 * @brief Get exception name from code
@@ -35,6 +34,7 @@ namespace
 		case EXCEPTION_DATATYPE_MISALIGNMENT: return _T("Datatype Misalignment");
 		case EXCEPTION_FLT_DIVIDE_BY_ZERO: return _T("Float Divide by Zero");
 		case EXCEPTION_ILLEGAL_INSTRUCTION: return _T("Illegal Instruction");
+		case EXCEPTION_IN_PAGE_ERROR: return _T("In Page Error");
 		case EXCEPTION_INT_DIVIDE_BY_ZERO: return _T("Integer Divide by Zero");
 		case EXCEPTION_STACK_OVERFLOW: return _T("Stack Overflow");
 		default: return _T("Unknown Exception");
@@ -152,6 +152,57 @@ namespace
 			HANDLE hFile;
 			MyStackWalker(HANDLE f) : hFile(f) {}
 		protected:
+			static void MyStrCpy(char* szDest, size_t nMaxDestSize, const char* szSrc)
+			{
+				if (nMaxDestSize <= 0)
+					return;
+				strncpy_s(szDest, nMaxDestSize, szSrc, _TRUNCATE);
+				// INFO: _TRUNCATE will ensure that it is null-terminated;
+				// but with older compilers (<1400) it uses "strncpy" and this does not!)
+				szDest[nMaxDestSize - 1] = 0;
+			} // MyStrCpy
+
+			// Adapted from StackWalker.cpp.
+			// Modified to output module-relative offsets (WinMergeU+0xXXXXXX)
+			// to simplify crash analysis in WinDbg.
+			void OnCallstackEntry(CallstackEntryType eType, CallstackEntry& entry)
+			{
+				CHAR   buffer[STACKWALK_MAX_NAMELEN];
+				size_t maxLen = STACKWALK_MAX_NAMELEN;
+#if _MSC_VER >= 1400
+				maxLen = _TRUNCATE;
+#endif
+				if ((eType != lastEntry) && (entry.offset != 0))
+				{
+					if (entry.name[0] == 0)
+						MyStrCpy(entry.name, STACKWALK_MAX_NAMELEN, "(function-name not available)");
+					if (entry.undName[0] != 0)
+						MyStrCpy(entry.name, STACKWALK_MAX_NAMELEN, entry.undName);
+					if (entry.undFullName[0] != 0)
+						MyStrCpy(entry.name, STACKWALK_MAX_NAMELEN, entry.undFullName);
+
+					DWORD64 relOffset = 0;
+					if (entry.baseOfImage != 0)
+						relOffset = entry.offset - entry.baseOfImage;
+
+					if (entry.lineFileName[0] == 0)
+					{
+						MyStrCpy(entry.lineFileName, STACKWALK_MAX_NAMELEN, "(filename not available)");
+						if (entry.moduleName[0] == 0)
+							MyStrCpy(entry.moduleName, STACKWALK_MAX_NAMELEN, "(module-name not available)");
+
+						_snprintf_s(buffer, maxLen, "%p (%s+0x%llX): %s: %s\n", (LPVOID)entry.offset, entry.moduleName, relOffset, entry.lineFileName, entry.name);
+					}
+					else
+					{
+						_snprintf_s(buffer, maxLen, "%s (%d): %s [%s+0x%llX]\n", entry.lineFileName, entry.lineNumber, entry.name, entry.moduleName, relOffset);
+					}
+
+					buffer[STACKWALK_MAX_NAMELEN - 1] = 0;
+					OnOutput(buffer);
+				}
+			}
+
 			void OnOutput(LPCSTR text) override
 			{
 				if (hFile)
@@ -173,23 +224,11 @@ namespace
 		CloseHandle(hFile);
 	}
 
-	/**
-	 * @brief Vectored exception handler for crash logging
-	 * @note This handler logs only the first crash per process lifetime to prevent
-	 *       crash loops. The handling flag is intentionally never reset, ensuring
-	 *       that if crash logging itself triggers an exception or if multiple crashes
-	 *       occur in rapid succession, only the first is logged.
-	 */
-	LONG CALLBACK WinMergeVectoredExceptionHandler(EXCEPTION_POINTERS* ex)
+	LONG WINAPI WinMergeUnhandledExceptionFilter(EXCEPTION_POINTERS* ex)
 	{
-		if (!g_bCrashLoggingEnabled || !ex || !ex->ExceptionRecord)
+		if (!g_bCrashLoggingEnabled || !ex)
 			return EXCEPTION_CONTINUE_SEARCH;
-		
-		// One-time crash logging per process to prevent crash loops
-		static volatile LONG handling = 0;
-		if (InterlockedExchange(&handling, 1) == 1)
-			 return EXCEPTION_CONTINUE_SEARCH;
-		
+
 		__try
 		{
 			WriteCrashInfo(ex);
@@ -198,6 +237,8 @@ namespace
 		{
 			// Best-effort logging only
 		}
+
+		// Continue to WER
 		return EXCEPTION_CONTINUE_SEARCH;
 	}
 
@@ -326,29 +367,18 @@ namespace
 namespace CrashLogger
 {
 	/**
-	 * @brief Install crash logger using Vectored Exception Handler
-	 * @return true if handler was successfully installed
-	 * @note Uses AddVectoredExceptionHandler instead of SetUnhandledExceptionFilter
-	 *       because on Windows XP/7, the error reporting dialog can appear repeatedly
-	 *       even after canceling it when using SetUnhandledExceptionFilter.
-	 *       VEH with priority 1 ensures our handler runs early in the exception chain.
+	 * @brief Install crash logger using SetUnhandledExceptionFilter.
 	 */
 	bool Install()
 	{
-		if (!g_hVectoredHandler)
-			g_hVectoredHandler = AddVectoredExceptionHandler(1, WinMergeVectoredExceptionHandler);
-		g_bCrashLoggingEnabled = (g_hVectoredHandler != nullptr);
-		return g_bCrashLoggingEnabled;
+		SetUnhandledExceptionFilter(WinMergeUnhandledExceptionFilter);
+		g_bCrashLoggingEnabled = true;
+		return true;
 	}
 
 	void Disable()
 	{
 		g_bCrashLoggingEnabled = false;
-		if (g_hVectoredHandler)
-		{
-			RemoveVectoredExceptionHandler(g_hVectoredHandler);
-			g_hVectoredHandler = nullptr;
-		}
 	}
 
 	bool HasPreviousCrash()

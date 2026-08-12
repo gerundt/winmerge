@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -145,10 +145,19 @@
     <Filter Include="MFCGui\MDIChild\WebPageCompare\Source Files">
       <UniqueIdentifier>{531213fd-cf86-41a6-9841-985bf32f78fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MFCGui\Menu">
+      <UniqueIdentifier>{86b9dc2b-35a5-426d-945d-bd78c6275d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MFCGui\Menu\Header Files">
+      <UniqueIdentifier>{11f1ed39-13d0-436c-99c6-0390218f37c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MFCGui\Menu\Source Files">
+      <UniqueIdentifier>{459f5abc-e3bb-4033-9611-db5aa1b0c7d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="charsets.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Common\charsets.c">
+      <Filter>Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="codepage_detect.cpp">
       <Filter>Source Files</Filter>
@@ -204,8 +213,8 @@
     <ClCompile Include="dllpstub.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Environment.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Common\Environment.cpp">
+      <Filter>Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileFilter.cpp">
       <Filter>Source Files</Filter>
@@ -234,8 +243,8 @@
     <ClCompile Include="FolderCmp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="locality.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Common\locality.cpp">
+      <Filter>Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="markdown.cpp">
       <Filter>Source Files</Filter>
@@ -255,11 +264,11 @@
     <ClCompile Include="PatchHTML.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PathContext.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Common\PathContext.cpp">
+      <Filter>Common\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="paths.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Common\paths.cpp">
+      <Filter>Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PluginManager.cpp">
       <Filter>Source Files</Filter>
@@ -366,6 +375,9 @@
     <ClCompile Include="Common\SuperComboBox.cpp">
       <Filter>MFCGui\Common\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileSaveHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="AboutDlg.cpp">
       <Filter>MFCGui\Dialogs\Source Files</Filter>
     </ClCompile>
@@ -462,7 +474,7 @@
     <ClCompile Include="PropTextColors.cpp">
       <Filter>MFCGui\PropertyPages\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Common\ClipBoard.cpp">
+    <ClCompile Include="Common\Clipboard.cpp">
       <Filter>Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Common\coretools.cpp">
@@ -516,8 +528,8 @@
     <ClCompile Include="DirSelectFilesDlg.cpp">
       <Filter>MFCGui\Dialogs\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Concurrent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Common\Concurrent.cpp">
+      <Filter>Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PropMergeColors.cpp">
       <Filter>MFCGui\PropertyPages\Source Files</Filter>
@@ -684,9 +696,6 @@
     <ClCompile Include="Common\MDITabBar.cpp">
       <Filter>MFCGui\Main\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileActionScript.cpp">
-      <Filter>MFCGui\MDIChild\FolderCompare\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HashCalc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -742,7 +751,7 @@
       <Filter>MFCGui\Main\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Common\SysColorHook.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PropSysColors.cpp">
       <Filter>MFCGui\PropertyPages\Source Files</Filter>
@@ -774,10 +783,13 @@
     <ClCompile Include="Common\ValidatingEdit.cpp">
       <Filter>MFCGui\Common\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileFilterHelperMenu.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ComparisonResultFilterDlg.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FilterConditionDlg.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatchInsideDlg.cpp">
       <Filter>MFCGui\Dialogs\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MyColorDialog.cpp">
@@ -795,9 +807,6 @@
     <ClCompile Include="I18nGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PropertySystemMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WinRtLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -807,10 +816,73 @@
     <ClCompile Include="RenameMoveDetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileActionScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertySystemMenu.cpp">
+      <Filter>MFCGui\Menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFilterHelperMenu.cpp">
+      <Filter>MFCGui\Menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MruHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClipboardHistoryMenu.cpp">
+      <Filter>MFCGui\Menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LineFilterBar.cpp">
+      <Filter>MFCGui\MDIChild\TextTableCompare\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LineFilterHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LineFilterHelperMenu.cpp">
+      <Filter>MFCGui\Menu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterHelperMenuBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceListHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterMenuHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeSitterParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SyntaxParserHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCmpReport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCmpReportDlg.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowListCtrl.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiffImageListUtils.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArchiveDlg.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArchiveTool.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MergeLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MergeTextFormatter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="charsets.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Common\charsets.h">
+      <Filter>Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="codepage_detect.h">
       <Filter>Header Files</Filter>
@@ -869,8 +941,8 @@
     <ClInclude Include="dllpstub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Environment.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Common\Environment.h">
+      <Filter>Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Exceptions.h">
       <Filter>Header Files</Filter>
@@ -914,8 +986,8 @@
     <ClInclude Include="IntToIntMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="locality.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Common\locality.h">
+      <Filter>Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="markdown.h">
       <Filter>Header Files</Filter>
@@ -932,11 +1004,11 @@
     <ClInclude Include="PatchHTML.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PathContext.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Common\PathContext.h">
+      <Filter>Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="paths.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Common\paths.h">
+      <Filter>Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PluginManager.h">
       <Filter>Header Files</Filter>
@@ -1076,6 +1148,9 @@
     <ClInclude Include="Common\SuperComboBox.h">
       <Filter>MFCGui\Common\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileSaveHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="AboutDlg.h">
       <Filter>MFCGui\Dialogs\Header Files</Filter>
     </ClInclude>
@@ -1169,7 +1244,7 @@
     <ClInclude Include="PropTextColors.h">
       <Filter>MFCGui\PropertyPages\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common\ClipBoard.h">
+    <ClInclude Include="Common\Clipboard.h">
       <Filter>Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Common\coretools.h">
@@ -1223,8 +1298,8 @@
     <ClInclude Include="DirSelectFilesDlg.h">
       <Filter>MFCGui\Dialogs\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Concurrent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Common\Concurrent.h">
+      <Filter>Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PropMergeColors.h">
       <Filter>MFCGui\PropertyPages\Header Files</Filter>
@@ -1400,9 +1475,6 @@
     <ClInclude Include="Common\MDITabBar.h">
       <Filter>MFCGui\Main\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileActionScript.h">
-      <Filter>MFCGui\MDIChild\FolderCompare\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HashCalc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1479,7 +1551,7 @@
       <Filter>MFCGui\PropertyPages\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Common\SysColorHook.h">
-      <Filter>Header Files</Filter>
+      <Filter>Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorSchemes.h">
       <Filter>Header Files</Filter>
@@ -1508,10 +1580,13 @@
     <ClInclude Include="Common\ValidatingEdit.h">
       <Filter>MFCGui\Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileFilterHelperMenu.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ComparisonResultFilterDlg.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FilterConditionDlg.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchInsideDlg.h">
       <Filter>MFCGui\Dialogs\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyColorDialog.h">
@@ -1532,13 +1607,76 @@
     <ClInclude Include="I18nGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PropertySystemMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DirFilterBar.h">
       <Filter>MFCGui\MDIChild\FolderCompare\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenameMoveDetection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileActionScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileFilterHelperMenu.h">
+      <Filter>MFCGui\Menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertySystemMenu.h">
+      <Filter>MFCGui\Menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ScopeExit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MruHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClipboardHistoryMenu.h">
+      <Filter>MFCGui\Menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineFilterBar.h">
+      <Filter>MFCGui\MDIChild\TextTableCompare\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineFilterHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineFilterHelperMenu.h">
+      <Filter>MFCGui\Menu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterMenuHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterHelperMenuBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplaceListHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeSitterParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SyntaxParserHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCmpReport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCmpReportDlg.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowListCtrl.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiffImageListUtils.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArchiveTool.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArchiveDlg.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MergeLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MergeTextFormatter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1980,6 +2118,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\move_right_to_middle.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\archive.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

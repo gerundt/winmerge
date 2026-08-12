@@ -73,13 +73,13 @@ if "%1" == "x64" (
 )
 
 rem Create folder structure
-for %%i in (ColorSchemes Languages\ShellExtension Filters MergePlugins Docs Frhed\Docs Frhed\Languages WinIMerge WinWebDiff darkmodelib Merge7z\Lang Commands\Apache-Tika Commands\tidy-html5 Commands\jq Commands\q Commands\msys2 Commands\md4c Resources) do (
+for %%i in (ColorSchemes Languages\ShellExtension Filters MergePlugins Docs Frhed\Docs Frhed\Languages WinIMerge WinWebDiff darkmodelib TreeSitterGrammars Merge7z\Lang Commands\Apache-Tika Commands\cliphcat Commands\tidy-html5 Commands\jq Commands\q Commands\msys2 Commands\md4c Resources) do (
   mkdir "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\%%i" 2> NUL
 )
 
 rem Docs
 echo Copy Docs...
-for %%i in (Translations\Docs\Readme\ReadMe-*.txt Build\Manual\htmlhelp\WinMerge*.chm Docs\Users\ReleaseNotes.html Docs\Users\ChangeLog.html) do (
+for %%i in (Translations\Docs\Readme\ReadMe-*.txt Build\Manual\htmlhelp\WinMerge*.chm Docs\Users\ReleaseNotes*.html Docs\Users\ChangeLog*.html) do (
   copy "%%i" "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Docs" > NUL
 )
 for %%i in (Src\COPYING Docs\Users\Contributors.txt Docs\Users\ReadMe.txt) do (
@@ -124,8 +124,8 @@ copy "Build\ShellExtension\WinMergeContextMenuPackage.msix" "%DISTDIR%\%PLATFORM
 
 rem Translations
 echo Copy Translations...
-copy Build\%PLATFORM%\Release\Languages\*.po "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Languages\" > NUL
-copy Translations\ShellExtension\*.po "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Languages\ShellExtension" > NUL
+copy Build\Translations\WinMerge\*.po "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Languages\" > NUL
+copy Build\Translations\ShellExtension\*.po "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Languages\ShellExtension\" > NUL
 
 rem ColorSchemes
 echo Copy ColorSchemes...
@@ -180,6 +180,14 @@ echo Copy darkmodelib...
 copy Build\%PLATFORM%\Release\darkmodelib\LICENSE.md "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\darkmodelib\" > NUL
 copy Build\%PLATFORM%\Release\darkmodelib\darkmode.dll "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\darkmodelib\" > NUL
 
+rem TreeSitterGrammars
+echo Copy TreeSitterGrammars...
+copy Build\%PLATFORM%\Release\TreeSitterGrammars\*.dll "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\TreeSitterGrammars\" > NUL
+copy Build\%PLATFORM%\Release\TreeSitterGrammars\*.scm "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\TreeSitterGrammars\" > NUL
+for /D %%i in (Build\%PLATFORM%\Release\TreeSitterGrammars\tree-sitter-*) do (
+    xcopy /Y /I "%%i\LICENSE" "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\TreeSitterGrammars\%%~nxi\" > NUL
+)
+
 rem Commands
 echo Copy Commands...
 xcopy /s/y Plugins\Commands "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Commands"
@@ -188,6 +196,11 @@ copy Plugins\Commands\DownloadFiles.bat "%DISTDIR%\%PLATFORMH%zip-version\WinMer
 rem Patch
 echo Copy Patch...
 robocopy Build\msys2 "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Commands\msys2" /E /XF lemon*.* re2c*.* /XD lemon*.* re2c*.* > NUL
+
+rem Copy cliphcat...
+echo Copy cliphcat...
+copy Build\cliphcat\cliphcat.exe "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Commands\cliphcat\cliphcat.exe" > NUL
+copy Build\cliphcat\LICENSE "%DISTDIR%\%PLATFORMH%zip-version\WinMerge\Commands\cliphcat\" > NUL
 
 rem Copy jq...
 echo Copy jq...

@@ -30,13 +30,16 @@ constexpr unsigned FLAG_RESCAN_WAITS_FOR_IDLE = 1;
 #include "edtlib.h"
 #include "GhostTextView.h"
 #include "OptionsDiffColors.h"
+#include "ISyntaxParser.h"
 #include <map>
 #include <vector>
+#include <memory>
 
 class IMergeEditStatus;
 class CLocationView;
 class CMergeDoc;
 struct DIFFRANGE;
+class CTreeSitterParser;
 
 /**
 This class is the base class for WinMerge editor panels.
@@ -86,6 +89,9 @@ private:
 	COLORSETTINGS m_cachedColors; /**< Cached color settings */
 
 	bool m_bCurrentLineIsDiff; /**< `true` if cursor is in diff line */
+	int m_nClickedColumn;
+
+	std::shared_ptr<LangServices::ISyntaxParser> m_pTreeSitterParser;
 
 // Attributes
 public:
@@ -96,6 +102,7 @@ public:
 	bool IsReadOnly(int pane) const;
 	void ShowDiff(bool bScroll, bool bSelectText);
 	virtual void OnEditOperation(int nAction, const tchar_t* pszText, size_t cchText) override;
+	virtual void OnTextBufferChanged (bool bInsert, const CEPoint & ptStartPos, const CEPoint & ptEndPos, const tchar_t* pszText, size_t cchText, int nActionType) override;
 	bool IsLineInCurrentDiff(int nLine) const;
 	void SelectNone();
 	void SelectDiff(int nDiff, bool bScroll = true, bool bSelectText = true);
@@ -118,14 +125,16 @@ public:
 	void SelectArea(const CEPoint & ptStart, const CEPoint & ptEnd) { SetSelection(ptStart, ptEnd); } // make public
 	using CGhostTextView::GetSelection;
 	virtual void UpdateSiblingScrollPos (bool bHorz) override;
-    virtual std::vector<CrystalLineParser::TEXTBLOCK> GetMarkerTextBlocks(int nLineIndex) const override;
-	virtual std::vector<CrystalLineParser::TEXTBLOCK> GetAdditionalTextBlocks (int nLineIndex) override;
+	virtual std::vector<LangServices::TEXTBLOCK> GetMarkerTextBlocks(int nLineIndex) const override;
+	virtual std::vector<LangServices::TEXTBLOCK> GetAdditionalTextBlocks (int nLineIndex) override;
 	virtual CEColor GetColor(int nColorIndex) const override;
 	virtual void GetLineColors (int nLineIndex, CEColor & crBkgnd,
 			CEColor & crText, bool & bDrawWhitespace) override;
 	virtual void GetLineColors2 (int nLineIndex, DWORD ignoreFlags
 		, CEColor & crBkgnd, CEColor & crText, bool & bDrawWhitespace);
 	void WMGoto() { OnWMGoto(); };
+	CTreeSitterParser* GetTreeSitterParser();
+	void GotoTreeSitterDefinition();
 	void GotoLine(UINT nLine, bool bRealLine, int pane, bool bMoveAnchor = true, int nChar = -1);
 	int GetTopLine() const { return m_nTopLine; }
 	using CCrystalTextView::GetScreenLines;
@@ -146,12 +155,20 @@ public:
 	virtual void SetWordWrapping( bool bWordWrap ) override;
 	void UpdateStatusbar();
 	CMergeEditView *GetGroupView(int nPane) const;
+	int GetActiveGroup() const;
 
 	virtual void OnDisplayDiff(int nDiff=0);
 
 	bool IsInitialized() const;
 	bool IsCursorInDiff() const;
 	bool IsDiffVisible(int nDiff);
+	bool IsDiffFiltered(int nDiff);
+	int FindFirstNonFilteredDiff();
+	int FindLastNonFilteredDiff();
+	int FindNextNonFilteredDiff(int startDiff = -1);
+	int FindPrevNonFilteredDiff(int startDiff = -1);
+	bool HasNextNonFilteredDiff();
+	bool HasPrevNonFilteredDiff();
 	void ZoomText(short amount);
 	virtual bool QueryEditable() override;
 	virtual void EnsureVisible(CEPoint pt) override;
@@ -182,6 +199,7 @@ protected:
 	virtual void OnUpdateCaret() override;
 	bool MergeModeKeyDown(MSG* pMsg);
 	bool IsDiffVisible(const DIFFRANGE& diff, int nLinesBelow = 0);
+	bool IsDiffFiltered(const DIFFRANGE& diff);
 	void OnNext3wayDiff(int type);
 	void OnUpdateNext3wayDiff(CCmdUI* pCmdUI, int type);
 	void OnPrev3wayDiff(int type);
@@ -201,6 +219,8 @@ protected:
 	afx_msg void OnEditPaste();
 	afx_msg void OnUpdateEditPaste(CCmdUI* pCmdUI);
 	afx_msg void OnEditUndo();
+	afx_msg void OnGotoDefinition();
+	afx_msg void OnUpdateGotoDefinition(CCmdUI* pCmdUI);
 	afx_msg void OnFirstdiff();
 	afx_msg void OnUpdateFirstdiff(CCmdUI* pCmdUI);
 	afx_msg void OnLastdiff();
@@ -286,6 +306,8 @@ protected:
 	afx_msg void OnUpdateAddToSubstitutionFilters(CCmdUI* pCmdUI);
 	afx_msg void OnAddToLineFilters();
 	afx_msg void OnUpdateAddToLineFilters(CCmdUI* pCmdUI);
+	afx_msg void OnAddToDisplayFilters();
+	afx_msg void OnUpdateAddToDisplayFilters(CCmdUI* pCmdUI);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnUpdateEditReplace(CCmdUI* pCmdUI);
 	afx_msg void OnConvertEolTo(UINT nID );
@@ -333,6 +355,7 @@ protected:
 	afx_msg void OnUseFirstLineAsHeaders();
 	afx_msg void OnUpdateUseFirstLineAsHeaders(CCmdUI* pCmdUI);
 	afx_msg void OnAutoFitAllColumns();
+	afx_msg void OnFilterMenuColumn(UINT nID);
 	afx_msg void OnUpdateViewChangeScheme(CCmdUI *pCmdUI);
 	afx_msg void OnChangeScheme(UINT nID);
 	afx_msg void OnUpdateChangeScheme(CCmdUI* pCmdUI);

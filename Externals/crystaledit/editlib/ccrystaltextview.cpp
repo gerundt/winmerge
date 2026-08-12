@@ -93,6 +93,10 @@
 #include "ccrystaltextmarkers.h"
 #include "ViewableWhitespace.h"
 #include "SyntaxColors.h"
+#include "ISyntaxParser.h"
+#include "TextDefinition.h"
+#include "SyntaxParserRegistry.h"
+#include "cepoint.h"
 #include "renderers/ccrystalrendererdirectwrite.h"
 #include "renderers/ccrystalrenderergdi.h"
 #include "dialogs/cfindtextdlg.h"
@@ -111,7 +115,7 @@
 #include "darkmodelib.h"
 
 using std::vector;
-using CrystalLineParser::TEXTBLOCK;
+using TEXTBLOCK = LangServices::TEXTBLOCK;
 
 // Escaped character constants in range 0x80-0xFF are interpreted in current codepage
 // Using C locale gets us direct mapping to Unicode codepoints
@@ -183,6 +187,7 @@ ON_COMMAND (ID_EDIT_MARK, OnEditMark)
 ON_WM_MOUSEWHEEL ()
 ON_WM_MOUSEHWHEEL ()
 ON_MESSAGE (WM_IME_STARTCOMPOSITION, OnImeStartComposition) /* IME */
+ON_MESSAGE (WM_IME_REQUEST, OnImeRequest) /* IME */
 //}}AFX_MSG_MAP
 ON_COMMAND (ID_EDIT_CHAR_LEFT, OnCharLeft)
 ON_COMMAND (ID_EDIT_EXT_CHAR_LEFT, OnExtCharLeft)
@@ -276,10 +281,19 @@ EXPAND_PRIMITIVE (MoveCtrlEnd, TextEnd)
 // CCrystalTextView construction/destruction
 
 bool CCrystalTextView::
-DoSetTextType (CrystalLineParser::TextDefinition *def)
+DoSetTextType (LangServices::TextDefinition *def)
 {
+  LangServices::LanguageId oldLangId = m_CurSourceDef ? m_CurSourceDef->type : LangServices::LanguageId::SRC_PLAIN;
   m_CurSourceDef = def;
   SetFlags (def->flags);
+
+  if (!m_pSyntaxParser || def->type != oldLangId)
+    {
+      m_pSyntaxParser = LangServices::SyntaxParserRegistry::GetInstance().CreateParser(def->type);
+      if (m_pSyntaxParser && m_pTextBuffer)
+        m_pSyntaxParser->SetTextBuffer(m_pTextBuffer);
+    }
+
 
 // Do not set these
 // EOL is determined from file, tabsize and viewtabs are
@@ -315,31 +329,27 @@ DoSetTextType (CrystalLineParser::TextDefinition *def)
 bool CCrystalTextView::
 SetTextType (const tchar_t* pszExt)
 {
-  m_CurSourceDef = &CrystalLineParser::m_SourceDefs[0];
+  m_CurSourceDef = LangServices::GetTextType (LangServices::LanguageId::SRC_PLAIN);
 
-  CrystalLineParser::TextDefinition *def = CrystalLineParser::GetTextType (pszExt);
+  LangServices::TextDefinition *def = LangServices::GetTextType (pszExt);
 
   return SetTextType (def);
 }
 
 bool CCrystalTextView::
-SetTextType (CrystalLineParser::TextType enuType)
+SetTextType (LangServices::LanguageId enuType)
 {
-  CrystalLineParser::TextDefinition *def;
+  LangServices::TextDefinition *def;
 
-  m_CurSourceDef = def = &CrystalLineParser::m_SourceDefs[0];
-  for (size_t i = 0; i < CrystalLineParser::m_SourceDefs.size(); i++, def++)
-    {
-      if (def->type == enuType)
-        {
-          return SetTextType (def);
-        }
-    }
+  m_CurSourceDef = def = LangServices::GetTextType (LangServices::LanguageId::SRC_PLAIN);
+  def = LangServices::GetTextType(enuType);
+  if (def)
+    return SetTextType (def);
   return false;
 }
 
 bool CCrystalTextView::
-SetTextType (CrystalLineParser::TextDefinition *def)
+SetTextType (LangServices::TextDefinition *def)
 {
   if (def)
     if (m_CurSourceDef != def)
@@ -385,7 +395,6 @@ CCrystalTextView::CCrystalTextView ()
 , m_panSubLineIndexCache(new std::vector<int>())
 , m_pstrIncrementalSearchString(new CString)
 , m_pstrIncrementalSearchStringOld(new CString)
-, m_ParseCookies(new vector<uint32_t>)
 , m_pnActualLineLength(new vector<int>)
 , m_nIdealCharPos(0)
 , m_bFocused(false)
@@ -446,7 +455,7 @@ CCrystalTextView::CCrystalTextView ()
 
   //END SW
   CCrystalTextView::ResetView ();
-  SetTextType (CrystalLineParser::SRC_PLAIN);
+  SetTextType (LangServices::LanguageId::SRC_PLAIN);
 }
 
 CCrystalTextView::~CCrystalTextView ()
@@ -480,9 +489,6 @@ CCrystalTextView::~CCrystalTextView ()
   m_pstrIncrementalSearchStringOld = nullptr;
 
   //END SW
-  ASSERT(m_ParseCookies != nullptr);
-  delete m_ParseCookies;
-  m_ParseCookies = nullptr;
   ASSERT(m_pnActualLineLength != nullptr);
   delete m_pnActualLineLength;
   m_pnActualLineLength = nullptr;
@@ -1431,41 +1437,6 @@ GetLineColors (int nLineIndex, CEColor & crBkgnd,
   bDrawWhitespace = false;
 }
 
-DWORD CCrystalTextView::
-GetParseCookie (int nLineIndex)
-{
-  const int nLineCount = GetLineCount ();
-  if (m_ParseCookies->size() == 0)
-    {
-      // must be initialized to invalid value (DWORD) -1
-      m_ParseCookies->assign(nLineCount, static_cast<uint32_t>(-1));
-    }
-
-  if (nLineIndex < 0)
-    return 0;
-  if ((*m_ParseCookies)[nLineIndex] != - 1)
-    return (*m_ParseCookies)[nLineIndex];
-
-  int L = nLineIndex;
-  while (L >= 0 && (*m_ParseCookies)[L] == - 1)
-    L--;
-  L++;
-
-  int nBlocks = 0;
-  while (L <= nLineIndex)
-    {
-      unsigned dwCookie = 0;
-      if (L > 0)
-        dwCookie = (*m_ParseCookies)[L - 1];
-      ASSERT (dwCookie != - 1);
-      (*m_ParseCookies)[L] = ParseLine (dwCookie, GetLineChars(L), GetLineLength(L), nullptr, nBlocks);
-      ASSERT ((*m_ParseCookies)[L] != - 1);
-      L++;
-    }
-
-  return (*m_ParseCookies)[nLineIndex];
-}
-
 std::vector<TEXTBLOCK> CCrystalTextView::
 GetAdditionalTextBlocks (int nLineIndex)
 {
@@ -1930,18 +1901,7 @@ CCrystalTextView::GetTextBlocks(int nLineIndex)
   int nLength = GetViewableLineLength (nLineIndex);
 
   //  Parse the line
-  unsigned dwCookie = GetParseCookie(nLineIndex - 1);
-  std::vector<TEXTBLOCK> blocks((nLength + 1) * 3); // be aware of nLength == 0
-  int nBlocks = 0;
-  // insert at least one textblock of normal color at the beginning
-  blocks[0].m_nCharPos = 0;
-  blocks[0].m_nColorIndex = COLORINDEX_NORMALTEXT;
-  blocks[0].m_nBgColorIndex = COLORINDEX_BKGND;
-  nBlocks++;
-  (*m_ParseCookies)[nLineIndex] = ParseLine(dwCookie, GetLineChars(nLineIndex), GetLineLength(nLineIndex), blocks.data(), nBlocks);
-  ASSERT((*m_ParseCookies)[nLineIndex] != -1);
-  blocks.resize(nBlocks);
-
+  std::vector<TEXTBLOCK> blocks = ParseLine(nLineIndex);
   std::vector<TEXTBLOCK> additionalBlocks = GetAdditionalTextBlocks(nLineIndex);
   std::vector<TEXTBLOCK> mergedBlocks;
   if (m_pMarkers && m_pMarkers->GetEnabled() && m_pMarkers->GetMarkers().size() > 0)
@@ -2711,10 +2671,8 @@ OnDraw (CDC * pdc)
   const int nLineHeight = GetLineHeight ();
   PrepareSelBounds ();
 
-  // if the private arrays (m_ParseCookies and m_pnActualLineLength) 
+  // if the private arrays (m_pnActualLineLength) 
   // are defined, check they are in phase with the text buffer
-  if (m_ParseCookies->size())
-    ASSERT(m_ParseCookies->size() == static_cast<size_t>(nLineCount));
   if (m_pnActualLineLength->size())
     ASSERT(m_pnActualLineLength->size() == static_cast<size_t>(nLineCount));
 
@@ -2753,10 +2711,11 @@ OnDraw (CDC * pdc)
       rcLine.bottom = (std::min)(rcClient.bottom, rcLine.top + nSubLines * nLineHeight);
       rcMargin.bottom = rcLine.bottom;
 
+      bool bLineVisible = nCurrentLine < nLineCount && GetLineVisible(nCurrentLine);
       CRect rcMarginAndLine(rcClient.left, rcLine.top, rcClient.right, rcLine.bottom);
-      if (pdc->RectVisible(rcMarginAndLine))
+      if (bLineVisible)
         {
-          if (nCurrentLine < nLineCount && GetLineVisible (nCurrentLine))
+          if (pdc->RectVisible(rcMarginAndLine))
             {
               DrawMargin (rcMargin, nCurrentLine, nCurrentLine + 1);
               DrawSingleLine (rcLine, nCurrentLine);
@@ -2769,7 +2728,10 @@ OnDraw (CDC * pdc)
                   nCursorY + nLineHeight - 1, 1);
               nLastLineBottom = rcMargin.bottom;
             }
-          else
+        }
+      else
+        {
+          if (nCurrentLine >= nLineCount && pdc->RectVisible(rcMarginAndLine))
             {
               DrawMargin (rcMargin, -1, -1);
               DrawSingleLine (rcLine, -1);
@@ -2821,7 +2783,6 @@ ResetView ()
   m_ptAnchor.x = 0;
   m_ptAnchor.y = 0;
   InvalidateLineCache( 0, -1 );
-  m_ParseCookies->clear();
   m_pnActualLineLength->clear();
   m_ptCursorPos.x = 0;
   m_ptCursorPos.y = 0;
@@ -3846,6 +3807,8 @@ ReAttachToBuffer (CCrystalTextBuffer * pBuf /*= nullptr*/ )
   m_pTextBuffer = pBuf;
   if (m_pTextBuffer != nullptr)
     m_pTextBuffer->AddView (this);
+  if (m_pSyntaxParser)
+    m_pSyntaxParser->SetTextBuffer(m_pTextBuffer);
   // don't reset CCrystalEditView options
   CCrystalTextView::ResetView ();
 
@@ -3875,6 +3838,8 @@ AttachToBuffer (CCrystalTextBuffer * pBuf /*= nullptr*/ )
   m_pTextBuffer = pBuf;
   if (m_pTextBuffer != nullptr)
     m_pTextBuffer->AddView (this);
+  if (m_pSyntaxParser)
+    m_pSyntaxParser->SetTextBuffer (m_pTextBuffer);
   ResetView ();
 
   //  Init scrollbars
@@ -4773,10 +4738,15 @@ OnSetFocus (CWnd * pOldWnd)
   UpdateCaret ();
 }
 
-unsigned CCrystalTextView::
-ParseLine (unsigned dwCookie, const tchar_t *pszChars, int nLength, TEXTBLOCK * pBuf, int &nActualItems)
+std::vector<TEXTBLOCK> CCrystalTextView::
+ParseLine (int nLineIndex)
 {
-  return m_CurSourceDef->ParseLineX (dwCookie, pszChars, nLength, pBuf, nActualItems);
+  std::vector<TEXTBLOCK> blocks;
+  if (m_pSyntaxParser)
+    blocks = m_pSyntaxParser->ParseLine(nLineIndex);
+  if (blocks.empty())
+    blocks.push_back({ 0, COLORINDEX_NORMALTEXT, COLORINDEX_BKGND });
+  return blocks;
 }
 
 int CCrystalTextView::
@@ -5051,15 +5021,6 @@ UpdateView (CCrystalTextView * pSource, CUpdateContext * pContext,
   if ((dwFlags & UPDATE_SINGLELINE) != 0)
     {
       ASSERT (nLineIndex != -1);
-      //  All text below this line should be reparsed
-      const int cookiesSize = (int) m_ParseCookies->size();
-      if (cookiesSize > 0)
-        {
-          ASSERT (cookiesSize == nLineCount);
-          // must be reinitialized to invalid value (DWORD) - 1
-          for (int i = nLineIndex; i < cookiesSize; ++i)
-            (*m_ParseCookies)[i] = static_cast<uint32_t>(-1);
-        }
       //  This line'th actual length must be recalculated
       if (m_pnActualLineLength->size())
         {
@@ -5081,23 +5042,6 @@ UpdateView (CCrystalTextView * pSource, CUpdateContext * pContext,
 
       if (nLineIndex == -1)
         nLineIndex = 0;         //  Refresh all text
-
-      //  All text below this line should be reparsed
-      if (m_ParseCookies->size())
-        {
-          size_t arrSize = m_ParseCookies->size();
-          if (arrSize != static_cast<size_t>(nLineCount))
-            {
-              size_t oldsize = arrSize; 
-              m_ParseCookies->resize(nLineCount);
-              arrSize = nLineCount;
-              // must be initialized to invalid value (DWORD) - 1
-              for (size_t i = oldsize; i < arrSize; ++i)
-                (*m_ParseCookies)[i] = static_cast<uint32_t>(-1);
-            }
-          for (size_t i = nLineIndex; i < arrSize; ++i)
-            (*m_ParseCookies)[i] = static_cast<uint32_t>(-1);
-        }
 
       //  Recalculate actual length for all lines below this
       if (m_pnActualLineLength->size())
@@ -5206,11 +5150,6 @@ SetAnchor (const CEPoint & ptNewAnchor)
 {
   ASSERT_VALIDTEXTPOS (ptNewAnchor);
   m_ptAnchor = ptNewAnchor;
-}
-
-void CCrystalTextView::
-OnEditOperation (int nAction, const tchar_t* pszText, size_t cchText)
-{
 }
 
 BOOL CCrystalTextView::
@@ -5628,6 +5567,15 @@ FindTextInBlock (const tchar_t* pszText, const CEPoint & ptStartPosition,
         {
           while (ptCurrentPos.y >= 0)
             {
+              // Skip invisible lines
+              if (GetLineFlags(ptCurrentPos.y) & LF_INVISIBLE)
+                {
+                  ptCurrentPos.y--;
+                  if (ptCurrentPos.y >= 0)
+                    ptCurrentPos.x = GetLineLength(ptCurrentPos.y);
+                  continue;
+                }
+
               int nLineLength;
               CString line;
               if (dwFlags & FIND_REGEXP)
@@ -5713,6 +5661,14 @@ FindTextInBlock (const tchar_t* pszText, const CEPoint & ptStartPosition,
         {
           while (ptCurrentPos.y <= ptBlockEnd.y)
             {
+              // Skip invisible lines
+              if (GetLineFlags(ptCurrentPos.y) & LF_INVISIBLE)
+                {
+                  ptCurrentPos.x = 0;
+                  ptCurrentPos.y++;
+                  continue;
+                }
+
               int nLineLength;
               CString line;
               if (dwFlags & FIND_REGEXP)
@@ -6242,7 +6198,7 @@ void CCrystalTextView::CopyProperties (CCrystalTextView *pSource)
   m_pColors = pSource->m_pColors;
   m_pMarkers = pSource->m_pMarkers;
   m_bDisableDragAndDrop = pSource->m_bDisableDragAndDrop;
-  SetTextType(pSource->m_CurSourceDef);
+  ShareSyntaxParser(pSource);
   SetFont (pSource->m_lfBaseFont);
 }
 
@@ -6296,14 +6252,14 @@ OnMouseHWheel (UINT nFlags, short zDelta, CPoint pt)
 void CCrystalTextView::
 OnSourceType (UINT nId)
 {
-  SetTextType ((CrystalLineParser::TextType) (nId - ID_SOURCE_PLAIN));
+  SetTextType ((LangServices::LanguageId) (nId - ID_SOURCE_PLAIN));
   Invalidate ();
 }
 
 void CCrystalTextView::
 OnUpdateSourceType (CCmdUI * pCmdUI)
 {
-  pCmdUI->SetRadio (&CrystalLineParser::m_SourceDefs[(pCmdUI->m_nID - ID_SOURCE_PLAIN)] == m_CurSourceDef);
+  pCmdUI->SetRadio (LangServices::GetTextType ((pCmdUI->m_nID - ID_SOURCE_PLAIN)) == m_CurSourceDef);
 }
 
 int
@@ -6326,180 +6282,19 @@ void CCrystalTextView::
 OnMatchBrace ()
 {
   CEPoint ptCursorPos = GetCursorPos ();
-  int nLength = m_pTextBuffer->GetLineLength (ptCursorPos.y);
-  const tchar_t* pszText = m_pTextBuffer->GetLineChars (ptCursorPos.y), *pszEnd = pszText + ptCursorPos.x;
-  bool bAfter = false;
-  int nType = 0;
-  if (ptCursorPos.x < nLength)
+
+  // Delegate to syntax parser if available
+  if (m_pSyntaxParser != nullptr)
     {
-      nType = bracetype (*pszEnd);
-      if (nType)
+      int outLineIndex = 0, outCharPos = 0;
+      if (m_pSyntaxParser->FindMatchingBrace(ptCursorPos.y, ptCursorPos.x, outLineIndex, outCharPos))
         {
-          bAfter = false;
-        }
-      else if (ptCursorPos.x > 0)
-        {
-          nType = bracetype (pszEnd[-1]);
-          bAfter = true;
-        }
-    }
-  else if (ptCursorPos.x > 0)
-    {
-      nType = bracetype (pszEnd[-1]);
-      bAfter = true;
-    }
-  if (nType)
-    {
-      int nOther, nCount = 0, nComment = 0;
-      if (bAfter)
-        {
-          nOther = ((nType - 1) ^ 1) + 1;
-          if (nOther & 1)
-            pszEnd--;
-        }
-      else
-        {
-          nOther = ((nType - 1) ^ 1) + 1;
-          if (!(nOther & 1))
-            pszEnd++;
-        }
-      const tchar_t* pszOpenComment = m_CurSourceDef->opencomment,
-        *pszCloseComment = m_CurSourceDef->closecomment,
-        *pszCommentLine = m_CurSourceDef->commentline, *pszTest;
-      int nOpenComment = (int) tc::tcslen (pszOpenComment),
-        nCloseComment = (int) tc::tcslen (pszCloseComment),
-        nCommentLine = (int) tc::tcslen (pszCommentLine);
-      if (nOther & 1)
-        {
-          for (;;)
-            {
-              while (--pszEnd >= pszText)
-                {
-                  pszTest = pszEnd - nOpenComment + 1;
-                  if (pszTest >= pszText && !tc::tcsnicmp (pszTest, pszOpenComment, nOpenComment))
-                    {
-                      nComment--;
-                      pszEnd = pszTest;
-                      if (--pszEnd < pszText)
-                        {
-                          break;
-                        }
-                    }
-                  pszTest = pszEnd - nCloseComment + 1;
-                  if (pszTest >= pszText && !tc::tcsnicmp (pszTest, pszCloseComment, nCloseComment))
-                    {
-                      nComment++;
-                      pszEnd = pszTest;
-                      if (--pszEnd < pszText)
-                        {
-                          break;
-                        }
-                    }
-                  if (!nComment)
-                    {
-                      pszTest = pszEnd - nCommentLine + 1;
-                      if (pszTest >= pszText && !tc::tcsnicmp (pszTest, pszCommentLine, nCommentLine))
-                        {
-                          break;
-                        }
-                      if (bracetype (*pszEnd) == nType)
-                        {
-                          nCount++;
-                        }
-                      else if (bracetype (*pszEnd) == nOther)
-                        {
-                          if (!nCount--)
-                            {
-                              ptCursorPos.x = (LONG) (pszEnd - pszText);
-                              if (bAfter)
-                                ptCursorPos.x++;
-                              SetCursorPos (ptCursorPos);
-                              SetSelection (ptCursorPos, ptCursorPos);
-                              SetAnchor (ptCursorPos);
-                              EnsureVisible (ptCursorPos);
-                              return;
-                            }
-                        }
-                    }
-                }
-              if (ptCursorPos.y)
-                {
-                  ptCursorPos.x = m_pTextBuffer->GetLineLength (--ptCursorPos.y);
-                  pszText = m_pTextBuffer->GetLineChars (ptCursorPos.y);
-                  pszEnd = pszText + ptCursorPos.x;
-                }
-              else
-                break;
-            }
-        }
-      else
-        {
-          const tchar_t* pszBegin = pszText;
-          pszText = pszEnd;
-          pszEnd = pszBegin + nLength;
-          int nLines = m_pTextBuffer->GetLineCount ();
-          for (;;)
-            {
-              while (pszText < pszEnd)
-                {
-                  pszTest = pszText + nCloseComment;
-                  if (pszTest <= pszEnd && !tc::tcsnicmp (pszText, pszCloseComment, nCloseComment))
-                    {
-                      nComment--;
-                      pszText = pszTest;
-                      if (pszText > pszEnd)
-                        {
-                          break;
-                        }
-                    }
-                  pszTest = pszText + nOpenComment;
-                  if (pszTest <= pszEnd && !tc::tcsnicmp (pszText, pszOpenComment, nOpenComment))
-                    {
-                      nComment++;
-                      pszText = pszTest;
-                      if (pszText > pszEnd)
-                        {
-                          break;
-                        }
-                    }
-                  if (!nComment)
-                    {
-                      pszTest = pszText + nCommentLine;
-                      if (pszTest <= pszEnd && !tc::tcsnicmp (pszText, pszCommentLine, nCommentLine))
-                        {
-                          break;
-                        }
-                      if (bracetype (*pszText) == nType)
-                        {
-                          nCount++;
-                        }
-                      else if (bracetype (*pszText) == nOther)
-                        {
-                          if (!nCount--)
-                            {
-                              ptCursorPos.x = (LONG) (pszText - pszBegin);
-                              if (bAfter)
-                                ptCursorPos.x++;
-                              SetCursorPos (ptCursorPos);
-                              SetSelection (ptCursorPos, ptCursorPos);
-                              SetAnchor (ptCursorPos);
-                              EnsureVisible (ptCursorPos);
-                              return;
-                            }
-                        }
-                    }
-                  pszText++;
-                }
-              if (ptCursorPos.y < nLines)
-                {
-                  ptCursorPos.x = 0;
-                  nLength = m_pTextBuffer->GetLineLength (++ptCursorPos.y);
-                  pszBegin = pszText = m_pTextBuffer->GetLineChars (ptCursorPos.y);
-                  pszEnd = pszBegin + nLength;
-                }
-              else
-                break;
-            }
+          CEPoint ptMatch(outCharPos, outLineIndex);
+          SetCursorPos(ptMatch);
+          SetSelection(ptMatch, ptMatch);
+          SetAnchor(ptMatch);
+          EnsureVisible(ptMatch);
+          return;
         }
     }
 }
@@ -6523,7 +6318,7 @@ OnEditGoTo ()
 void CCrystalTextView::
 OnUpdateToggleSourceHeader (CCmdUI * pCmdUI)
 {
-  pCmdUI->Enable (m_CurSourceDef->type == CrystalLineParser::SRC_C);
+  pCmdUI->Enable (m_CurSourceDef->type == LangServices::LanguageId::SRC_C);
 }
 
 void CCrystalTextView::
@@ -6534,7 +6329,7 @@ OnToggleSourceHeader ()
       CFileStatus status;
       return CFile::GetStatus(lpszPath, status) != 0;
     };
-  if (m_CurSourceDef->type == CrystalLineParser::SRC_C)
+  if (m_CurSourceDef->type == LangServices::LanguageId::SRC_C)
     {
       CDocument *pDoc = GetDocument ();
       ASSERT (pDoc != nullptr);
@@ -6714,6 +6509,23 @@ CCrystalParser *CCrystalTextView::SetParser( CCrystalParser *pParser )
 
   return pOldParser;
 }
+
+/**
+ * @brief Set syntax parser using the new interface.
+ */
+void CCrystalTextView::SetSyntaxParser(std::shared_ptr<LangServices::ISyntaxParser> pParser)
+{
+  m_pSyntaxParser = std::move(pParser);
+
+  if (m_pSyntaxParser)
+    {
+      // Connect the parser to the text buffer
+      if (m_pTextBuffer != nullptr)
+        {
+          m_pSyntaxParser->SetTextBuffer(m_pTextBuffer);
+        }
+    }
+}
 //END SW
 
 /**
@@ -6798,6 +6610,129 @@ LRESULT CCrystalTextView::OnImeStartComposition(WPARAM wParam, LPARAM lParam) /*
   UpdateCompositionWindowPos();
 
   return DefWindowProc(WM_IME_STARTCOMPOSITION, wParam, lParam);
+}
+
+LRESULT CCrystalTextView::BuildReconvertString(
+    RECONVERTSTRING* pReconv, int nLineIndex, DWORD dwTargetCharOffset, DWORD dwTargetCharLen)
+{
+  int nLineLen = GetLineLength(nLineIndex);
+  const tchar_t* pszLine = GetLineChars(nLineIndex);
+  if (pszLine == nullptr || nLineLen <= 0)
+      return 0;
+
+  DWORD dwStrLen = static_cast<DWORD>(nLineLen);
+
+  // clamp
+  dwTargetCharOffset = (std::min)(dwTargetCharOffset, dwStrLen);
+  if (dwTargetCharOffset + dwTargetCharLen > dwStrLen)
+    dwTargetCharLen = dwStrLen - dwTargetCharOffset;
+
+  DWORD dwSize = sizeof(RECONVERTSTRING) + (dwStrLen + 1) * sizeof(tchar_t);
+
+  if (pReconv == nullptr)
+    return static_cast<LRESULT>(dwSize);
+
+  if (pReconv->dwSize < dwSize)
+    return 0;
+
+  pReconv->dwSize = dwSize;
+  pReconv->dwVersion = 0;
+  pReconv->dwStrLen = dwStrLen;
+  pReconv->dwStrOffset = sizeof(RECONVERTSTRING);
+  pReconv->dwCompStrLen = dwTargetCharLen;
+  pReconv->dwCompStrOffset = dwTargetCharOffset * sizeof(tchar_t);
+  pReconv->dwTargetStrLen = dwTargetCharLen;
+  pReconv->dwTargetStrOffset = dwTargetCharOffset * sizeof(tchar_t);
+
+  tchar_t* pszDest = reinterpret_cast<tchar_t*>(
+    reinterpret_cast<BYTE*>(pReconv) + pReconv->dwStrOffset);
+
+  memcpy(pszDest, pszLine, dwStrLen * sizeof(tchar_t));
+  pszDest[dwStrLen] = _T('\0');
+
+  return static_cast<LRESULT>(dwSize);
+}
+
+LRESULT CCrystalTextView::OnImeRequest(WPARAM wParam, LPARAM lParam)
+{
+  if (wParam != IMR_RECONVERTSTRING &&
+      wParam != IMR_CONFIRMRECONVERTSTRING &&
+      wParam != IMR_DOCUMENTFEED)
+    return DefWindowProc(WM_IME_REQUEST, wParam, lParam);
+
+  switch (wParam)
+    {
+    case IMR_RECONVERTSTRING:
+      {
+        CEPoint ptCursor = GetCursorPos();
+        int nLineIndex = ptCursor.y;
+        DWORD dwOffset = static_cast<DWORD>(ptCursor.x);
+        DWORD dwLen = 0;
+
+        if (IsSelection())
+          {
+            CEPoint s, e;
+            GetSelection(s, e);
+            if (s.y != e.y)
+                return 0;
+            nLineIndex = s.y;
+            dwOffset = static_cast<DWORD>(s.x);
+            dwLen = static_cast<DWORD>(e.x - s.x);
+          }
+
+        return BuildReconvertString(
+            reinterpret_cast<RECONVERTSTRING*>(lParam), nLineIndex, dwOffset, dwLen);
+      }
+
+    case IMR_CONFIRMRECONVERTSTRING:
+      {
+        RECONVERTSTRING* pReconv = reinterpret_cast<RECONVERTSTRING*>(lParam);
+        if (pReconv == nullptr)
+          return FALSE;
+
+        DWORD dwCompCharOffset = pReconv->dwCompStrOffset / sizeof(tchar_t);
+        DWORD dwCompCharLen = pReconv->dwCompStrLen;
+
+        CEPoint ptCursor = GetCursorPos();
+        int nLineIndex = ptCursor.y;
+
+        if (IsSelection())
+          {
+            CEPoint ptSelStart, ptSelEnd;
+            GetSelection(ptSelStart, ptSelEnd);
+            if (ptSelStart.y != ptSelEnd.y)
+                return FALSE;  // Multi-line selection not supported
+            nLineIndex = ptSelStart.y;
+          }
+
+        // IME adjusted the range but resulted in zero length - reject this
+        int nLineLen = GetLineLength(nLineIndex);
+        if (dwCompCharLen == 0)
+            return FALSE;
+        if (dwCompCharOffset >= static_cast<DWORD>(nLineLen))
+            return FALSE;
+        if (dwCompCharOffset + dwCompCharLen > static_cast<DWORD>(nLineLen))
+            return FALSE;
+
+        CEPoint ptNewStart(static_cast<int>(dwCompCharOffset), nLineIndex);
+        CEPoint ptNewEnd(static_cast<int>(dwCompCharOffset + dwCompCharLen), nLineIndex);
+        SetSelection(ptNewStart, ptNewEnd);
+        SetCursorPos(ptNewStart);
+        EnsureVisible(ptNewStart);
+        UpdateCompositionWindowPos();
+
+        return TRUE;
+      }
+
+    case IMR_DOCUMENTFEED:
+      {
+        CEPoint ptCursor = GetCursorPos();
+        return BuildReconvertString(
+            reinterpret_cast<RECONVERTSTRING*>(lParam), ptCursor.y, static_cast<DWORD>(ptCursor.x), 0);
+      }
+  }
+
+  return 0;  // Should not reach here
 }
 
 void CCrystalTextView::OnEditDeleteBack() 
@@ -7194,7 +7129,7 @@ SetTextTypeByContent (const tchar_t* pszContent)
     {
       if (rxnode)
         RxFree (rxnode);
-      return SetTextType(CrystalLineParser::SRC_XML);
+      return SetTextType(LangServices::LanguageId::SRC_XML);
     }
   if (rxnode)
     RxFree (rxnode);

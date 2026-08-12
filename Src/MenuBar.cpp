@@ -42,6 +42,8 @@ CMenuBar::CMenuBar()
 	, m_nCurrentHotItem(-1)
 	, m_hCurrentPopupMenu(nullptr)
 	, m_bShowKeyboardCues(false)
+	, m_bAltUsedWithMouse(false)
+	, m_bAltKeyDown(false)
 {
 	m_pThis = this;
 }
@@ -380,6 +382,13 @@ BOOL CMenuBar::PreTranslateMessage(MSG* pMsg)
 {
 	if (!m_hWnd)
 		return FALSE;
+
+	if (m_bAltKeyDown)
+	{
+		if (pMsg->message == WM_MOUSEMOVE || pMsg->message == WM_LBUTTONDOWN || pMsg->message == WM_LBUTTONUP)
+			m_bAltUsedWithMouse = true;
+	}
+
 	if (pMsg->message == WM_SYSKEYDOWN || pMsg->message == WM_SYSKEYUP)
 	{
 		const BOOL bShift = ::GetAsyncKeyState(VK_SHIFT) & 0x8000;
@@ -387,10 +396,22 @@ BOOL CMenuBar::PreTranslateMessage(MSG* pMsg)
 		{
 			if (pMsg->message == WM_SYSKEYDOWN)
 			{
+				if (pMsg->wParam == VK_MENU)
+				{
+					m_bAltKeyDown = true;
+					m_bAltUsedWithMouse = false;
+				}
 				ShowKeyboardCues(true);
 			}
 			else if (pMsg->message == WM_SYSKEYUP && m_bShowKeyboardCues)
 			{
+				m_bAltKeyDown = false;
+				if (m_bAltUsedWithMouse)
+				{
+					m_bAltUsedWithMouse = false;
+					ShowKeyboardCues(false);
+					return TRUE; // Alt was used with mouse
+				}
 				if (!m_bActive)
 					SetFocus();
 				else if (m_hwndOldFocus != nullptr && IsWindow(m_hwndOldFocus))

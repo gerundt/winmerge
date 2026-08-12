@@ -2,8 +2,18 @@
  * @file  FilterParser.y
  *
  * @brief Parser for filter expressions.
+ * 
+ * Supported literals:
+ *   - Boolean: true, false
+ *   - Null: none, undefined (both represent std::monostate)
+ *   - Numeric: integers, doubles
+ *   - String: "text"
+ *   - Size: 10KB, 5MB, 1.5GB
+ *   - DateTime: d"2024-01-15"
+ *   - Duration: 5days, 2hours, 30min
+ *   - Version: v"1.2.3"
  */
-%token AND OR NOT TRUE_LITERAL FALSE_LITERAL INTEGER_LITERAL DOUBLE_LITERAL STRING_LITERAL SIZE_LITERAL DATETIME_LITERAL DURATION_LITERAL VERSION_LITERAL IDENTIFIER EQ NE LT LE GT GE CONTAINS RECONTAINS LIKE MATCHES LPAREN RPAREN PLUS MINUS STAR SLASH MOD COMMA.
+%token AND OR NOT TRUE_LITERAL FALSE_LITERAL NONE_LITERAL INTEGER_LITERAL DOUBLE_LITERAL STRING_LITERAL SIZE_LITERAL DATETIME_LITERAL DURATION_LITERAL VERSION_LITERAL IDENTIFIER EQ NE LT LE GT GE CONTAINS RECONTAINS LIKE MATCHES LPAREN RPAREN PLUS MINUS STAR SLASH MOD COMMA.
 
 %left OR.
 %left AND.
@@ -72,27 +82,27 @@ and_expr(A) ::= not_expr(A).
 not_expr(A) ::= NOT not_expr(B).                      { A = { new NotNode(B.node) }; }
 not_expr(A) ::= cmp_expr(A).
 
-cmp_expr(A) ::= arithmetic(B) EQ arithmetic(C).       { A = { new BinaryOpNode(B.node, TK_EQ, C.node) }; }
-cmp_expr(A) ::= arithmetic(B) NE arithmetic(C).       { A = { new BinaryOpNode(B.node, TK_NE, C.node) }; }
-cmp_expr(A) ::= arithmetic(B) LT arithmetic(C).       { A = { new BinaryOpNode(B.node, TK_LT,  C.node) }; }
-cmp_expr(A) ::= arithmetic(B) LE arithmetic(C).       { A = { new BinaryOpNode(B.node, TK_LE, C.node) }; }
-cmp_expr(A) ::= arithmetic(B) GT arithmetic(C).       { A = { new BinaryOpNode(B.node, TK_GT,  C.node) }; }
-cmp_expr(A) ::= arithmetic(B) GE arithmetic(C).       { A = { new BinaryOpNode(B.node, TK_GE, C.node) }; }
-cmp_expr(A) ::= arithmetic(B) CONTAINS arithmetic(C). { A = { new BinaryOpNode(B.node, TK_CONTAINS, C.node) }; }
-cmp_expr(A) ::= arithmetic(B) NOT CONTAINS arithmetic(C). { A = { new NotNode(new BinaryOpNode(B.node, TK_CONTAINS, C.node)) }; }
-cmp_expr(A) ::= arithmetic(B) RECONTAINS arithmetic(C). { A = { new BinaryOpNode(B.node, TK_RECONTAINS, C.node) }; }
-cmp_expr(A) ::= arithmetic(B) NOT RECONTAINS arithmetic(C). { A = { new NotNode(new BinaryOpNode(B.node, TK_RECONTAINS, C.node)) }; }
-cmp_expr(A) ::= arithmetic(B) LIKE arithmetic(C).     { A = { new BinaryOpNode(B.node, TK_LIKE, C.node) }; }
-cmp_expr(A) ::= arithmetic(B) NOT LIKE arithmetic(C).     { A = { new NotNode(new BinaryOpNode(B.node, TK_LIKE, C.node)) }; }
-cmp_expr(A) ::= arithmetic(B) MATCHES  arithmetic(C). { A = { new BinaryOpNode(B.node, TK_MATCHES, C.node) }; }
-cmp_expr(A) ::= arithmetic(B) NOT MATCHES  arithmetic(C). { A = { new NotNode(new BinaryOpNode(B.node, TK_MATCHES, C.node)) }; }
+cmp_expr(A) ::= arithmetic(B) EQ arithmetic(C).       { A = { new BinaryOpNode(pCtx, B.node, TK_EQ, C.node) }; }
+cmp_expr(A) ::= arithmetic(B) NE arithmetic(C).       { A = { new BinaryOpNode(pCtx, B.node, TK_NE, C.node) }; }
+cmp_expr(A) ::= arithmetic(B) LT arithmetic(C).       { A = { new BinaryOpNode(pCtx, B.node, TK_LT,  C.node) }; }
+cmp_expr(A) ::= arithmetic(B) LE arithmetic(C).       { A = { new BinaryOpNode(pCtx, B.node, TK_LE, C.node) }; }
+cmp_expr(A) ::= arithmetic(B) GT arithmetic(C).       { A = { new BinaryOpNode(pCtx, B.node, TK_GT,  C.node) }; }
+cmp_expr(A) ::= arithmetic(B) GE arithmetic(C).       { A = { new BinaryOpNode(pCtx, B.node, TK_GE, C.node) }; }
+cmp_expr(A) ::= arithmetic(B) CONTAINS arithmetic(C). { A = { new BinaryOpNode(pCtx, B.node, TK_CONTAINS, C.node) }; }
+cmp_expr(A) ::= arithmetic(B) NOT CONTAINS arithmetic(C). { A = { new NotNode(new BinaryOpNode(pCtx, B.node, TK_CONTAINS, C.node)) }; }
+cmp_expr(A) ::= arithmetic(B) RECONTAINS arithmetic(C). { A = { new BinaryOpNode(pCtx, B.node, TK_RECONTAINS, C.node) }; }
+cmp_expr(A) ::= arithmetic(B) NOT RECONTAINS arithmetic(C). { A = { new NotNode(new BinaryOpNode(pCtx, B.node, TK_RECONTAINS, C.node)) }; }
+cmp_expr(A) ::= arithmetic(B) LIKE arithmetic(C).     { A = { new BinaryOpNode(pCtx, B.node, TK_LIKE, C.node) }; }
+cmp_expr(A) ::= arithmetic(B) NOT LIKE arithmetic(C).     { A = { new NotNode(new BinaryOpNode(pCtx, B.node, TK_LIKE, C.node)) }; }
+cmp_expr(A) ::= arithmetic(B) MATCHES  arithmetic(C). { A = { new BinaryOpNode(pCtx, B.node, TK_MATCHES, C.node) }; }
+cmp_expr(A) ::= arithmetic(B) NOT MATCHES  arithmetic(C). { A = { new NotNode(new BinaryOpNode(pCtx, B.node, TK_MATCHES, C.node)) }; }
 cmp_expr(A) ::= arithmetic(A).
 
-arithmetic(A) ::= arithmetic(B) PLUS arithmetic(C).   { A = { new BinaryOpNode(B.node, TK_PLUS, C.node) }; }
-arithmetic(A) ::= arithmetic(B) MINUS arithmetic(C).  { A = { new BinaryOpNode(B.node, TK_MINUS, C.node) }; }
-arithmetic(A) ::= arithmetic(B) STAR arithmetic(C).   { A = { new BinaryOpNode(B.node, TK_STAR, C.node) }; }
-arithmetic(A) ::= arithmetic(B) SLASH arithmetic(C).  { A = { new BinaryOpNode(B.node, TK_SLASH, C.node) }; }
-arithmetic(A) ::= arithmetic(B) MOD arithmetic(C).    { A = { new BinaryOpNode(B.node, TK_MOD, C.node) }; }
+arithmetic(A) ::= arithmetic(B) PLUS arithmetic(C).   { A = { new BinaryOpNode(pCtx, B.node, TK_PLUS, C.node) }; }
+arithmetic(A) ::= arithmetic(B) MINUS arithmetic(C).  { A = { new BinaryOpNode(pCtx, B.node, TK_MINUS, C.node) }; }
+arithmetic(A) ::= arithmetic(B) STAR arithmetic(C).   { A = { new BinaryOpNode(pCtx, B.node, TK_STAR, C.node) }; }
+arithmetic(A) ::= arithmetic(B) SLASH arithmetic(C).  { A = { new BinaryOpNode(pCtx, B.node, TK_SLASH, C.node) }; }
+arithmetic(A) ::= arithmetic(B) MOD arithmetic(C).    { A = { new BinaryOpNode(pCtx, B.node, TK_MOD, C.node) }; }
 arithmetic(A) ::= unary(A).
 
 expr(A) ::= or_expr(A).
@@ -102,6 +112,7 @@ unary(A) ::= term(A).
 
 term(A) ::= TRUE_LITERAL.          { A = { new BoolLiteral(true) }; }
 term(A) ::= FALSE_LITERAL.         { A = { new BoolLiteral(false) }; }
+term(A) ::= NONE_LITERAL.          { A = { new NoneLiteral() }; }
 term(A) ::= DOUBLE_LITERAL(B).      { A = { new DoubleLiteral(B.real) }; }
 term(A) ::= INTEGER_LITERAL(B).    { A = { new IntLiteral(B.integer) }; }
 term(A) ::= STRING_LITERAL(B).     { A = { new StringLiteral(B.string) }; }

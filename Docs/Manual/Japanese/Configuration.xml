@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <article id="Configuration">
   <title>
-オプションとコンフィグレーション<indexterm>
+オプションと設定<indexterm>
       <primary>オプション</primary>
     </indexterm></title>
 
@@ -14,7 +14,7 @@
 メニューの、<menuchoice><guimenu>編集</guimenu><guimenuitem>設定</guimenuitem></menuchoice>、または、ツールバー<inlinemediaobject>
 <imageobject> <imagedata contentwidth="16"
 fileref="screenshots/options_btn.png" /> </imageobject><textobject>
-            <phrase>WinMerge Options button</phrase>
+            <phrase>「WinMerge オプション」ボタン</phrase>
           </textobject>
         </inlinemediaobject><guibutton>設定</guibutton>ボタンをクリックしてください。</para>
 
@@ -51,13 +51,13 @@ fileref="screenshots/options_btn.png" /> </imageobject><textobject>
   <section id="Configuration_importexport">
     <title>
 設定情報のインポートとエクスポート<indexterm>
-        <primary>importing options files</primary>
+        <primary>オプション ファイルのインポート</primary>
       </indexterm><indexterm>
-        <primary>exporting options files</primary>
+        <primary>オプション ファイルのエクスポート</primary>
       </indexterm></title>
 
     <para>
-差分比較、または、マージの設定を頻繁に変更する場合、また、 あなたの設定を他のWinMergeユーザーと共有したい場合は、
+差異比較、または、マージの設定を頻繁に変更する場合、また、 あなたの設定を他のWinMergeユーザーと共有したい場合は、
 設定をファイルへエクスポートして保存することを検討してください。
 あとでそれらの設定を使いたい時は、手動でオプションを設定する代わりに、単に設定ファイルをインポートすることができます。</para>
 
@@ -170,9 +170,7 @@ fileref="screenshots/options_btn.png" /> </imageobject><textobject>
 
         <listitem>
           <para>
-<option>Close main window if there is on one MDI child window</option>:
-Pressing <keycap>Esc</keycap> closes a child window, and if there is only
-one child window, it will also close the main window.</para>
+<option>MDI子ウィンドウが1つしかない場合、メインウィンドウを閉じる</option>:<keycap>Esc</keycap>を押下すると子ウィンドウを閉じますが、子ウィンドウが1つしかない場合は、メインウィンドウも閉じます。</para>
         </listitem>
 
         <listitem>
@@ -263,9 +261,9 @@ WinMergeは直ちに終了します。</para>
     <section>
       <title>
 ファイル比較時のファイル時刻を保つ<indexterm>
-          <primary>timestamps</primary>
+          <primary>タイムスタンプ</primary>
 
-          <secondary>preserving</secondary>
+          <secondary>保存する</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -286,7 +284,7 @@ WinMergeは直ちに終了します。</para>
 起動時にファイルまたはフォルダーの選択ダイアログを表示する<indexterm>
           <primary>ファイルまたはフォルダーの選択ダイアログ</primary>
 
-          <secondary>opening automatically</secondary>
+          <secondary>自動的に開く</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -371,7 +369,7 @@ OK押下時にファイルまたはフォルダーの選択ダイアログを閉
 
         <listitem>
           <para>
-<guilabel>ウィンドウがアクティブになった時のみ</guilabel> (デフォルト): WinMergeのウインドウがアクティブになった時、
+<guilabel>ウィンドウがアクティブになった時のみ</guilabel> (デフォルト): WinMergeのウィンドウがアクティブになった時、
 もしファイルが変更されていれば、ファイルを再読み込みします。 ただし、この時ファイルを開きなおすか問い合わせるメッセージボックスが表示されます。
 このメッセージボックスを表示したくない場合は、「再びこの質問をしない」をチェックし、 はいボタンを押下してください。</para>
         </listitem>
@@ -388,11 +386,11 @@ OK押下時にファイルまたはフォルダーの選択ダイアログを閉
     <section>
       <title>
 言語<indexterm>
-          <primary>Language</primary>
+          <primary>言語</primary>
         </indexterm></title>
 
       <para>
-See <xref linkend="Locales_changing" />.</para>
+<xref linkend="Locales_changing" />を参照してください。</para>
 
     </section>
   </section>
@@ -416,7 +414,7 @@ See <xref linkend="Locales_changing" />.</para>
     <section>
       <title>
 様々な無視オプションについて<indexterm>
-          <primary>ignored differences</primary>
+          <primary>無視された違い</primary>
         </indexterm></title>
 
       <para>
@@ -446,9 +444,9 @@ WinMerge内で特別な方法で扱われます。</para>
     <section>
       <title>
 空白<indexterm>
-          <primary>whitespaces</primary>
+          <primary>空白</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <para>
@@ -528,9 +526,9 @@ merge)。例のすべての行は、同一行として検出されます。</par
     <section>
       <title>
 空行を無視する<indexterm>
-          <primary>blank lines</primary>
+          <primary>空白行</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -551,7 +549,7 @@ merge)。例のすべての行は、同一行として検出されます。</par
     <section>
       <title>
 大文字と小文字を区別しない<indexterm>
-          <primary>case (letter), detecting and ignoring differences</primary>
+          <primary>大文字と小文字 (文字)、相違点の検出と無視</primary>
         </indexterm></title>
 
       <itemizedlist>
@@ -574,7 +572,7 @@ merge)。例のすべての行は、同一行として検出されます。</par
 改行文字の違いを無視する (Windows/Unix/Mac)<indexterm>
           <primary>EOL</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -595,9 +593,9 @@ merge)。例のすべての行は、同一行として検出されます。</par
     <section>
       <title>
 数字を無視する<indexterm>
-          <primary>numbers</primary>
+          <primary>数字</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -616,21 +614,20 @@ merge)。例のすべての行は、同一行として検出されます。</par
     <section>
       <title>
 コードページの違いを無視する<indexterm>
-          <primary>codepage</primary>
+          <primary>コードページ</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>Disabled</option> (default): ファイルのエンコーディングの違いを検出します。 UTF-8
-BOMの有無の違いも検出します。</para>
+<option>無効</option> (デフォルト): ファイルのエンコーディングの違いを検出します。 UTF-8 BOMの有無の違いも検出します。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>Enabled</option>:ファイルエンコーディングの違いは無視されます。</para>
+<option>有効</option>:ファイルエンコーディングの違いは無視されます。</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -640,7 +637,7 @@ BOMの有無の違いも検出します。</para>
 コメントの違いを無視する<indexterm>
           <primary>フィルター</primary>
 
-          <secondary>comments</secondary>
+          <secondary>コメント</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -710,7 +707,7 @@ def
     <section>
       <title>
 移動ブロックの検出を有効にする<indexterm>
-          <primary>moved differences</primary>
+          <primary>移動された差異</primary>
         </indexterm></title>
 
       <itemizedlist>
@@ -721,7 +718,7 @@ def
 
         <listitem>
           <para>
-<option>有効</option>: WinMergeは、(ファイル中の異なる場所に)移動された行の検出を試みます。移動されたブロックは、
+<option>有効</option>: WinMergeは、(ファイル中の異なる場所に)移動ブロックの検出を試みます。移動されたブロックは、
 <guilabel>移動ブロック</guilabel>と <guilabel> 選択された移動ブロック</guilabel>の色で示されます。
 ロケーションバーが表示されている場合、左と右のロケーションバーの一致する差異の場所が、線で結ばれます。
 移動ブロックの表示は、それが多すぎない場合、ファイル中の変更をより簡単に視覚化することができます。</para>
@@ -735,14 +732,13 @@ def
     <section>
       <title>
 類似行をマッチさせる<indexterm>
-          <primary>similar lines, aligning</primary>
+          <primary>同様の線、整列</primary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>無効</option>(デフォルト): Lines within difference blocks are shown as they
-occur in the source files.</para>
+<option>無効</option>(デフォルト): 差異ブロック内の行は、ソースファイルに現れる通りに表示されます。</para>
         </listitem>
 
         <listitem>
@@ -761,28 +757,28 @@ lines</citetitle>の説明を参照してください。</para>
     <section>
       <title>
 Diff アルゴリズム<indexterm>
-          <primary>algorithm</primary>
+          <primary>アルゴリズム</primary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>default</option> (デフォルト): 基本的な差分アルゴリズムです。</para>
+<option>default</option> (デフォルト): 基本的な差異アルゴリズムです。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>minimal</option>: できるだけ差分が少なくなるように比較します。 その分、比較に時間がかかります。</para>
+<option>minimal</option>: できるだけ差異が少なくなるように比較します。 その分、比較に時間がかかります。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>patience</option>: patienceアルゴリズムで差分を比較します。</para>
+<option>patience</option>: patienceアルゴリズムで差異を比較します。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>histogram</option>: histogramアルゴリズムで差分を比較します。
+<option>histogram</option>: histogramアルゴリズムで差異を比較します。
 このアルゴリズムはpatienceアルゴリズムを低頻度の共通要素に対応するように拡張しています。</para>
         </listitem>
 
@@ -796,13 +792,13 @@ Diff アルゴリズム<indexterm>
     <section>
       <title>
 indent heuristic を有効にする<indexterm>
-          <primary>indent heuristic</primary>
+          <primary>インデントヒューリスティック</primary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>有効</option> (デフォルト): 差分のハンク境界をシフトするヒューリスティックを有効にして、差分を読みやすくします。 Diff
+<option>有効</option> (デフォルト): 差異のハンク境界をシフトするヒューリスティックを有効にして、差異を読みやすくします。 Diff
 アルゴリズムがdefaultの場合、効果はありません。</para>
         </listitem>
 
@@ -815,23 +811,19 @@ indent heuristic を有効にする<indexterm>
 
     <section>
       <title>
-Completely unhighlight the ignored differences<indexterm>
-          <primary>unhighlight ignored differences</primary>
+無視された差異の行を同一行の色と同じにする<indexterm>
+          <primary>無視された相違点の強調表示を解除する</primary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>Disabled</option> (default): Difference lines ignored by line
-filters and substitution filters are displayed in the color of Ignored
-Difference.</para>
+<option>無効</option> (デフォルト): 行フィルターおよび置換フィルターによって無視された差異行は、無視された差異の色で表示されます。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>Enabled</option>: Makes the color of the different lines ignored by
-line filters and substitution filters the same as the color of the identical
-lines.</para>
+<option>有効</option>: 行フィルターおよび置換フィルターによって無視された差異行の色を、同一行の色と同じにします。</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -845,7 +837,7 @@ lines.</para>
 比較方法<indexterm>
           <primary>ファイルの比較</primary>
 
-          <secondary>detection options</secondary>
+          <secondary>検出オプション</secondary>
         </indexterm></title>
 
       <para>
@@ -890,9 +882,9 @@ lines.</para>
         <varlistentry>
           <term>
 更新日時<indexterm>
-              <primary>timestamps</primary>
+              <primary>タイムスタンプ</primary>
 
-              <secondary>comparing</secondary>
+              <secondary>比較する</secondary>
             </indexterm></term>
 
           <listitem>
@@ -913,9 +905,9 @@ lines.</para>
         <varlistentry>
           <term>
 サイズ<indexterm>
-              <primary>file sizes</primary>
+              <primary>ファイルサイズ</primary>
 
-              <secondary>comparing</secondary>
+              <secondary>比較する</secondary>
             </indexterm></term>
 
           <listitem>
@@ -940,11 +932,11 @@ lines.</para>
 最初の差異で比較を終了する<indexterm>
           <primary>ファイルの比較</primary>
 
-          <secondary>stopping after first difference</secondary>
+          <secondary>最初の差の後に停止する</secondary>
         </indexterm><indexterm>
           <primary>フォルダーの比較</primary>
 
-          <secondary>stopping after first difference</secondary>
+          <secondary>最初の差の後に停止する</secondary>
         </indexterm></title>
 
       <para>
@@ -973,9 +965,9 @@ lines.</para>
     <section>
       <title>
 3秒以下の時間差を無視する<indexterm>
-          <primary>timestamps</primary>
+          <primary>タイムスタンプ</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -1004,23 +996,21 @@ lines.</para>
 
     <section>
       <title>
-Include subfolders<indexterm>
-          <primary>include subfolders</primary>
+サブフォルダーを含める<indexterm>
+          <primary>サブフォルダーを含める</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>Enabled</option> (default): WinMerge doing a recursive comparing and
-also includes subfolders.</para>
+<option>有効</option> (デフォルト): WinMergeは再帰的に比較を行い、サブフォルダーも含めます。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>Disabled</option>: WinMerge only comparing the files in the root
-folder.</para>
+<option>無効</option>: WinMergeはルートフォルダー内のファイルのみを比較します。</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1028,9 +1018,9 @@ folder.</para>
     <section>
       <title>
 比較後自動的にサブフォルダーを展開する<indexterm>
-          <primary>expand subfolders</primary>
+          <primary>サブフォルダーを展開する</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -1059,9 +1049,9 @@ folder.</para>
     <section>
       <title>
 片方にしか存在しないフォルダー内も含める<indexterm>
-          <primary>include unique subfolders</primary>
+          <primary>固有のサブフォルダーを含める</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -1080,9 +1070,9 @@ folder.</para>
     <section>
       <title>
 再解析ポイントを無視する<indexterm>
-          <primary>reparse points</primary>
+          <primary>再解析ポイント</primary>
 
-          <secondary>detecting and ignoring differences</secondary>
+          <secondary>違いを検出して無視する</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -1093,10 +1083,9 @@ folder.</para>
 
         <listitem>
           <para>
-<option>Enabled</option>: Ignores the contents of folders that are reparse
-points. For example, C:\Users\All Users is a symbolic link to
-C:\ProgramData, and enabling this option will skip comparing the
-C:\Users\All Users folder.</para>
+<option>有効</option>: リパースポイントであるフォルダーの内容を無視します。例えば、C:\Users\All
+Usersは、C:\ProgramDataへのシンボリックリンクですが、このオプションを有効にすると、C:\Users\All
+Usersフォルダーの比較をスキップします。</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1104,59 +1093,49 @@ C:\Users\All Users folder.</para>
     <section>
       <title>
 クイック比較切替閾値 (MB)<indexterm>
-          <primary>Quick compare</primary>
+          <primary>簡単な比較</primary>
 
-          <secondary>limit</secondary>
+          <secondary>限界</secondary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>Disabled</option>: Is not active unless the Compare method is set to
-other than <guilabel>Full Contents</guilabel> compare method.</para>
+<option>無効</option>: 比較方法が<guilabel>フルコンテンツ</guilabel>以外に設定されている場合は無効です。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>Enabled</option>: Is active when the Compare method is set to
-<guilabel>Full Contents</guilabel> compare method.</para>
+<option>有効</option>: 比較方法が<guilabel>フルコンテンツ</guilabel>に設定されている場合に有効です。</para>
 
           <para>
-Threshold size for switching to <guilabel>Quick Contents</guilabel> compare
-method.  When <guilabel>Full Contents</guilabel> compare method is selected,
-files bigger (in mega bytes) than this value are compared using
-<guilabel>Quick Contents</guilabel> compare method.</para>
+<guilabel>クイックコンテンツ</guilabel>比較方法に切り替えるための閾値サイズです。<guilabel>フルコンテンツ</guilabel>比較方法が選択されている場合、この値（メガバイト単位）より大きいファイルは、<guilabel>クイックコンテンツ</guilabel>比較方法を使用して比較されます。</para>
         </listitem>
       </itemizedlist>
     </section>
 
     <section>
       <title>
-Switch to binary compare when size exceeds (MB)<indexterm>
-          <primary>Binary compare</primary>
+サイズ超過時にバイナリ比較に切り替える (MB)<indexterm>
+          <primary>バイナリ比較</primary>
 
-          <secondary>limit</secondary>
+          <secondary>限界</secondary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>Disabled</option>: Is not active unless the Compare method is set to
-other than <guilabel>Full Contents</guilabel> and <guilabel>Quick
-Contents</guilabel> compare method.</para>
+<option>無効</option>:
+比較方法が<guilabel>フルコンテンツ</guilabel>および<guilabel>クイックコンテンツ</guilabel>以外に設定されている場合は無効です。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>Enabled</option>: Is active when the Compare method is set to
-<guilabel>Full Contents</guilabel> or <guilabel>Quick Contents</guilabel>
-compare method.</para>
+<option>有効</option>:
+比較方法が<guilabel>フルコンテンツ</guilabel>または<guilabel>クイックコンテンツ</guilabel>に設定されている場合に有効です。</para>
 
           <para>
-Threshold size for switching to Binary Contents compare method.  When
-<guilabel>Full Contents</guilabel> or <guilabel>Quick Contents</guilabel>
-compare method is selected, files bigger (in mega bytes) than this value are
-compared using <guilabel>Binary Contents</guilabel> compare method.</para>
+バイナリコンテンツ比較方法に切り替えるための閾値サイズです。<guilabel>フルコンテンツ</guilabel>または<guilabel>クイックコンテンツ</guilabel>比較方法が選択されている場合、この値（メガバイト単位）より大きいファイルは、<guilabel>バイナリコンテンツ</guilabel>比較方法を使用して比較されます。</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1164,12 +1143,11 @@ compared using <guilabel>Binary Contents</guilabel> compare method.</para>
     <section>
       <title>
 使用するCPUコアの数<indexterm>
-          <primary>compare threads</primary>
+          <primary>スレッドを比較する</primary>
         </indexterm></title>
 
       <para>
-Number of threads which use to comparing. With a negative value WinMerge
-will use addition of the number of available CPU cores.</para>
+比較に使用するスレッド数です。負の値を指定すると、WinMergeは利用可能なCPUコア数にその値を加えた数を使用します。</para>
     </section>
 
     <section>
@@ -1179,8 +1157,8 @@ will use addition of the number of available CPU cores.</para>
         </indexterm></title>
 
       <para>
-フォルダ比較時に、フィルタ式と同様の構文で追加の比較条件を指定できます。たとえば、比較方法に「Full
-Contents」を選択している場合でも、<screen>allequal(Date)</screen> や <screen>LeftDate = RightDate</screen>
+フォルダー比較時に、フィルタ式と同様の構文で追加の比較条件を指定できます。たとえば、比較方法に「Full
+Contents」を選択している場合でも、<screen>allequal(日付)</screen> や <screen>左日付 = 右日付</screen>
 を指定すると、ファイル内容が一致していても更新日時が異なるファイルは差異ありとみなされます。また、入力欄の右側にある
 <guilabel>=</guilabel> ボタンをクリックすると、<guilabel>サイズを比較</guilabel> や
 <guilabel>更新日時を比較</guilabel> などのメニューが表示されます。ここで <guilabel>更新日時を比較</guilabel>
@@ -1222,119 +1200,245 @@ Contents」を選択している場合でも、<screen>allequal(Date)</screen> �
         </indexterm><indexterm>
           <primary>移動検出キー</primary>
         </indexterm></title>
- 
+
       <para>
 左右（または三方向）でファイル/フォルダーを照合するための検出キーを生成するフィルター式を指定します。一致するキーを持つ項目は、名前変更または移動された可能性のある項目としてグループ化されます。たとえば、キーに
 <literal>Size</literal> を指定すると同じサイズのファイルがグループ化され、<literal>Name</literal>
 を指定すると同じファイル名のファイルがグループ化されます（移動の検出に有効です）。</para>
- 
+
       <para>
-入力欄の右側にある <guilabel>=</guilabel>
-ボタンをクリックすると、一般的な検出キー式を簡単に挿入できるヘルパーメニューが表示されます。</para>
- 
-      <variablelist>
-        <varlistentry>
-          <term>Name</term>
-          <listitem>
-            <para>
+入力欄の右側にある <guilabel>=</guilabel> ボタンをクリックすると、一般的な検出キー式を挿入できる補助メニューが表示されます。</para>
+
+      <section>
+        <title>基本的な検出キー</title>
+        <variablelist>
+          <varlistentry>
+            <term>Name</term>
+            <listitem>
+              <para>
 ファイル名またはフォルダー名で一致判定を行います。名前を変えずに別のディレクトリへ移動したファイルの検出に有効です。</para>
-          </listitem>
-        </varlistentry>
- 
-        <varlistentry>
-          <term>BaseName</term>
-          <listitem>
-            <para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ベース名（拡張子なし）</term>
+            <listitem>
+              <para>
 拡張子を除いたファイル名で一致判定を行います。たとえば "file.txt" と "file.doc" は一致します。</para>
-          </listitem>
-        </varlistentry>
- 
-        <varlistentry>
-          <term>normalizeUnicode(Name, "NFC")</term>
-          <listitem>
-            <para>
-Unicode 正規化後のファイル名で一致判定を行います。見た目は同じだが Unicode 表現が異なるファイル名の検出に有効です。</para>
-          </listitem>
-        </varlistentry>
- 
-        <varlistentry>
-          <term>Size</term>
-          <listitem>
-            <para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>正規化された Unicode 名</term>
+            <listitem>
+              <para>
+Unicode 正規化されたファイル名で一致判定を行う <literal>normalizeUnicode(Name, "NFC")</literal>
+を挿入します。合成文字と分解文字など、Unicode 表現は異なるが同等の名前を持つファイルの検出に有効です。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>相対パス</term>
+            <listitem>
+              <para>
+比較ルートからの相対パスでファイルを一致判定します。ディレクトリ構造を保ったまま名前だけが変更されたファイルの検出に有効です。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Size</term>
+            <listitem>
+              <para>
 ファイルサイズで一致判定を行います。サイズが同じまま名前だけが変更されたファイルの検出に有効です。</para>
-          </listitem>
-        </varlistentry>
- 
-        <varlistentry>
-          <term>Date</term>
-          <listitem>
-            <para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Date</term>
+            <listitem>
+              <para>
 更新日時で一致判定を行います。</para>
-          </listitem>
-        </varlistentry>
- 
-        <varlistentry>
-          <term>if(IsFolder, Name, prop("Hash.MD5"))</term>
-          <listitem>
-            <para>
-フォルダーは名前で、ファイルは内容の MD5 ハッシュで一致判定を行います。名前変更されたファイルを検出する最も正確な方法ですが、大きなファイルでは
-MD5 計算に時間がかかる場合があります。</para>
-          </listitem>
-        </varlistentry>
- 
-        <varlistentry>
-          <term>プロパティベースのキー</term>
-          <listitem>
-            <para>
-このメニューから <literal>System.Author</literal> や <literal>System.Title</literal>
-などのWindows ファイルプロパティにもアクセスできます。これらのメタデータを使ってファイルを一致判定することも可能です。</para>
-          </listitem>
-        </varlistentry>
- 
-        <varlistentry>
-          <term>文字列変換関数</term>
-          <listitem>
-            <para>
-検出キーに適用できる文字列変換関数も用意されています。</para>
-            <itemizedlist>
-              <listitem>
-                <para>
-<literal>replace(str, "from", "to")</literal> - キー内の文字列を置換します</para>
-              </listitem>
-              <listitem>
-                <para>
-<literal>regexReplace(str, "pattern", "replacement")</literal> -
-正規表現による置換を行います</para>
-              </listitem>
-              <listitem>
-                <para>
-<literal>toLower(str)</literal> / <literal>toUpper(str)</literal> -
-大文字・小文字を変換します</para>
-              </listitem>
-              <listitem>
-                <para>
-<literal>toHalfWidth(str)</literal> / <literal>toFullWidth(str)</literal> -
-半角・全角を変換します</para>
-              </listitem>
-              <listitem>
-                <para>
-<literal>toSimplifiedChinese(str)</literal> /
-<literal>toTraditionalChinese(str)</literal> - 中国語の簡体字・繁体字を変換します</para>
-              </listitem>
-              <listitem>
-                <para>
-<literal>toHiragana(str)</literal> / <literal>toKatakana(str)</literal> -
-日本語のひらがな・カタカナを変換します</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </varlistentry>
-      </variablelist>
- 
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>ハッシュ（MD5）</term>
+            <listitem>
+              <para>
+<literal>if(IsFolder, Name, prop("Hash.MD5"))</literal>
+を挿入します。フォルダーの場合は名前で一致判定し、ファイルの場合は内容の MD5
+ハッシュで一致判定します。名前変更されたファイルを検出する最も正確な方法ですが、大きなファイルでは MD5 計算に時間がかかる場合があります。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>追加のプロパティ...</term>
+            <listitem>
+              <para>
+<literal>System.Author</literal>、<literal>System.Title</literal>、<literal>System.Keywords</literal>
+などの Windows ファイルプロパティにアクセスできるサブメニューを開きます。これらのメタデータを使用してファイルを一致判定できます。挿入される式は
+<literal>if(IsFolder, Name, prop("PropertyName"))</literal> です。</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section>
+        <title>文字列変換関数</title>
+        <para>
+このメニューには、検出キーに適用できる文字列変換関数が含まれています。選択すると、現在の式（空の場合は
+<literal>Name</literal>）を関数でラップします。</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>replace() 関数を挿入</term>
+            <listitem>
+              <para>
+キー内の文字列を置換するための <literal>replace(expression, "from", "to")</literal>
+を挿入します。検索対象と置換後の文字列を指定するために、"from" と "to" を編集してください。例:
+<literal>replace(Name, ".backup", "")</literal> はファイル名から ".backup" を削除します。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>regexReplace() 関数を挿入</term>
+            <listitem>
+              <para>
+正規表現を使用して文字列を置換する <literal>regexReplace(expression, "pattern",
+"replacement")</literal> を挿入します。置換文字列では後方参照（$1、$2 など）が使用できます。例:
+<literal>regexReplace(Name, "^(\d+)_(.+)$", "$2")</literal>
+はファイル名の先頭にある番号とアンダースコアを削除します。</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section>
+        <title>置換リスト</title>
+        <para>
+［置換リスト］サブメニューでは、外部ファイルを使用した一括文字列置換機能を利用できます。</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>文字列置換リストを作成して挿入...</term>
+            <listitem>
+              <para>
+文字列置換用のテンプレートを含む TSV（タブ区切り）ファイルを新規作成します。ファイルは
+<filename>%APPDATA%\WinMerge\ReplaceLists</filename>（設定によっては
+<filename>Documents\WinMerge\ReplaceLists</filename>）に保存されます。作成後、既定のテキストエディターでファイルが開かれ、<literal>replaceWithList(expression,
+"filepath")</literal> が挿入されます。</para>
+              <para>
+ファイル形式は 1 行につき 1 つの置換で、<literal>検索文字列&lt;TAB&gt;置換文字列</literal>
+の形式です。<literal>#</literal> で始まる行はコメントとして扱われます。</para>
+              <para>
+ファイル内容の例:<screen># ファイル名のバージョン番号を置換
+v1.0	v2.0
+beta	release</screen></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>正規表現置換リストを作成して挿入...</term>
+            <listitem>
+              <para>
+文字列置換リストと同様ですが、正規表現による置換用です。<filename>%APPDATA%\WinMerge\RegexReplaceLists</filename>（または
+<filename>Documents\WinMerge\RegexReplaceLists</filename>）にテンプレートファイルを作成し、<literal>regexReplaceWithList(expression,
+"filepath")</literal> を挿入します。</para>
+              <para>
+ファイル形式は <literal>正規表現&lt;TAB&gt;置換文字列</literal> で、後方参照をサポートします。</para>
+              <para>
+ファイル内容の例:<screen># 日付の書式の正規化
+\d+	NUMBER
+(\d{4})-(\d{2})-(\d{2})	$1_$2_$3</screen></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>文字列置換リスト / 正規表現置換リスト</term>
+            <listitem>
+              <para>
+これらのサブメニューには、それぞれの ReplaceLists フォルダー内にあるすべての TSV
+ファイルが一覧表示されます。一覧からファイルを選択すると、そのファイルのパスを指定した
+<literal>replaceWithList()</literal> または
+<literal>regexReplaceWithList()</literal>
+が挿入されます。これにより、以前に作成した置換リストを簡単に再利用できます。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>文字列置換リストフォルダーを開く... / 正規表現置換リストフォルダーを開く...</term>
+            <listitem>
+              <para>
+置換リストファイルが保存されているフォルダーを Windows エクスプローラーで開きます。ここから、置換リストファイルを直接編集、削除、整理できます。</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section>
+        <title>テキストの正規化</title>
+        <para>
+［テキストの正規化］サブメニューでは、より柔軟な一致判定を行うための正規化関数を利用できます。</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>小文字 / 大文字</term>
+            <listitem>
+              <para>
+<literal>toLower(expression)</literal> または
+<literal>toUpper(expression)</literal>
+を挿入し、すべての文字を小文字または大文字に変換します。大文字・小文字を区別しない一致判定に有効です。例:
+<literal>toLower(Name)</literal> は "File.txt"、"FILE.TXT"、"file.txt"
+を同一として一致させます。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>半角 / 全角</term>
+            <listitem>
+              <para>
+<literal>toHalfWidth(expression)</literal> または
+<literal>toFullWidth(expression)</literal>
+を挿入します。主に日本語テキストを対象に、半角文字と全角文字を相互に変換します。例:
+<literal>toHalfWidth(Name)</literal> は、全角カタカナの「ファイル」を半角の「ﾌｧｲﾙ」に変換します。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>中国語変換</term>
+            <listitem>
+              <para>
+<literal>toSimplifiedChinese(expression)</literal> および
+<literal>toTraditionalChinese(expression)</literal>
+関数を提供します。簡体字中国語と繁体字中国語の相互変換を行います。異なる中国語文字セットで記述された名前を持つファイルの一致判定に有効です。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>日本語変換</term>
+            <listitem>
+              <para>
+<literal>toHiragana(expression)</literal> および
+<literal>toKatakana(expression)</literal> 関数を提供します。日本語のひらがなとカタカナを相互に変換します。</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Unicode を正規化</term>
+            <listitem>
+              <para>
+Unicode 正規化されたファイル名で一致判定を行う <literal>normalizeUnicode(Name, "NFC")</literal>
+を挿入します。合成文字と分解文字など、Unicode 表現は異なるが同等の名前を持つファイルの検出に有効です。（例：単一のé文字とe +
+結合鋭アクセント）</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
       <para>
 <literal>+</literal> 演算子と区切り文字を使って、複数のキーを組み合わせることもできます。たとえば <literal>Name +
 "|" + Size</literal> は、ファイル名とサイズを組み合わせた複合キーを生成します。</para>
- 
+
       <note>
         <para>
 検出キー式は、ファイル/フォルダー比較の各側について評価され、キーが生成されます。キーが一致した項目は同一グループとしてまとめられます。たとえばキーに
@@ -1345,10 +1449,15 @@ MD5 計算に時間がかかる場合があります。</para>
  
     <section>
       <title>
-名前変更された項目を 1 つの項目にマージ<indexterm>
+名前変更項目と移動項目のマージ<indexterm>
           <primary>名前変更された項目のマージ</primary>
+        </indexterm><indexterm>
+          <primary>移動された項目のマージ</primary>
         </indexterm></title>
  
+      <para>
+名前変更／移動検出機能によって検出された、名前変更および移動された項目を、フォルダー比較ツリー上でどのように単一の項目としてマージするかを指定します。</para>
+
       <itemizedlist>
         <listitem>
           <para>
@@ -1359,16 +1468,22 @@ MD5 計算に時間がかかる場合があります。</para>
  
         <listitem>
           <para>
-<option>有効</option>: 名前変更されたと検出され、かつ同じディレクトリに存在する項目は、1
-つの項目にマージされます。これにより、異なる名前で複数の側に存在する項目が 1
-つにまとめられ、比較ツリーが簡潔になります。異なるディレクトリにある項目（移動された項目）は、このオプションが有効でもマージされません。</para>
+<option>名前変更をマージ</option>: 同一ディレクトリ内で名前変更されたと検出された項目を、1
+つの項目としてマージします。これにより、異なる名前で複数の側に存在する項目を 1
+つとして表示でき、比較ツリーが簡潔になります。異なるディレクトリにある項目（移動された項目）はマージされません。</para>
+        </listitem>
+
+        <listitem>
+          <para>
+<option>名前変更と移動をマージ</option>:
+名前変更された項目（同一ディレクトリで名前が異なるもの）と、移動された項目（異なるディレクトリにあるもの）の両方を、検出された場合に単一の項目としてマージします。これにより、名前変更や移動されたファイル／フォルダーを最もコンパクトに表示できます。</para>
         </listitem>
       </itemizedlist>
  
       <note>
         <para>
-マージは、各側に最大 1
-つの項目しか存在せず、かつ同じ親ディレクトリにある場合にのみ行われます。一方の側で複数のファイルが一致する場合（曖昧なケース）は、マージされません。</para>
+マージは、各側にグループ内の項目が最大 1
+つしか存在せず、かつマージ条件（名前変更の場合は同一ディレクトリ、移動の場合は任意のディレクトリ）を満たす場合にのみ行われます。一方の側で複数のファイルが一致する場合（曖昧なケース）は、マージされません。</para>
       </note>
     </section>
   </section>
@@ -1376,7 +1491,7 @@ MD5 計算に時間がかかる場合があります。</para>
   <section id="Configuration_compare_table">
     <title>
 比較 → テーブル ページ<indexterm>
-        <primary>table files</primary>
+        <primary>テーブルファイル</primary>
       </indexterm></title>
     <section>
       <title>CSV ファイルとして扱うパターン</title>
@@ -1428,7 +1543,7 @@ MD5 計算に時間がかかる場合があります。</para>
     <section>
       <title>
 バイナリファイルとして扱うパターン<indexterm>
-          <primary>binary files</primary>
+          <primary>バイナリファイル</primary>
         </indexterm></title>
       <para>
 テーブル形式で比較したいタブ区切り値のファイルのファイル名パターンを指定します。 セミコロン区切りで複数指定することが可能です。
@@ -1436,83 +1551,71 @@ MD5 計算に時間がかかる場合があります。</para>
     </section>
     <section>
       <title>
-Frhed settings<indexterm>
+Frhed の設定<indexterm>
           <primary>frhed</primary>
         </indexterm></title>
       <variablelist>
         <varlistentry>
-          <term>View Settings...</term>
+          <term>設定を表示...</term>
 
           <listitem>
-            <para>Here you can choose:</para>
+            <para>ここで選択できます:</para>
             <itemizedlist>
               <listitem>
-                <para>The number of bytes to display per line of hexdump (only applies if
-&quot;Automatically adjust number of bytes per line&quot; is disabled)</para>
+                <para>16 進ダンプの 1 行あたりに表示するバイト数 (「1 行あたりのバイト数を自動的に調整する」が無効になっている場合にのみ適用されます)</para>
               </listitem>
               <listitem>
-                <para>If the &quot;Automatically adjust number of bytes per line&quot;- checkbox
-is checked, then the number of bytes displayed per hexdump line is adjusted
-in such a way that the whole window width is used at all times.</para>
+                <para>「行ごとのバイト数を自動的に調整する」チェックボックスがチェックされている場合、16
+進ダンプ行ごとに表示されるバイト数は、常にウィンドウ幅全体が使用されるように調整されます。</para>
               </listitem>
               <listitem>
-                <para>The number of digits for the offset length (only applies if &quot;Adjust
-offset length&quot; is disabled)</para>
+                <para>オフセット長の桁数 (「オフセット長の調整」が無効な場合にのみ適用されます)</para>
               </listitem>
               <listitem>
-                <para>If the offset length should be automatically adjusted to that of the maximum
-offset (enabled) or right-padded with spaces (disabled)</para>
+                <para>オフセットの長さを最大オフセットの長さに自動的に調整するか (有効)、または右にスペースを埋め込むか (無効)</para>
               </listitem>
               <listitem>
-                <para>How to display the values at the caret position, either as signed or as
-unsigned integer values</para>
+                <para>キャレット位置の値を符号付きまたは符号なしの整数値として表示する方法</para>
               </listitem>
               <listitem>
-                <para>If read-only mode should be automatically set after opening files.</para>
+                <para>ファイルを開いた後に読み取り専用モードが自動的に設定される必要がある場合。</para>
               </listitem>
               <listitem>
-                <para>The name of the text editor that will be called by the
-<menuchoice><guimenu>Edit</guimenu><guimenuitem>Open in text editor
-</guimenuitem></menuchoice> command.</para>
+                <para><menuchoice><guimenu>編集</guimenu><guimenuitem>テキスト エディタで開く
+</guimenuitem></menuchoice> コマンドによって呼び出されるテキスト エディタの名前。</para>
               </listitem>
             </itemizedlist>
           </listitem>
         </varlistentry>
 
         <varlistentry>
-          <term>Binary Mode...</term>
+          <term>バイナリモード...</term>
 
           <listitem>
-            <para>What kind of byte order to use: Either Little-endian, as used in
-Intel-computers or Big-endian, used for example in computers with a Motorola
-processor. The difference between these modes is thus: Consider a longword,
-which is 4 bytes (named A to D) long.</para>
+            <para>使用するバイト順序の種類: Intel コンピュータで使用されるリトル エンディアン、または Motorola
+プロセッサを搭載したコンピュータなどで使用されるビッグ エンディアンのいずれか。これらのモードの違いは次のとおりです。 4 バイト (A から D
+という名前) の長さのロングワードを考えてみましょう。</para>
 
-            <screen>Longword in processor register = ABCD.</screen>
+            <screen>プロセッサ レジスタ内のロングワード = ABCD。</screen>
 
-            <para>The least significant bit, which has the value 1, is found in byte "D". In a
-processor register the longword is ordered in this way. If this value is
-written to a position in memory, then by Intel convention the longword is
-written in this way, with the growing offsets to the right:</para>
+            <para>値 1 を持つ最下位ビットはバイト "D" にあります。プロセッサ
+レジスタでは、ロングワードはこのように順序付けされます。この値がメモリ内の特定の位置に書き込まれる場合、インテルの規則により、ロングワードは次のように右にオフセットが増加して書き込まれます。</para>
 
-            <screen>Longword in memory = DCBA.</screen>
+            <screen>メモリ内のロングワード = DCBA。</screen>
 
-            <para>That is, the bytes making up the longword are written in reverse order as
-they are found in a processor register.</para>
+            <para>つまり、ロングワードを構成するバイトは、プロセッサ レジスタ内で見つかったときと逆の順序で書き込まれます。</para>
 
-            <para>This means that a file written by a Big-endian machine will contain wrong
-longword and word values if read by a Little-endian machine without
-conversion.</para>
+            <para>つまり、ビッグ エンディアン マシンで書き込まれたファイルは、変換せずにリトル エンディアン
+マシンで読み取られた場合、間違ったロングワード値とワード値が含まれることになります。</para>
           </listitem>
         </varlistentry>
 
         <varlistentry>
-          <term>Character Set...</term>
+          <term>文字セット...</term>
 
           <listitem>
-            <para>Here you can choose the character set for displaying and writing characters,
-either ANSI (the Windows character set) or OEM (the DOS character set). The
-font size in points can also be chosen.</para>
+            <para>ここでは、文字を表示および書き込むための文字セット、ANSI (Windows 文字セット) または OEM (DOS 文字セット)
+を選択できます。フォントサイズをポイント単位で選択することもできます。</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -1522,7 +1625,7 @@ font size in points can also be chosen.</para>
   <section id="Configuration_compare_image">
     <title>
 比較 → 画像 ページ<indexterm>
-        <primary>image files</primary>
+        <primary>画像ファイル</primary>
       </indexterm></title>
     <section>
       <title>画像ファイルとして扱うパターン</title>
@@ -1535,10 +1638,7 @@ font size in points can also be chosen.</para>
     <section>
       <title>フォルダー比較で画像比較を有効にする</title>
       <para>
-When this option is enabled, folder comparisons will compare files that
-match the specified patterns as images.  Metadata differences will be
-ignored, and a color distance threshold will be applied to determine visual
-differences between images.</para>
+このオプションを有効にすると、フォルダー比較時に指定されたパターンに一致するファイルを画像として比較します。メタデータの差異は無視され、画像間の視覚的な差異を判定するために色距離の閾値が適用されます。</para>
     </section>
 
     <section>
@@ -1551,14 +1651,12 @@ differences between images.</para>
 
         <listitem>
           <para>
-<option>Line-by-line position and text</option>: Shows the recognized text
-line by line with its position in the original image.</para>
+<option>行毎の位置情報とテキスト</option>: 認識されたテキストを、元の画像内での位置とともに行ごとに表示します。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>Word-by-word position and text</option>: Shows the recognized text
-word by word with its position in the original image.</para>
+<option>単語毎の位置情報とテキスト</option>: 認識されたテキストを、元の画像内での位置とともに単語ごとに表示します。</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1567,65 +1665,56 @@ word by word with its position in the original image.</para>
   <section id="Configuration_compare_webpage">
     <title>
 比較 → Webページ ページ<indexterm>
-        <primary>webpages</primary>
+        <primary>ウェブページ</primary>
       </indexterm></title>
 
     <section>
       <title>
-URL pattern to include (Regular expression)<indexterm>
+URLパターン (正規表現)<indexterm>
         </indexterm></title>
       <para>
-Enter a regular expression in this field to specify the file paths or URLs
-that should be opened in the webpage compare window.  For example, if you
-enter the regular expression <code>.*\.html?|https?://.*</code>, files with
-the .html or .htm extension and URLs starting with http:// or https:// will
-be opened in the webpage compare window.</para>
+Webページ比較ウィンドウで開くべきファイルパスまたはURLを指定するために、このフィールドに正規表現を入力してください。例えば、正規表現<code>.*\.html?|https?://.*</code>を入力すると、.htmlまたは.htm拡張子のファイルと、http://またはhttps://で始まるURLがWebページ比較ウィンドウで開かれます。</para>
     </section>
 
     <section>
       <title>
-URL pattern to exclude (Regular expression)<indexterm>
+除外URLパターン (正規表現)<indexterm>
         </indexterm></title>
       <para>
-Enter a regular expression to exclude certain file paths or URLs from the
-Webpage Comparison window.  This applies to items that match the "URL
-pattern to include" field.  Use this to exclude specific patterns you don't
-want to include.</para>
+Webページ比較ウィンドウから除外する特定のファイルパスまたはURLを指定するために正規表現を入力してください。これは「含めるURLパターン」フィールドに一致する項目に適用されます。含めたくない特定のパターンを除外するために使用します。</para>
     </section>
 
     <section>
       <title>
-User data folder location<indexterm>
+ユーザーデータフォルダーの場所<indexterm>
         </indexterm></title>
       <itemizedlist>
         <listitem>
           <para>
-<option>AppData folder</option> (default): Stores cookies, browsing history,
-and cache data in the %APPDATA%\WinMerge\WinWebDiff folder.</para>
+<option>AppDataフォルダー</option> (デフォルト):
+クッキー、閲覧履歴、キャッシュデータを%APPDATA%\WinMerge\WinWebDiffフォルダーに保存します。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>Install folder</option>: Saves data in the WinMerge installation
-directory, which usually requires administrator permissions to write. This
-is generally not recommended.</para>
+<option>インストールフォルダー</option>:
+データをWinMergeインストールディレクトリに保存します。通常、書き込みには管理者権限が必要です。一般的には推奨されません。</para>
         </listitem>
       </itemizedlist>
     </section>
 
     <section>
       <title>
-Separate user data folders for each pane<indexterm>
+ユーザーデータフォルダーをペイン毎に分離する<indexterm>
         </indexterm></title>
-      <para>Creates distinct data folders for each pane, preventing data overlap between
-them.</para>
+      <para>各ペインごとに個別のデータフォルダーを作成し、ペイン間でのデータの重複を防ぎます。</para>
     </section>
   </section>
 
   <section id="Configuration_messageboxes">
     <title>
-Message Boxes page<indexterm>
-        <primary>message boxes</primary>
+メッセージボックスページ<indexterm>
+        <primary>メッセージボックス</primary>
       </indexterm></title>
 
     <section>
@@ -1653,9 +1742,9 @@ WinMergeを新しいバージョンにアップデートした時は、メッセ
   <section id="Configuration_editor_general">
     <title>
 エディター → 一般 ページ<indexterm>
-        <primary>editing</primary>
+        <primary>編集</primary>
 
-        <secondary>options for File Compare window</secondary>
+        <secondary>ファイル比較ウィンドウのオプション</secondary>
       </indexterm></title>
 
     <section id="Configuration_syntaxhighlight">
@@ -1663,7 +1752,7 @@ WinMergeを新しいバージョンにアップデートした時は、メッセ
 シンタックスハイライト<indexterm>
           <primary>シンタックスハイライト</primary>
 
-          <secondary>enabling and disabling</secondary>
+          <secondary>有効化と無効化</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -1681,6 +1770,33 @@ WinMergeを新しいバージョンにアップデートした時は、メッセ
 の画面描画が遅いと思う場合は、これを無効にすると良いかもしれません。</para>
         </listitem>
       </itemizedlist>
+
+      <para>
+<option>ハイライトモードは</option>、構文の強調表示にどの構文パーサーを使用するかを決定します。</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+<option>組み込みのみ</option>：WinMerge の組み込み構文パーサーのみを使用します。</para>
+        </listitem>
+
+        <listitem>
+          <para>
+<option>組み込みを優先</option>：組み込みの構文解析器を優先します。現在のファイル形式に対応していない場合は、Tree-sitter
+が使用されます。</para>
+        </listitem>
+
+        <listitem>
+          <para>
+<option>Tree-sitter を優先</option>：Tree-sitter を優先します。Tree-sitter
+が現在のファイル形式に対応していない場合は、組み込みの構文パーサーが使用されます。</para>
+        </listitem>
+
+        <listitem>
+          <para>
+<option>Tree-sitter のみ</option>：構文強調表示には Tree-sitter のみを使用します。</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
@@ -1688,9 +1804,9 @@ WinMergeを新しいバージョンにアップデートした時は、メッセ
 元のEOL文字を保存する<indexterm>
           <primary>EOL</primary>
 
-          <secondary>preserving</secondary>
+          <secondary>保存する</secondary>
         </indexterm><indexterm>
-          <primary>end of line</primary>
+          <primary>行末</primary>
 
           <see>EOL</see>
         </indexterm></title>
@@ -1728,9 +1844,9 @@ Unixなど)異なるEOLスタイルを持つシステムからのファイルを
     <section>
       <title>
 タブ<indexterm>
-          <primary>tabs</primary>
+          <primary>タブ</primary>
 
-          <secondary>editing options</secondary>
+          <secondary>編集オプション</secondary>
         </indexterm></title>
 
       <variablelist>
@@ -1771,23 +1887,23 @@ Unixなど)異なるEOLスタイルを持つシステムからのファイルを
     <section>
       <title>
 レンダリングモード<indexterm>
-          <primary>rendering</primary>
+          <primary>レンダリング</primary>
         </indexterm></title>
 
       <itemizedlist>
         <listitem>
           <para>
-<option>GDI</option> (default): Renders text using the Graphics Device
-Interface (GDI).</para>
+<option>GDI</option> (デフォルト): Graphics Device Interface
+(GDI)を使用してテキストをレンダリングします。</para>
         </listitem>
 
         <listitem>
           <para>
-<option>DirectWrite Modes</option>: Renders text using various DirectWrite
-rendering modes, including support for colored emojis on Windows 8.1 and
-later. Available only in the 64-bit version of WinMerge. See <ulink
+<option>DirectWriteモード</option>:
+様々なDirectWriteレンダリングモードを使用してテキストをレンダリングします。Windows
+8.1以降でカラー絵文字をサポートします。WinMergeの64ビット版でのみ利用可能です。詳細については<ulink
 url="https://learn.microsoft.com/en-us/windows/win32/api/dwrite/ne-dwrite-dwrite_rendering_mode#constants">DirectWrite
-Rendering Modes</ulink> for details.</para>
+Rendering Modes</ulink>を参照してください。</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1796,17 +1912,17 @@ Rendering Modes</ulink> for details.</para>
   <section id="Configuration_editor_comparemerge">
     <title>
 エディター → 比較/マージ ページ<indexterm>
-        <primary>editing</primary>
+        <primary>編集</primary>
 
-        <secondary>options for File Compare window</secondary>
+        <secondary>ファイル比較ウィンドウのオプション</secondary>
       </indexterm></title>
 
     <section>
       <title>
 自動的に再スキャンする<indexterm>
-          <primary>rescanning files</primary>
+          <primary>ファイルの再スキャン</primary>
 
-          <secondary>enabling and disabling autoscan</secondary>
+          <secondary>自動スキャンの有効化と無効化</secondary>
         </indexterm></title>
 
       <itemizedlist>
@@ -1832,7 +1948,7 @@ Rendering Modes</ulink> for details.</para>
     <section>
       <title>
 選択された差異のコピー粒度<indexterm>
-          <primary>copy granularity</primary>
+          <primary>コピーの粒度</primary>
         </indexterm></title>
 
       <para>
@@ -1866,9 +1982,9 @@ Rendering Modes</ulink> for details.</para>
     <section id="Configuration_viewlinediffs">
       <title>
 行内差異の強調<indexterm>
-          <primary>line differences</primary>
+          <primary>行の差異</primary>
 
-          <secondary>viewing options</secondary>
+          <secondary>表示オプション</secondary>
         </indexterm></title>
 
       <para>
@@ -1876,7 +1992,7 @@ Rendering Modes</ulink> for details.</para>
 
       <variablelist>
         <varlistentry>
-          <term>View line differences</term>
+          <term>行の違いを表示する</term>
 
           <listitem>
             <itemizedlist>
@@ -1929,11 +2045,10 @@ Rendering Modes</ulink> for details.</para>
 
       <variablelist>
         <varlistentry>
-          <term>Word break characters</term>
+          <term>単語区切り文字</term>
 
           <listitem>
-            <para>Specifies the symbols that are treated as non-whitespace word separators
-when <guilabel>Break at whitespace or punctuation</guilabel> is selected.</para>
+            <para><guilabel>空白か句読点で区切る</guilabel>が選択されている場合に、空白以外の単語区切りとして扱われる記号を指定します。</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -1952,7 +2067,7 @@ when <guilabel>Break at whitespace or punctuation</guilabel> is selected.</para>
   <section id="Configuration_editor_syntax">
     <title>
 エディター → 一般 ページ<indexterm>
-        <primary>editing</primary>
+        <primary>編集</primary>
 
         <secondary>オプション</secondary>
       </indexterm></title>
@@ -2036,7 +2151,7 @@ Dark</option>（デフォルト）、<option>Solarized Dark</option>、および
   <section id="Configuration_colors_differences">
     <title>
 色 → 差異ページ<indexterm>
-        <primary>difference colors</primary>
+        <primary>差異の色</primary>
 
         <secondary>オプション</secondary>
       </indexterm></title>
@@ -2049,8 +2164,7 @@ Dark</option>（デフォルト）、<option>Solarized Dark</option>、および
 <guibutton>OK</guibutton>をクリックすると、新しい色がボックスに読み込まれます。</para>
 
     <para>
-To revert to the default colors of a scheme, choose a different scheme and
-return to the modified scheme.</para>
+配色のデフォルト色に戻すには、別の配色を選択してから、変更した配色に戻してください。</para>
   </section>
 
   <section id="Configuration_colors_syntax">
@@ -2058,7 +2172,7 @@ return to the modified scheme.</para>
 色 → シンタックス ページ<indexterm>
         <primary>シンタックスハイライト</primary>
 
-        <secondary>color options</secondary>
+        <secondary>色のオプション</secondary>
       </indexterm></title>
 
     <para>
@@ -2068,14 +2182,13 @@ linkend="Configuration_syntaxhighlight"
 このページは、認識されるシンタックス要素を列挙し、これらのテキストの色と太さを変更可能にします。</para>
 
     <para>
-To revert to the default colors of a scheme, choose a different scheme and
-return to the modified scheme.</para>
+配色のデフォルト色に戻すには、別の配色を選択してから、変更した配色に戻してください。</para>
   </section>
 
   <section id="Configuration_colors_text">
     <title>
 色 → テキスト ページ<indexterm>
-        <primary>text colors</primary>
+        <primary>文字の色</primary>
 
         <secondary>オプション</secondary>
       </indexterm></title>
@@ -2090,7 +2203,7 @@ return to the modified scheme.</para>
   <section id="Configuration_colors_marker">
     <title>
 色 → マーカー ページ<indexterm>
-        <primary>marker colors</primary>
+        <primary>マーカーの色</primary>
 
         <secondary>オプション</secondary>
       </indexterm></title>
@@ -2101,31 +2214,28 @@ return to the modified scheme.</para>
   <section id="Configuration_colors_foldercompare">
     <title>
 色 → フォルダー比較 ページ<indexterm>
-        <primary>folder compare colors</primary>
+        <primary>フォルダーの色を比較する</primary>
 
         <secondary>オプション</secondary>
       </indexterm></title>
 
     <para>
-By default, the WinMerge Folder Compare window use background colors to show
-the status from a item (equal, different, not exists on all sides or
-filtered).</para>
+デフォルトでは、WinMergeのフォルダー比較ウィンドウは、背景色を使用して項目のステータス（同一、差異あり、片側に存在しない、またはフィルター済み）を表示します。</para>
 
     <para>
 色を変更するには色ボックスをクリックし、標準的な色の設定ダイアログを開きます。 基本色か作成した色から1つ選択し
 <guibutton>OK</guibutton>をクリックすると、新しい色がボックスに読み込まれます。</para>
 
     <para>
-To revert to the default colors of a scheme, choose a different scheme and
-return to the modified scheme.</para>
+配色のデフォルト色に戻すには、別の配色を選択してから、変更した配色に戻してください。</para>
   </section>
 
   <section id="Configuration_archive">
     <title>
 アーカイブサポートページ<indexterm>
-        <primary>archiving files</primary>
+        <primary>ファイルのアーカイブ</primary>
 
-        <secondary>configuring support after installation</secondary>
+        <secondary>インストール後のサポートの構成</secondary>
       </indexterm></title>
 
     <para>
@@ -2134,9 +2244,9 @@ return to the modified scheme.</para>
     <section>
       <title>
 アーカイブファイルサポートを有効にする<indexterm>
-          <primary>7-Zip archives</primary>
+          <primary>7-Zip アーカイブ</primary>
 
-          <secondary>enabling and disabling integration</secondary>
+          <secondary>統合の有効化と無効化</secondary>
         </indexterm></title>
 
       <para>
@@ -2158,7 +2268,7 @@ return to the modified scheme.</para>
     <section>
       <title>
 ファイルのシグネチャからアーカイブの種類を検出する<indexterm>
-          <primary>detecting archive types</primary>
+          <primary>アーカイブタイプの検出</primary>
         </indexterm></title>
 
       <itemizedlist>
@@ -2228,9 +2338,9 @@ TBD</para>
     <section id="Configuration_external_editor">
       <title>
 外部エディター<indexterm>
-          <primary>external editor</primary>
+          <primary>外部エディタ</primary>
 
-          <secondary>configuring</secondary>
+          <secondary>構成する</secondary>
         </indexterm></title>
 
       <para>
@@ -2302,7 +2412,7 @@ WinMerge がフィルター、プラグイン、カラースキーマ、設定�
     <section>
       <title>
 テンポラリファイルフォルダー<indexterm>
-          <primary>temporary files, folder used</primary>
+          <primary>一時ファイル、使用フォルダー</primary>
         </indexterm></title>
 
       <para>
@@ -2326,7 +2436,7 @@ WinMerge が、一時ファイルを保存するフォルダーを指定して�
   <section id="Configuration_backup">
     <title>
 バックアップファイルページ<indexterm>
-        <primary>backup files, options</primary>
+        <primary>バックアップ ファイル、オプション</primary>
       </indexterm></title>
 
     <para>
@@ -2403,7 +2513,7 @@ WinMerge がバックアップファイルを作る時、 元ファイル名に�
   <section id="Configuration_codepage">
     <title>
 コードページページ<indexterm>
-        <primary>codepage</primary>
+        <primary>コードページ</primary>
 
         <secondary>オプション</secondary>
       </indexterm></title>
@@ -2420,16 +2530,16 @@ WinMerge がバックアップファイルを作る時、 元ファイル名に�
       <itemizedlist>
         <listitem>
           <para>
-<ulink url="https://en.wikipedia.org/wiki/Code_pages"> Wikipedia: Code pages
-</ulink>, <ulink url="https://en.wikipedia.org/wiki/Character_encoding">
-Character encoding </ulink></para>
+<ulink url="https://en.wikipedia.org/wiki/Code_pages"> Wikipedia: コード ページ
+</ulink>、<ulink url="https://en.wikipedia.org/wiki/Character_encoding">
+文字エンコーディング </ulink></para>
         </listitem>
 
         <listitem>
           <para>
 <ulink
 url="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ucoderef/28fefe92-d66c-4b03-90a9-97b473223d43">
-Microsoft: Code Pages Supported by Windows </ulink></para>
+Microsoft: Windows でサポートされるコード ページ </ulink></para>
         </listitem>
       </itemizedlist>
     </note>
@@ -2512,7 +2622,7 @@ Explorer は、コードページ選択機能を提供しています。 外部�
     </section>
 
     <section>
-      <title>Detect codepage for text files using mlang.dll</title>
+      <title>mlang.dll を使用してテキスト ファイルのコードページを検出する</title>
 
       <para>TBD</para>
 
@@ -2527,7 +2637,7 @@ Explorer は、コードページ選択機能を提供しています。 外部�
 エクスプローラー<indexterm>
           <primary>統合</primary>
 
-          <secondary>with Windows shell</secondary>
+          <secondary>Windowsシェルを使った場合</secondary>
         </indexterm></title>
 
       <para>

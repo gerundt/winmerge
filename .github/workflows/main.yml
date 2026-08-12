@@ -13,12 +13,15 @@ jobs:
     runs-on: windows-latest
 
     steps:  
-    - uses: actions/checkout@v4
+    - name: Configure Git for long paths
+      run: git config --global core.longpaths true
+
+    - uses: actions/checkout@v6
       with:
         submodules: 'recursive'
 
     - name: Cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: Build/WinMergeDownloadDeps
         key: WinMergeDownloadDeps
@@ -26,7 +29,7 @@ jobs:
     - name: Build
       run: |
         .\DownloadDeps.cmd
-        .\BuildAll.vs2022.cmd x64 -ci
+        .\BuildAll.cmd x64 -ci
 
     - name: Upload zip
       uses: actions/upload-artifact@v4

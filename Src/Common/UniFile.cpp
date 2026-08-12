@@ -222,7 +222,7 @@ bool UniMemFile::DoOpen(const String& filename, AccessMode mode)
 		}
 		catch (Exception&)
 		{
-			if (file.getSize() == 0)
+			if (file.path().empty() || file.getSize() == 0)
 			{
 				m_lineno = 0;
 				return true;
@@ -267,6 +267,25 @@ bool UniMemFile::DoOpen(const String& filename, AccessMode mode)
 	m_current = m_base;
 	m_lineno = 0;
 
+	return true;
+}
+
+bool UniMemFile::DoGetFileStatus()
+{
+	m_lastError.ClearError();
+
+	if (m_hMapping == nullptr)
+	{
+		m_filesize = 0;
+		m_statusFetched = 1;
+		return true;
+	}
+
+	auto begin = m_hMapping->begin();
+	auto end = m_hMapping->end();
+
+	m_filesize = end - begin;
+	m_statusFetched = 1;
 	return true;
 }
 

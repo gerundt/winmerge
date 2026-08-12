@@ -22,7 +22,6 @@
 #include "UnicodeString.h"
 #include "CompareStats.h"
 #include "FilterList.h"
-#include "SubstitutionList.h"
 #include "DirView.h"
 #include "DirFrame.h"
 #include "MainFrm.h"
@@ -44,6 +43,9 @@
 #include "FolderCmp.h"
 #include "DirViewColItems.h"
 #include "RenameMoveDetection.h"
+#include "Shell.h"
+#include "MergeLogger.h"
+#include "MergeTextFormatter.h"
 #include <Poco/Semaphore.h>
 #include <set>
 
@@ -92,14 +94,6 @@ CDirDoc::CDirDoc()
  */
 CDirDoc::~CDirDoc()
 {
-	// Inform all of our merge docs that we're closing
-	for (auto pMergeDoc : m_MergeDocs)
-		pMergeDoc->DirDocClosing(this);
-	// Delete all temporary folders belonging to this document
-	while (m_pTempPathContext != nullptr)
-	{
-		m_pTempPathContext = m_pTempPathContext->DeleteHead();
-	}
 }
 
 /**
@@ -113,6 +107,33 @@ BOOL CDirDoc::OnNewDocument()
 	return TRUE;
 }
 
+/**
+ * @brief Called when dirdoc is closed.
+ */
+void CDirDoc::OnCloseDocument()
+{
+	if (m_pDirView)
+	{
+		if (CDirFrame* pf = m_pDirView->GetParentFrame())
+		{
+			if (auto* pHeaderBar = pf->GetHeaderInterface())
+			{
+				pHeaderBar->SetOnSetFocusCallback(nullptr);
+				pHeaderBar->SetOnCaptionChangedCallback(nullptr);
+				pHeaderBar->SetOnFolderSelectedCallback(nullptr);
+				pHeaderBar->SetOnGetRecentItemsCallback(nullptr);
+				pHeaderBar->SetOnGetClipboardHistoryCallback(nullptr);
+			}
+		}
+	}
+	// Inform all of our merge docs that we're closing
+	for (auto pMergeDoc : m_MergeDocs)
+		pMergeDoc->DirDocClosing(this);
+	// Delete all temporary folders belonging to this document
+	while (m_pTempPathContext != nullptr)
+		m_pTempPathContext = m_pTempPathContext->DeleteHead();
+	__super::OnCloseDocument();
+}
 
 BEGIN_MESSAGE_MAP(CDirDoc, CDocument)
 	//{{AFX_MSG_MAP(CDirDoc)
@@ -183,7 +204,7 @@ void CDirDoc::InitCompare(const PathContext & paths, bool bRecursive, CTempPathC
 			m_pTempPathContext->m_strRoot[nIndex] = m_pCtxt->GetNormalizedPath(nIndex);
 	}
 
-	CMergeFrameCommon::LogComparisonStart(paths, m_strDesc, nullptr, nullptr);
+	MergeLogger::LogComparisonStart(paths, m_strDesc, nullptr, nullptr);
 }
 
 
@@ -250,6 +271,7 @@ void CDirDoc::InitDiffContext(CDiffContext *pCtxt)
 	pCtxt->m_bIgnoreCodepage = pOptions->GetBool(OPT_CMP_IGNORE_CODEPAGE);
 	pCtxt->m_bEnableImageCompare = pOptions->GetBool(OPT_CMP_ENABLE_IMGCMP_IN_DIRCMP);
 	pCtxt->m_dColorDistanceThreshold = pOptions->GetInt(OPT_CMP_IMG_THRESHOLD) / 1000.0;
+	pCtxt->m_bPreferWICDecoder = pOptions->GetBool(OPT_CMP_IMG_PREFER_WIC_DECODER);
 
 	m_imgfileFilter.SetMaskOrExpression(pOptions->GetString(OPT_CMP_IMG_FILEPATTERNS));
 	pCtxt->m_pImgfileFilter = &m_imgfileFilter;
@@ -376,29 +398,42 @@ void CDirDoc::Rescan()
 		m_pCtxt->m_pRenameMoveDetection.reset();
 		m_pCtxt->RemoveAll();
 		m_pCtxt->InitDiffItemList();
+		InitDiffContext(m_pCtxt.get());
 	}
-
-	InitDiffContext(m_pCtxt.get());
+	else
+	{
+		auto pRenameMoveDetection = std::move(m_pCtxt->m_pRenameMoveDetection);
+		InitDiffContext(m_pCtxt.get());
+		m_pCtxt->m_pRenameMoveDetection = std::move(pRenameMoveDetection);
+	}
 
 	auto* pHeaderBar = pf->GetHeaderInterface();
 	pHeaderBar->SetPaneCount(m_nDirs);
-	pHeaderBar->SetOnSetFocusCallback([&](int pane) {
+	pHeaderBar->SetOnSetFocusCallback([this](int pane) {
 		m_pDirView->SetActivePane(pane);
 		GetOptionsMgr()->SaveOption(OPT_ACTIVE_PANE, pane);
 	});
-	pHeaderBar->SetOnCaptionChangedCallback([&](int pane, const String& sText) {
+	pHeaderBar->SetOnCaptionChangedCallback([this](int pane, const String& sText) {
 		m_strDesc[pane] = sText;
 		UpdateHeaderPath(pane);
 		m_pDirView->SetFocus();
 	});
-	pHeaderBar->SetOnFolderSelectedCallback([&](int pane, const String& sFolderpath) {
+	pHeaderBar->SetOnFolderSelectedCallback([this](int pane, const String& sFolderpath) {
+		if (m_diffThread.GetThreadState() == CDiffThread::THREAD_COMPARING)
+			return;
 		PathContext paths = m_pCtxt->GetNormalizedPaths();
 		paths.SetPath(pane, sFolderpath);
 		m_strDesc[pane].clear();
+		if (m_pTempPathContext != nullptr)
+		{
+			m_pTempPathContext->m_strDisplayRoot[pane].clear();
+			m_pTempPathContext->m_strRoot[pane].clear();
+		}
 		m_pDirView->SetFocus();
 		InitCompare(paths, m_pCtxt->m_bRecursive, nullptr);
 		Rescan();
 	});
+	pHeaderBar->SetDefaultHistoryCallbacks();
 	for (int nIndex = 0; nIndex < m_nDirs; nIndex++)
 	{
 		UpdateHeaderPath(nIndex);
@@ -443,7 +478,16 @@ void CDirDoc::Rescan()
 				if (errStr.empty())
 				{
 					if (GetReportFile().empty())
+					{
 						I18n::MessageBox(IDS_REPORT_SUCCESS, MB_OK | MB_ICONINFORMATION);
+						if (GetOptionsMgr()->GetBool(OPT_REPORTFILES_OPENREPORTFILE))
+						{
+							if (m_pReport->GetReportType() == REPORT_TYPE_SIMPLEHTML)
+								shell::Open(m_pReport->GetReportFile().c_str());
+							else
+								CMergeApp::OpenFileToExternalEditor(m_pReport->GetReportFile());
+						}
+					}
 				}
 				else
 				{
@@ -454,6 +498,7 @@ void CDirDoc::Rescan()
 				}
 			}
 			SetGeneratingReport(false);
+			m_tempFile = m_pReport->GetTempFile();
 			SetReport(nullptr);
 		});
 		m_diffThread.SetMarkedRescan(false);
@@ -468,8 +513,9 @@ void CDirDoc::Rescan()
 			{
 				bool doMoveDetection = GetOptionsMgr()->GetInt(OPT_CMP_RENAME_MOVE_DETECTION) > 1;
 				pRenameMoveDetection->Detect(*myStruct->context, doMoveDetection);
-				if (GetOptionsMgr()->GetBool(OPT_CMP_MERGE_RENAMED_ITEMS))
-					pRenameMoveDetection->Merge(*myStruct->context);
+				int nRenameMoveMergeMode = GetOptionsMgr()->GetInt(OPT_CMP_RENAME_MOVE_MERGE_MODE);
+				if (nRenameMoveMergeMode > 0)
+					pRenameMoveDetection->Merge(*myStruct->context, nRenameMoveMergeMode > 1);
 			}
 			});
 		m_diffThread.SetCompareFunction([](DiffFuncStruct* myStruct) {
@@ -493,8 +539,9 @@ void CDirDoc::Rescan()
 			{
 				bool doMoveDetection = GetOptionsMgr()->GetInt(OPT_CMP_RENAME_MOVE_DETECTION) > 1;
 				myStruct->context->m_pRenameMoveDetection->Detect(*myStruct->context, doMoveDetection);
-				if (GetOptionsMgr()->GetBool(OPT_CMP_MERGE_RENAMED_ITEMS))
-					myStruct->context->m_pRenameMoveDetection->Merge(*myStruct->context);
+				int nRenameMoveMergeMode = GetOptionsMgr()->GetInt(OPT_CMP_RENAME_MOVE_MERGE_MODE);
+				if (nRenameMoveMergeMode > 0)
+					myStruct->context->m_pRenameMoveDetection->Merge(*myStruct->context, nRenameMoveMergeMode > 1);
 			}
 		});
 		m_diffThread.SetCompareFunction([](DiffFuncStruct* myStruct) {
@@ -861,7 +908,8 @@ void CDirDoc::SetTitle(LPCTSTR lpszTitle)
 		{
 			String strPath = m_pCtxt->GetPath(index);
 			ApplyDisplayRoot(index, strPath);
-			sDirName[index] = paths::FindFileName(strPath);
+			const String& desc = m_strDesc[index];
+			sDirName[index] = desc.empty() ? paths::FindFileName(strPath) : desc;
 		}
 		if (std::count(&sDirName[0], &sDirName[0] + m_nDirs, sDirName[0]) == m_nDirs)
 			sTitle = sDirName[0] + strutils::format(_T(" x %d"), m_nDirs);
@@ -876,7 +924,7 @@ void CDirDoc::SetTitle(LPCTSTR lpszTitle)
  */
 CString CDirDoc::GetTooltipString() const
 {
-	return CMergeFrameCommon::GetTooltipString(m_pCtxt->GetNormalizedPaths(), m_strDesc, nullptr, nullptr).c_str();
+	return MergeTextFormatter::GetTooltipString(m_pCtxt->GetNormalizedPaths(), m_strDesc, nullptr, nullptr).c_str();
 }
 
 /**
@@ -1099,7 +1147,7 @@ bool CDirDoc::CompareFilesIfFilesAreLarge(int nFiles, const FileLocation ifilelo
 	GetOptionsMgr()->SaveOption(OPT_CMP_METHOD, oldCompareMethod); // Restore previous compare method
 	FolderCmp cmp(&ctxt);
 	CWaitCursor waitstatus;
-	di.diffcode.diffcode |= cmp.prepAndCompareFiles(di);
+	cmp.prepAndCompareFiles(di);
 	if (di.diffcode.isResultSame())
 	{
 		ctxt.GetComparePaths(di, paths);
@@ -1148,10 +1196,20 @@ void CDirDoc::OnBnClickedComparisonContinue()
 void CDirDoc::OnCbnSelChangeCPUCores()
 {
 	auto* pCmpProgressBar = GetCompProgressBar();
-	if (pCmpProgressBar == nullptr)
+	if (pCmpProgressBar == nullptr || m_pCtxt == nullptr)
 		return;
-	m_pCtxt->m_pCompareStats->SetIdleCompareThreadCount(
-		m_pCtxt->m_pCompareStats->GetCompareThreadCount() - pCmpProgressBar->GetNumberOfCPUCoresToUse()
-	);
+
+	int requestedCores = pCmpProgressBar->GetNumberOfCPUCoresToUse();
+	int totalThreads = m_pCtxt->m_pCompareStats->GetCompareThreadCount();
+
+	if (totalThreads <= 0)
+		return;
+
+	// Clamp requested cores to valid range [1, totalThreads]
+	requestedCores = std::clamp(requestedCores, 1, totalThreads);
+
+	PauseCurrentScan();
+	m_pCtxt->m_pCompareStats->SetIdleCompareThreadCount(totalThreads - requestedCores);
+	ContinueCurrentScan();
 }
 

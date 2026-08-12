@@ -5,7 +5,7 @@
  *
  */
 
-#include "stdafx.h"
+#include "pch.h"
 #include <ctime>
 #include <cassert>
 #include <sstream>
@@ -20,6 +20,10 @@
 #include "DiffItem.h"
 #include "DiffThread.h"
 #include "IAbortable.h"
+#include "UniFile.h"
+#include "TempFile.h"
+#include "I18n.h"
+#include "Clipboard.h"
 
 UINT CF_HTML = RegisterClipboardFormat(_T("HTML Format"));
 
@@ -123,37 +127,83 @@ void DirCmpReport::SetFileCmpReport(IFileCmpReport *pFileCmpReport)
 	m_pFileCmpReport.reset(pFileCmpReport);
 }
 
-static ULONG GetLength32(CFile const &f)
+/**
+ * @brief Generate report to clipboard.
+ * @param [out] errStr Empty if succeeded, otherwise contains error message.
+ * @return true if successful, false otherwise.
+ */
+bool DirCmpReport::GenerateReportToClipboard(String &errStr)
 {
-	ULONGLONG length = f.GetLength();
-	if (length > ULONG_MAX)
-		length = ULONG_MAX;
-	return static_cast<ULONG>(length);
+	// Read temporary file and copy to clipboard
+	UniMemFile file;
+	if (!file.OpenReadOnly(m_sReportFile))
+		return false;
+	
+	file.SetUnicoding(ucr::UTF8);
+	String content;
+	file.ReadStringAll(content);
+	file.Close();
+
+	bool bSuccess = false;
+	// If report type is HTML, render CF_HTML format as well
+	if (m_nReportType == REPORT_TYPE_SIMPLEHTML)
+		bSuccess = ClipboardUtils::PutFileAndTextAndHTML(m_sReportFile, content, HWND(nullptr));
+	else
+		bSuccess = ClipboardUtils::PutFileAndText(m_sReportFile, content, HWND(nullptr));
+	if (!bSuccess)
+	{
+		errStr = _("Failed to copy to clipboard.");
+		return false;
+	}
+
+	// TempFile destructor will automatically delete the temporary file
+	return true;
 }
 
-static HGLOBAL ConvertToUTF16ForClipboard(HGLOBAL hMem, int codepage)
+/**
+ * @brief Generate report to file.
+ * @param [out] errStr Empty if succeeded, otherwise contains error message.
+ * @return true if successful, false otherwise.
+ */
+bool DirCmpReport::GenerateReportToFile(String &errStr)
 {
-	size_t len = GlobalSize(hMem);
-	HGLOBAL hMemW = GlobalAlloc(GMEM_DDESHARE|GMEM_MOVEABLE|GMEM_ZEROINIT, (len + 1) * sizeof(wchar_t));
-	if (hMemW == nullptr)
-		return nullptr;
-	LPCSTR pstr = reinterpret_cast<LPCSTR>(GlobalLock(hMem));
-	LPWSTR pwstr = reinterpret_cast<LPWSTR>(GlobalLock(hMemW));
-	if (pstr == nullptr || pwstr == nullptr)
+	String path;
+	paths::SplitFilename(m_sReportFile, &path, nullptr, nullptr);
+	if (!paths::CreateIfNeeded(path))
 	{
-		GlobalFree(hMemW);
-		return nullptr;
+		errStr = _("Folder does not exist.");
+		return false;
 	}
-	int wlen = MultiByteToWideChar(codepage, 0, pstr, static_cast<int>(len), pwstr, static_cast<int>(len + 1));
-	if (len > 0 && pstr[len - 1] != '\0')
+
+	UniStdioFile file;
+	if (!file.OpenCreateUtf8(m_sReportFile))
 	{
-		pwstr[wlen] = 0;
-		++wlen;
+		errStr = _("Failed to create report file.");
+		return false;
 	}
-	GlobalUnlock(hMemW);
-	hMemW = GlobalReAlloc(hMemW, wlen * sizeof(wchar_t), 0);
-	GlobalUnlock(hMem);
-	return hMemW;
+
+	m_pFile = &file;
+	GenerateReport(m_nReportType);
+	file.Close();
+	m_pFile = nullptr;
+	return true;
+}
+
+static String GetReportExtension(REPORT_TYPE nReportType)
+{
+	switch (nReportType)
+	{
+	case REPORT_TYPE_SIMPLEHTML:
+		return _T(".html");
+	case REPORT_TYPE_SIMPLEXML:
+		return _T(".xml");
+	case REPORT_TYPE_COMMALIST:
+		return _T(".csv");
+	case REPORT_TYPE_TABLIST:
+		return _T(".tsv");
+	default:
+		return _T(".txt");
+	}
 }
 
 /**
@@ -165,83 +215,24 @@ bool DirCmpReport::GenerateReport(String &errStr)
 {
 	assert(m_pList != nullptr);
 	assert(m_pFile == nullptr);
-	bool bRet = false;
-	try
+
+	if (m_sReportFile.empty())
 	{
-		if (m_bCopyToClipboard)
-		{
-			if (!OpenClipboard(NULL))
-				return false;
-			if (!EmptyClipboard())
-				return false;
-			CSharedFile file(GMEM_DDESHARE|GMEM_MOVEABLE|GMEM_ZEROINIT);
-			m_pFile = &file;
-			bool savedIncludeFileCmpReport = m_bIncludeFileCmpReport;
-			m_bIncludeFileCmpReport = false;
-			GenerateReport(m_nReportType);
-			HGLOBAL hMem = file.Detach();
-			SetClipboardData(CF_UNICODETEXT, ConvertToUTF16ForClipboard(hMem, m_bOutputUTF8 ? CP_UTF8 : CP_THREAD_ACP));
-			GlobalFree(hMem);
-			// If report type is HTML, render CF_HTML format as well
-			if (m_nReportType == REPORT_TYPE_SIMPLEHTML)
-			{
-				// Reconstruct the CSharedFile object
-				file.~CSharedFile();
-				file.CSharedFile::CSharedFile(GMEM_DDESHARE|GMEM_MOVEABLE|GMEM_ZEROINIT);
-				// Write preliminary CF_HTML header with all offsets zero
-				static const char header[] =
-					"Version:0.9\n"
-					"StartHTML:%09d\n"
-					"EndHTML:%09d\n"
-					"StartFragment:%09d\n"
-					"EndFragment:%09d\n";
-				static const char start[] = "<html><body>\n<!--StartFragment -->";
-				static const char end[] = "\n<!--EndFragment -->\n</body>\n</html>\n";
-				char buffer[MAX_PATH_FULL];
-				int cbHeader = wsprintfA(buffer, header, 0, 0, 0, 0);
-				file.Write(buffer, cbHeader);
-				file.Write(start, sizeof start - 1);
-				GenerateHTMLHeaderBodyPortion();
-				GenerateXmlHtmlContent(false);
-				file.Write(end, sizeof end); // include terminating zero
-				DWORD size = GetLength32(file);
-				// Rewrite CF_HTML header with valid offsets
-				file.SeekToBegin();
-				wsprintfA(buffer, header, cbHeader, 
-					static_cast<int>(size - 1),
-					static_cast<int>(cbHeader + sizeof start - 1),
-					static_cast<int>(size - sizeof end + 1));
-				file.Write(buffer, cbHeader);
-				SetClipboardData(CF_HTML, GlobalReAlloc(file.Detach(), size, 0));
-			}
-			CloseClipboard();
-			m_bIncludeFileCmpReport = savedIncludeFileCmpReport;
-			m_pFile = nullptr;
-		}
-		if (!m_sReportFile.empty())
-		{
-			String path;
-			paths::SplitFilename(m_sReportFile, &path, nullptr, nullptr);
-			if (!paths::CreateIfNeeded(path))
-			{
-				errStr = _("Folder does not exist.");
-				return false;
-			}
-			m_pFile = new CFile(m_sReportFile.c_str(),
-				CFile::modeWrite|CFile::modeCreate|CFile::shareDenyWrite);
-			GenerateReport(m_nReportType);
-			delete m_pFile;
-			m_pFile = nullptr;
-		}
-		bRet = true;
+		m_tempFile = std::make_shared<TempFile>();
+		String ext = GetReportExtension(this->m_nReportType);
+		m_tempFile->Create(_T(""), ext);
+		m_sReportFile = m_tempFile->GetPath();
 	}
-	catch (CException *e)
+	
+	if (!GenerateReportToFile(errStr))
+		return false;
+
+	if (m_bCopyToClipboard)
 	{
-		e->ReportError(MB_ICONSTOP);
-		e->Delete();
+		if (!GenerateReportToClipboard(errStr))
+			return false;
 	}
-	m_pFile = nullptr;
-	return bRet;
+	return true;
 }
 
 /**
@@ -285,21 +276,7 @@ void DirCmpReport::GenerateReport(REPORT_TYPE nReportType)
  */
 void DirCmpReport::WriteString(const String& sText)
 {
-	std::string sOctets(m_bOutputUTF8 ? ucr::toUTF8(sText) : ucr::toThreadCP(sText));
-	const char *pchOctets = sOctets.c_str();
-	size_t cchAhead = sOctets.length();
-	while (const char *pchAhead = (const char *)memchr(pchOctets, '\n', cchAhead))
-	{
-		size_t cchLine = pchAhead - pchOctets;
-		m_pFile->Write(pchOctets, static_cast<unsigned>(cchLine));
-		static const char eol[] = { '\r', '\n' };
-		m_pFile->Write(eol, sizeof eol);
-		++cchLine;
-		pchOctets += cchLine;
-		cchAhead -= cchLine;
-	}
-	m_pFile->Write(pchOctets, static_cast<unsigned>(cchAhead));
-
+	m_pFile->WriteString(sText);
 }
 
 /**
@@ -492,7 +469,7 @@ void DirCmpReport::GenerateXmlHeader()
 void DirCmpReport::GenerateXmlHtmlContent(bool xml)
 {
 	String sFileName, sParentDir;
-	paths::SplitFilename((const tchar_t *)m_pFile->GetFilePath(), &sParentDir, &sFileName, nullptr);
+	paths::SplitFilename(m_pFile->GetFullyQualifiedPath(), &sParentDir, &sFileName, nullptr);
 	String sRelDestDir = sFileName.substr(0, sFileName.find_last_of(_T('.'))) + _T(".files");
 	String sDestDir = paths::ConcatPath(sParentDir, sRelDestDir);
 	if (!xml && m_bIncludeFileCmpReport && m_pFileCmpReport != nullptr)

@@ -10,8 +10,18 @@
 #include "OptionsMgr.h"
 #include "OptionsPanel.h"
 #include "FilterErrorMessages.h"
+#include "FilterExpression.h"
+#include "FilterMenuHelpers.h"
 #include "PropertySystemMenu.h"
+#include "ReplaceListHelper.h"
 #include "unicoder.h"
+#include "paths.h"
+#include "FileOrFolderSelect.h"
+#include "DirItem.h"
+#include "DirTravel.h"
+#include "Environment.h"
+#include "Shell.h"
+#include "UniFile.h"
 #include <Poco/Environment.h>
 
 #ifdef _DEBUG
@@ -19,9 +29,32 @@
 #endif
 
 static const int Mega = 1024 * 1024;
+// Max number of replace lists shown in menu.
+// NOTE: This relies on the resource ID ranges for string and regex replace lists
+//       being consecutive and of equal size. If those ranges change in resource.h
+//       (ID_RENAME_MOVE_KEY_MENU_STRING_REPLACE_LISTS_FIRST / _REGEX_...), update
+//       MaxReplaceListSize accordingly.
+static_assert(
+	ID_RENAME_MOVE_KEY_MENU_REGEX_REPLACE_LISTS_FIRST - ID_RENAME_MOVE_KEY_MENU_STRING_REPLACE_LISTS_FIRST == ReplaceListHelper::MaxReplaceListSize,
+	"MaxReplaceListSize must match the distance between the string and regex replace-list ID ranges."
+);
 
 class CPropCompareFolderMenu : public CMenu
 {
+private:
+	// Transform expression while preserving directives at the beginning
+	static String TransformExpressionPreservingDirectives(const String& expr, std::function<String(const String&)> transform)
+	{
+		String baseExpr = expr.empty() ? _T("Name") : expr;
+		String directives = FilterExpression::ExtractDirectives(baseExpr);
+		String exprWithoutDirective = FilterExpression::RemoveAllDirectives(baseExpr);
+
+		String newExpr = transform(exprWithoutDirective);
+		if (!directives.empty())
+			newExpr = directives + _T(" ") + newExpr;
+		return newExpr;
+	}
+
 public:
 	std::optional<String> ShowMenu(int menuid, const String& expr, int x, int y, CWnd* pParentWnd)
 	{
@@ -34,6 +67,17 @@ public:
 #ifndef _WIN64
 			pPopup->EnableMenuItem(ID_ADDCMPMENU_PROPS, MF_GRAYED);
 #endif
+			// Build menu dynamically
+			if (menuid == IDR_POPUP_RENAMEMOVE_MENU)
+			{
+				FilterMenuHelpers::PopulateReplaceLists(pPopup,
+					ID_RENAME_MOVE_KEY_MENU_STRING_REPLACE_LISTS_FIRST,
+					ID_RENAME_MOVE_KEY_MENU_REGEX_REPLACE_LISTS_FIRST);
+				bool caseSensitive = FilterExpression::HasCaseSensitiveDirective(expr);
+				pPopup->CheckMenuItem(ID_RENAME_MOVE_KEY_MENU_MATCHCASE, 
+					MF_BYCOMMAND | (caseSensitive ? MF_CHECKED : 0));
+			}
+
 			const int command = pPopup->TrackPopupMenu(
 				TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, x, y, pParentWnd);
 			if (command == 0)
@@ -71,6 +115,7 @@ public:
 					_T("Name"),
 					_T("BaseName"),
 					_T("normalizeUnicode(Name, \"NFC\")"),
+					_T("RelPath"),
 					_T("Size"),
 					_T("Date"),
 					_T("if(IsFolder, Name, prop(\"Hash.MD5\"))"),
@@ -101,9 +146,81 @@ public:
 					_T("toTraditionalChinese(%1)"),
 					_T("toHiragana(%1)"),
 					_T("toKatakana(%1)"),
+					_T("normalizeUnicode(%1, \"NFC\")"),
 				};
-				String newExpr = Exprs[command - ID_RENAME_MOVE_KEY_MENU_FUNC_FIRST];
-				result = strutils::format_string1(newExpr, expr.empty() ? _T("Name") : expr);
+				result = TransformExpressionPreservingDirectives(expr, [&](const String& e) {
+					return strutils::format_string1(Exprs[command - ID_RENAME_MOVE_KEY_MENU_FUNC_FIRST], e);
+				});
+			}
+			else if (command == ID_RENAME_MOVE_KEY_MENU_CREATE_REPLACELIST)
+			{
+				auto filepath = ReplaceListHelper::CreateAndSelectReplaceListFile(pParentWnd, false);
+				if (filepath.has_value())
+				{
+					String filepath2 = ReplaceListHelper::ReplaceAppDataFolderOrUserProfileFolder(*filepath);
+					result = TransformExpressionPreservingDirectives(expr, [&](const String& e) {
+						return _T("replaceWithList(") + e + _T(", \"") + filepath2 + _T("\")");
+					});
+				}
+			}
+			else if (command == ID_RENAME_MOVE_KEY_MENU_CREATE_REGEXREPLACELIST)
+			{
+				auto filepath = ReplaceListHelper::CreateAndSelectReplaceListFile(pParentWnd, true);
+				if (filepath.has_value())
+				{
+					String filepath2 = ReplaceListHelper::ReplaceAppDataFolderOrUserProfileFolder(*filepath);
+					result = TransformExpressionPreservingDirectives(expr, [&](const String& e) {
+						return _T("regexReplaceWithList(") + e + _T(", \"") + filepath2 + _T("\")");
+					});
+				}
+			}
+			else if (command >= ID_RENAME_MOVE_KEY_MENU_STRING_REPLACE_LISTS_FIRST && 
+					 command < ID_RENAME_MOVE_KEY_MENU_STRING_REPLACE_LISTS_FIRST + ReplaceListHelper::MaxReplaceListSize)
+			{
+				auto lists = ReplaceListHelper::GetReplaceLists(false);
+				int index = command - ID_RENAME_MOVE_KEY_MENU_STRING_REPLACE_LISTS_FIRST;
+				if (index < static_cast<int>(lists.size()))
+				{
+					String filepath = ReplaceListHelper::ReplaceAppDataFolderOrUserProfileFolder(lists[index]);
+					result = TransformExpressionPreservingDirectives(expr, [&](const String& e) {
+						return _T("replaceWithList(") + e + _T(", \"") + filepath + _T("\")");
+					});
+				}
+			}
+			else if (command >= ID_RENAME_MOVE_KEY_MENU_REGEX_REPLACE_LISTS_FIRST && 
+					 command < ID_RENAME_MOVE_KEY_MENU_REGEX_REPLACE_LISTS_FIRST + ReplaceListHelper::MaxReplaceListSize)
+			{
+				auto lists = ReplaceListHelper::GetReplaceLists(true);
+				int index = command - ID_RENAME_MOVE_KEY_MENU_REGEX_REPLACE_LISTS_FIRST;
+				if (index < static_cast<int>(lists.size()))
+				{
+					String filepath = ReplaceListHelper::ReplaceAppDataFolderOrUserProfileFolder(lists[index]);
+					result = TransformExpressionPreservingDirectives(expr, [&](const String& e) {
+						return _T("regexReplaceWithList(") + e + _T(", \"") + filepath + _T("\")");
+					});
+				}
+			}
+			else if (command == ID_RENAME_MOVE_KEY_MENU_STRING_REPLACE_LISTS_FOLDER)
+			{
+				int locationType = GetOptionsMgr()->GetInt(OPT_USERDATA_LOCATION);
+				String folder = ReplaceListHelper::GetReplaceListFolder(locationType, false);
+				if (!folder.empty())
+					shell::Open(folder.c_str());
+			}
+			else if (command == ID_RENAME_MOVE_KEY_MENU_REGEX_REPLACE_LISTS_FOLDER)
+			{
+				int locationType = GetOptionsMgr()->GetInt(OPT_USERDATA_LOCATION);
+				String folder = ReplaceListHelper::GetReplaceListFolder(locationType, true);
+				if (!folder.empty())
+					shell::Open(folder.c_str());
+			}
+			else if (command == ID_RENAME_MOVE_KEY_MENU_MATCHCASE)
+			{
+				bool caseSensitive = FilterExpression::HasCaseSensitiveDirective(expr);
+				if (caseSensitive)
+					result = FilterExpression::RemoveCaseSensitiveDirective(expr);
+				else
+					result = FilterExpression::AddCaseSensitiveDirective(expr);
 			}
 		}
 		DestroyMenu();
@@ -132,7 +249,7 @@ PropCompareFolder::PropCompareFolder(COptionsMgr *optionsMgr)
  , m_pAdditionalCompareCondition(new FilterExpression())
  , m_pRenameMoveKey(new FilterExpression())
  , m_nRenameMoveDetection(0)
- , m_bMergeRenameItems(false)
+ , m_nRenameMoveMergeMode(0)
 {
 	BindOption(OPT_CMP_METHOD, m_compareMethod, IDC_COMPAREMETHODCOMBO, DDX_CBIndex);
 	BindOption(OPT_CMP_STOP_AFTER_FIRST, m_bStopAfterFirst, IDC_COMPARE_STOPFIRST, DDX_Check);
@@ -149,7 +266,7 @@ PropCompareFolder::PropCompareFolder(COptionsMgr *optionsMgr)
 	BindOption(OPT_CMP_ADDITIONAL_CONDITION, m_sAdditionalCompareCondition, IDC_ADDTIONAL_COMPARE_CONDITION, DDX_CBStringExact);
 	BindOption(OPT_CMP_RENAME_MOVE_DETECTION, m_nRenameMoveDetection, IDC_RENAME_MOVE_DETECTION, DDX_CBIndex);
 	BindOption(OPT_CMP_RENAME_MOVE_KEY, m_sRenameMoveKey, IDC_RENAME_MOVE_KEY, DDX_CBStringExact);
-	BindOption(OPT_CMP_MERGE_RENAMED_ITEMS, m_bMergeRenameItems, IDC_MERGE_RENAMED_ITEMS, DDX_Check);
+	BindOption(OPT_CMP_RENAME_MOVE_MERGE_MODE, m_nRenameMoveMergeMode, IDC_RENAME_MOVE_MERGE_MODE, DDX_CBIndex);
 }
 
 void PropCompareFolder::DoDataExchange(CDataExchange* pDX)
@@ -223,6 +340,8 @@ BOOL PropCompareFolder::OnInitDialog()
 		{ _("Do not expand"), _("Expand all subfolders"), _("Expand different subfolders"), _("Expand identical subfolders") });
 	SetDlgItemComboBoxList(IDC_RENAME_MOVE_DETECTION,
 		{ I18n::tr("Options dialog|Compare|Folder|Detect renames and moves","Disabled"), _("Detect renames"), _("Detect renames and moves") });
+	SetDlgItemComboBoxList(IDC_RENAME_MOVE_MERGE_MODE,
+		{ I18n::tr("Options dialog|Compare|Folder|Detect renames and moves","Disabled"), _("Merge renames"), _("Merge renames and moves") });
 
 	OptionsPanel::OnInitDialog();
 	
@@ -352,5 +471,5 @@ void PropCompareFolder::UpdateControls()
 	EnableDlgItem(IDC_COMPARE_BINARYC_LIMIT, sel <= 1 ? true : false); // true: fullcontent, quickcontent
 	EnableDlgItem(IDC_RENAME_MOVE_KEY, selRenameMoveDetection >= 1);
 	EnableDlgItem(IDC_RENAME_MOVE_KEY_MENU, selRenameMoveDetection >= 1);
-	EnableDlgItem(IDC_MERGE_RENAMED_ITEMS, selRenameMoveDetection >= 1);
+	EnableDlgItem(IDC_RENAME_MOVE_MERGE_MODE, selRenameMoveDetection >= 1);
 }

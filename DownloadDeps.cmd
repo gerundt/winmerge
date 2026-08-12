@@ -12,28 +12,33 @@ set downloadsdir=%~dp0\build\WinMergeDownloadDeps
 set urls_destdirs=^
 https://github.com/WinMerge/winmerge/releases/download/winmerge_manual_another_build_tools_v2/winmerge_manual_another_build_tools_v2.zip!Docs\Manual\Tools ^
 https://github.com/WinMerge/winmerge/releases/download/ShellExtension-1.18.8.0/ShellExtension-1.18.8.0.zip!Build ^
-https://github.com/WinMerge/winmerge/releases/download/Merge7z2501.0/Merge7z2501.0-x86.zip!Build\x86\Release ^
-https://github.com/WinMerge/winmerge/releases/download/Merge7z2501.0/Merge7z2501.0-x64.zip!Build\X64\Release ^
-https://github.com/WinMerge/winmerge/releases/download/Merge7z2501.0/Merge7z2501.0-ARM.zip!Build\ARM64\Release ^
-https://github.com/WinMerge/winmerge/releases/download/Merge7z2501.0/Merge7z2501.0-ARM64.zip!Build\ARM64\Release ^
-https://github.com/WinMerge/frhed/releases/download/0.10904.2017/frhed-0.10904.2017.21-x86.zip!Build\x86\Release ^
-https://github.com/WinMerge/frhed/releases/download/0.10904.2017/frhed-0.10904.2017.21-x64.zip!Build\x64\Release ^
-https://github.com/WinMerge/frhed/releases/download/0.10904.2017/frhed-0.10904.2017.21-ARM.zip!Build\ARM\Release ^
-https://github.com/WinMerge/frhed/releases/download/0.10904.2017/frhed-0.10904.2017.21-ARM64.zip!Build\ARM64\Release ^
-https://github.com/WinMerge/winimerge/releases/download/v1.0.50/winimerge-1.0.50-x86.zip!Build\x86\Release ^
-https://github.com/WinMerge/winimerge/releases/download/v1.0.50/winimerge-1.0.50-x64.zip!Build\x64\Release ^
-https://github.com/WinMerge/winimerge/releases/download/v1.0.50/winimerge-1.0.50-ARM.zip!Build\ARM\Release ^
-https://github.com/WinMerge/winimerge/releases/download/v1.0.50/winimerge-1.0.50-ARM64.zip!Build\ARM64\Release ^
+https://github.com/WinMerge/winmerge/releases/download/Merge7z/Merge7z2602.1-x86.zip!Build\x86\Release ^
+https://github.com/WinMerge/winmerge/releases/download/Merge7z/Merge7z2602.1-x64.zip!Build\X64\Release ^
+https://github.com/WinMerge/winmerge/releases/download/Merge7z/Merge7z2602.1-ARM.zip!Build\ARM\Release ^
+https://github.com/WinMerge/winmerge/releases/download/Merge7z/Merge7z2602.1-ARM64.zip!Build\ARM64\Release ^
+https://github.com/WinMerge/frhed/releases/download/0.10904.2017/frhed-0.10904.2017.22-x86.zip!Build\x86\Release ^
+https://github.com/WinMerge/frhed/releases/download/0.10904.2017/frhed-0.10904.2017.22-x64.zip!Build\x64\Release ^
+https://github.com/WinMerge/frhed/releases/download/0.10904.2017/frhed-0.10904.2017.22-ARM.zip!Build\ARM\Release ^
+https://github.com/WinMerge/frhed/releases/download/0.10904.2017/frhed-0.10904.2017.22-ARM64.zip!Build\ARM64\Release ^
+https://github.com/WinMerge/winimerge/releases/download/v1.0.53/winimerge-1.0.53-x86.zip!Build\x86\Release ^
+https://github.com/WinMerge/winimerge/releases/download/v1.0.53/winimerge-1.0.53-x64.zip!Build\x64\Release ^
+https://github.com/WinMerge/winimerge/releases/download/v1.0.53/winimerge-1.0.53-ARM.zip!Build\ARM\Release ^
+https://github.com/WinMerge/winimerge/releases/download/v1.0.53/winimerge-1.0.53-ARM64.zip!Build\ARM64\Release ^
 https://github.com/WinMerge/winwebdiff/releases/download/v1.0.20/winwebdiff-1.0.20.0-x86.zip!Build\x86\Release ^
 https://github.com/WinMerge/winwebdiff/releases/download/v1.0.20/winwebdiff-1.0.20.0-x64.zip!Build\x64\Release ^
 https://github.com/WinMerge/winwebdiff/releases/download/v1.0.20/winwebdiff-1.0.20.0-ARM64.zip!Build\ARM64\Release ^
-https://github.com/WinMerge/darkmodelib/releases/download/v0.21.2/darkmodelib-0.21.2.0-x86.zip!Build\x86\Release ^
-https://github.com/WinMerge/darkmodelib/releases/download/v0.21.2/darkmodelib-0.21.2.0-x64.zip!Build\x64\Release ^
-https://github.com/WinMerge/darkmodelib/releases/download/v0.21.2/darkmodelib-0.21.2.0-ARM64.zip!Build\ARM64\Release ^
+https://github.com/WinMerge/darkmodelib/releases/download/v0.75.1/darkmodelib-0.75.1-x86.zip!Build\x86\Release ^
+https://github.com/WinMerge/darkmodelib/releases/download/v0.75.1/darkmodelib-0.75.1-x64.zip!Build\x64\Release ^
+https://github.com/WinMerge/darkmodelib/releases/download/v0.75.1/darkmodelib-0.75.1-ARM64.zip!Build\ARM64\Release ^
+https://github.com/WinMerge/tree-sitter-grammars/releases/download/v0.2.0/tree-sitter-grammars-0.2.0-x86.zip!Build\x86\Release ^
+https://github.com/WinMerge/tree-sitter-grammars/releases/download/v0.2.0/tree-sitter-grammars-0.2.0-x64.zip!Build\X64\Release ^
+https://github.com/WinMerge/tree-sitter-grammars/releases/download/v0.2.0/tree-sitter-grammars-0.2.0-ARM.zip!Build\ARM\Release ^
+https://github.com/WinMerge/tree-sitter-grammars/releases/download/v0.2.0/tree-sitter-grammars-0.2.0-ARM64.zip!Build\ARM64\Release ^
 https://github.com/htacg/tidy-html5/releases/download/5.4.0/tidy-5.4.0-w32-mt-XP.zip!Build\tidy-html5 ^
 https://github.com/htacg/tidy-html5/archive/refs/tags/5.4.0.zip!Build\tidy-html5 ^
 https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-windows-i386.exe!Build\jq ^
 https://github.com/jqlang/jq/archive/refs/tags/jq-1.8.1.zip!Build\jq ^
+https://github.com/WinMerge/cliphcat/releases/download/v0.3.0/cliphcat-0.3.0-exe.zip!Build\ ^
 https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-v1.5.2-win64.zip!Build\zstd ^
 https://mirror.msys2.org/mingw/mingw32/mingw-w64-i686-md4c-0.5.2-1-any.pkg.tar.zst!Build\md4c ^
 https://mirror.msys2.org/msys/i686/gcc-libs-10.2.0-1-i686.pkg.tar.zst!Build\msys2_tmp ^
@@ -92,10 +97,12 @@ for %%i in (x86 x64 ARM ARM64) do (
     mkdir Build\%%i\%%j\WinWebDiff 2> NUL
     mkdir Build\%%i\%%j\Frhed 2> NUL
     mkdir Build\%%i\%%j\darkmodelib 2> NUL
+    mkdir Build\%%i\%%j\TreeSitterGrammars 2> NUL
     mkdir Build\%%i\%%j\Filters 2> NUL
     mkdir Build\%%i\%%j\ColorSchemes 2> NUL
     mkdir Build\%%i\%%j\MergePlugins 2> NUL
     mkdir Build\%%i\%%j\Commands\jq 2> NUL
+    mkdir Build\%%i\%%j\Commands\cliphcat 2> NUL
     mkdir Build\%%i\%%j\Commands\tidy-html5 2> NUL
     mkdir Build\%%i\%%j\Commands\msys2\usr\bin 2> NUL
     mkdir Build\%%i\%%j\Commands\md4c 2> NUL
@@ -109,6 +116,8 @@ for %%i in (x86 x64 ARM ARM64) do (
       copy Build\%%i\Release\WinIMerge\WinIMergeLib.dll Build\%%i\%%j\WinIMerge\ 2> NUL
       copy Build\%%i\Release\WinWebDiff\WinWebDiffLib.dll Build\%%i\%%j\WinWebDiff\ 2> NUL
       copy Build\%%i\Release\darkmodelib\darkmode.dll Build\%%i\%%j\darkmodelib\ 2> NUL
+      copy Build\%%i\Release\TreeSitterGrammars\*.dll Build\%%i\%%j\TreeSitterGrammars\ 2> NUL
+      copy Build\%%i\Release\TreeSitterGrammars\*.scm Build\%%i\%%j\TreeSitterGrammars\ 2> NUL
     )
     echo ** jq
     copy Build\jq\jq-windows-i386.exe Build\%%i\%%j\Commands\jq\jq.exe
@@ -124,6 +133,9 @@ for %%i in (x86 x64 ARM ARM64) do (
     copy Build\msys2\usr\bin\patch.exe Build\%%i\%%j\Commands\msys2\usr\bin\
     copy Build\msys2\usr\bin\msys-2.0.dll Build\%%i\%%j\Commands\msys2\usr\bin\
     copy Build\msys2\usr\bin\msys-gcc_s-1.dll Build\%%i\%%j\Commands\msys2\usr\bin\
+    echo ** cliphcat
+    copy Build\cliphcat\cliphcat.exe Build\%%i\%%j\Commands\cliphcat\cliphcat.exe
+    copy Build\cliphcat\LICENSE Build\%%i\%%j\Commands\cliphcat\
     echo ** Commands
     xcopy /s/y Plugins\Commands Build\%%i\%%j\Commands
     echo ** Filters

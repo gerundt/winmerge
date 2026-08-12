@@ -48,6 +48,11 @@ BEGIN_MESSAGE_MAP(CMergeEditFrame, CMergeFrameCommon)
 	ON_COMMAND_EX(ID_VIEW_LOCATION_BAR, OnBarCheck)
 	ON_COMMAND(ID_VIEW_SPLITVERTICALLY, OnViewSplitVertically)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_SPLITVERTICALLY, OnUpdateViewSplitVertically)
+	// Display filter bar
+	ON_COMMAND(ID_VIEW_DISPLAY_FILTER_BAR_MENU, OnViewDisplayFilterBar)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DISPLAY_FILTER_BAR_MENU, OnUpdateDisplayViewFilterBar)
+	ON_COMMAND(IDCANCEL, OnDisplayFilterBarClose)
+	ON_COMMAND(IDC_FILTERFILE_MASK_MENU, OnDisplayFilterBarMenu)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -106,7 +111,11 @@ BOOL CMergeEditFrame::OnCreateClient( LPCREATESTRUCT /*lpcs*/,
 
 	m_pwndDetailMergeEditSplitterView = new CMergeEditSplitterView();
 	m_pwndDetailMergeEditSplitterView->m_bDetailView = true;
-	m_pwndDetailMergeEditSplitterView->Create(nullptr, nullptr, dwStyle, CRect(0,0,1,1), &m_wndDetailBar, ID_VIEW_DETAIL_BAR+1, pContext);
+	if (!m_pwndDetailMergeEditSplitterView->Create(nullptr, nullptr, dwStyle, CRect(0,0,1,1), &m_wndDetailBar, ID_VIEW_DETAIL_BAR+1, pContext))
+	{
+		TRACE0("Failed to create CMergeEditSplitterView\n");
+		return FALSE;
+	}
 
 	// tell merge doc about these views
 	m_pMergeDoc = dynamic_cast<CMergeDoc *>(pContext->m_pCurrentDoc);
@@ -120,17 +129,23 @@ BOOL CMergeEditFrame::OnCreateClient( LPCREATESTRUCT /*lpcs*/,
 		const int nGroup = m_pMergeDoc->GetActiveMergeView()->m_nThisGroup;
 		m_pMergeDoc->GetView(nGroup, pane)->SetActivePane();
 	});
-	m_wndFilePathBar.SetOnCaptionChangedCallback([&](int pane, const String& sText) {
+	m_wndFilePathBar.SetOnCaptionChangedCallback([this](int pane, const String& sText) {
 		const int nGroup = m_pMergeDoc->GetActiveMergeView()->m_nThisGroup;
 		m_pMergeDoc->SetDescription(pane, sText);
 		m_pMergeDoc->UpdateHeaderPath(pane);
 		m_pMergeDoc->GetView(nGroup, pane)->SetFocus();
 	});
-	m_wndFilePathBar.SetOnFileSelectedCallback([&](int pane, const String& sFilepath) {
+	m_wndFilePathBar.SetOnFileSelectedCallback([this](int pane, const String& sFilepath, const String& sDescription) {
 		const int nGroup = m_pMergeDoc->GetActiveMergeView()->m_nThisGroup;
-		m_pMergeDoc->ChangeFile(pane, sFilepath);
-		m_pMergeDoc->GetView(nGroup, pane)->SetFocus();
+		if (m_pMergeDoc->ChangeFile(pane, sFilepath, sDescription))
+		{
+			m_pMergeDoc->GetView(nGroup, pane)->SetFocus();
+			// Only add to MRU if description is empty (i.e., not from clipboard history)
+			if (sDescription.empty())
+				MruHelper::addToMru(pane, sFilepath);
+		}
 	});
+	m_wndFilePathBar.SetDefaultHistoryCallbacks();
 	m_wndStatusBar.SetPaneCount(m_pMergeDoc->m_nBuffers);
 	
 	// Set frame window handles so we can post stage changes back
@@ -280,7 +295,7 @@ void CMergeEditFrame::SaveActivePane()
 		auto& splitterWnd = static_cast<CMergeEditSplitterView*>(m_wndSplitter.GetPane(iRowParent, 0))->m_wndSplitter;
 		splitterWnd.GetActivePane(&iRow, &iCol);
 		if (iRow >= 0 || iCol >= 0)
-			GetOptionsMgr()->SaveOption(OPT_ACTIVE_PANE, max(iRow, iCol));
+			GetOptionsMgr()->SaveOption(OPT_ACTIVE_PANE, (std::max)(iRow, iCol));
 	}
 }
 
@@ -474,3 +489,53 @@ void CMergeEditFrame::OnSize(UINT nType, int cx, int cy)
 	
 	UpdateHeaderSizes();
 }
+
+void CMergeEditFrame::OnViewDisplayFilterBar()
+{
+	if (!m_pFilterBar)
+		ShowFilterBar();
+	else
+		HideFilterBar();
+}
+
+void CMergeEditFrame::OnUpdateDisplayViewFilterBar(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(TRUE);
+	pCmdUI->SetCheck(m_pFilterBar != nullptr);
+}
+
+void CMergeEditFrame::OnDisplayFilterBarClose()
+{
+	HideFilterBar();
+	GetActiveView()->SetFocus();
+}
+
+void CMergeEditFrame::OnDisplayFilterBarMenu()
+{
+	if (m_pFilterBar)
+		m_pFilterBar->ShowFilterMenu();
+}
+
+void CMergeEditFrame::ShowFilterBar()
+{
+	if (!m_pFilterBar)
+		m_pFilterBar.reset(new CLineFilterBar());
+	if (!::IsWindow(m_pFilterBar->GetSafeHwnd()) && !m_pFilterBar->Create(this))
+	{
+		TRACE0("Failed to create filter bar\n");
+		m_pFilterBar.reset();
+		return;
+	}
+	ShowControlBar(m_pFilterBar.get(), TRUE, FALSE);
+}
+
+void CMergeEditFrame::HideFilterBar()
+{
+	if (m_pFilterBar != nullptr && ::IsWindow(m_pFilterBar->GetSafeHwnd()))
+	{
+		ShowControlBar(m_pFilterBar.get(), FALSE, FALSE);
+		m_pFilterBar->DestroyWindow();
+	}
+	m_pFilterBar.reset();
+}
+

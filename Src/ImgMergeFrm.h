@@ -50,7 +50,7 @@ public:
 public:
 	bool OpenDocs(int nFiles, const FileLocation fileloc[], const bool bRO[], const String strDesc[], CMDIFrameWnd *pParent);
 	void MoveOnLoad(int nPane = -1, int nLineIndex = -1);
-	void ChangeFile(int pane, const String& path);
+	bool ChangeFile(int pane, const String& path, const String& description = _T(""));
 	IDirDoc* GetDirDoc() const override { return m_pDirDoc; };
 	void SetDirDoc(IDirDoc * pDirDoc) override;
 	void UpdateResources();
@@ -60,8 +60,9 @@ public:
 	int UpdateLastCompareResult();
 	void UpdateAutoPaneResize();
 	void UpdateSplitter();
-	bool GenerateReport(const String& sFileName) const override;
+	bool GenerateReport(ReportContext& reportContext) const override;
 	bool GenerateReport(const String& sFileName, bool allPages) const;
+	IMergeDoc::DocumentType GetDocumentType() const override { return IMergeDoc::DocumentType::Image; }
 	const PackingInfo* GetUnpacker() const override { return &m_infoUnpacker; };
 	void SetUnpacker(const PackingInfo* infoUnpacker) override { if (infoUnpacker) m_infoUnpacker = *infoUnpacker; };
 	const PrediffingInfo* GetPrediffer() const override { return nullptr; };
@@ -118,6 +119,7 @@ private:
 	bool MergeModeKeyDown(MSG* pMsg);
 	static void OnChildPaneEvent(const IImgMergeWindow::Event& evt);
 	void OnDropFiles(int pane, const std::vector<String>& files);
+	bool m_bInOnClose = false;
 	static void TranslateLocationPane(int id, const wchar_t *org, size_t dstbufsize, wchar_t *dst);
 	CLocationBar m_wndLocationBar;
 	IImgMergeWindow *m_pImgMergeWindow;
@@ -249,7 +251,8 @@ protected:
 	afx_msg void OnUpdateImgOverlayAnimationInterval(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateImgUseBackColor(CCmdUI* pCmdUI);
 	afx_msg void OnImgCompareExtractedText();
-	afx_msg void OnToolsGenerateReport();
+	afx_msg void OnShellMenu();
+	afx_msg void OnUpdateShellMenu(CCmdUI* pCmdUI);
 	afx_msg void OnRefresh();
 	afx_msg void OnSetFocus(CWnd *pNewWnd);
 	afx_msg void OnHelp();

@@ -83,11 +83,6 @@ BOOL DirCompProgressBar::Create(CWnd* pParentWnd)
 		m_pTaskbarList->SetProgressState(AfxGetMainWnd()->m_hWnd, TBPF_INDETERMINATE);
 #endif
 
-	if (HWND hSelf = GetSafeHwnd())
-	{
-		DarkMode::setWindowCtlColorSubclass(hSelf);
-		DarkMode::setChildCtrlsSubclassAndThemeEx(hSelf, true, true);
-	}
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -169,7 +164,10 @@ void DirCompProgressBar::OnTimer(UINT_PTR nIDEvent)
 			// Start comparing, init progressDlg
 			SetProgressState(m_pCompareStats->GetComparedItems(), m_pCompareStats->GetTotalItems());
 			SetNumberOfCPUCoresToUseMax(m_pCompareStats->GetCompareThreadCount());
-			SetNumberOfCPUCoresToUse(m_pCompareStats->GetCompareThreadCount());
+			const int activeThreads =
+				m_pCompareStats->GetCompareThreadCount() -
+				static_cast<int>(m_pCompareStats->GetIdleCompareThreadCount());
+			SetNumberOfCPUCoresToUse(activeThreads);
 			m_prevState = CompareStats::STATE_COMPARE;
 		}
 		// Comparing items

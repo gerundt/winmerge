@@ -11,15 +11,18 @@ jobs:
     name: Analyze
     runs-on: windows-latest
     steps:
+      - name: Configure Git for long paths
+        run: git config --global core.longpaths true
+
       - name: Checkout repository
         id: checkout_repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: 'recursive'
 
       - name: Initialize CodeQL
         id: init_codeql
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: cpp
           queries: security-and-quality
@@ -30,10 +33,10 @@ jobs:
         shell: pwsh
         run: |
           .\DownloadDeps.cmd
-          .\BuildAll.vs2022.cmd x64 -ci
+          .\BuildAll.cmd x64 -ci
 
       - name: Perform CodeQL Analysis
         id: analyze_codeql
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
 
 # Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)
